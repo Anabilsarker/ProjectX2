@@ -1,0 +1,69 @@
+﻿<Window x:Class="WPFUI.PopupWindow1"
+        x:Name="popupwindow1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFUI" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="PopupWindow1" Height="700" Width="300" ResizeMode="NoResize" Topmost="True" WindowStyle="None">
+    <Grid Background="#FF252C42">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="60"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" Background="#FF252C42">
+            <Button x:Name="popupclose" Style="{StaticResource MaterialDesignFlatButton}" Foreground="LightSkyBlue" Click="popupclose_Click">
+                <materialDesign:PackIcon Kind="Close"/>
+            </Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="#FF252C42">
+            <Image Source="Resources/shield.ico" Width="40" Margin="10,0,0,0"/>
+            <TextBlock Text=" Winzard System Repair" FontSize="20" Foreground="White" Margin="10"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#FF343D58">
+            <Image Source="Resources/warning.png" Width="90"/>
+            <TextBlock Text="Attention" FontSize="22" Foreground="White" FontWeight="Bold" Margin="20,40,0,0"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Background="#FF343D58">
+            <TextBlock FontSize="18" Foreground="White" Margin="10,0,0,0">
+                Fix,Clean and Optimize to help
+                <LineBreak/>
+                improve your PC.
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="0" Background="#FF242B41">
+            <TextBlock Text="Malware Threats" FontSize="18" Foreground="White" Margin="10"/>
+            <TextBlock Text="Security Holes" FontSize="18" Foreground="White" Margin="10"/>
+            <TextBlock Text="Corrupted System Files" FontSize="18" Foreground="White" Margin="10"/>
+            <TextBlock Text="Outdated Drivers" FontSize="18" Foreground="White" Margin="10"/>
+            <TextBlock Text="Junk Files" FontSize="18" Foreground="White" Margin="10"/>
+            <TextBlock Text="Broken Registry Entries" FontSize="18" Foreground="White" Margin="10"/>
+            <TextBlock Text="Startup optimizations" FontSize="18" Foreground="White" Margin="10"/>
+            <TextBlock Text="Privacy Traces" FontSize="18" Foreground="White" Margin="10"/>
+            <TextBlock Text="Fragmented Files" FontSize="18" Foreground="White" Margin="10"/>
+            <TextBlock Text="System optimizations" FontSize="18" Foreground="White" Margin="10"/>
+            <Button x:Name="popupfixclean" Content="FIX NOW" Margin="90,5,50,0" Height="30" Background="#FF01C964"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="1" Background="#FF242B41">
+            <TextBlock x:Name="MalwareThreats" FontSize="18" Foreground="Yellow" Margin="10"/>
+            <TextBlock x:Name="SecurityHoles" FontSize="18" Foreground="Yellow" Margin="10"/>
+            <TextBlock x:Name="CorruptedSystemFiles" FontSize="18" Foreground="Yellow" Margin="10"/>
+            <TextBlock x:Name="OutdatedDrivers" FontSize="18" Foreground="Yellow" Margin="10"/>
+            <TextBlock x:Name="JunkFiles" FontSize="18" Foreground="Yellow" Margin="10"/>
+            <TextBlock x:Name="BrokenRegistryEntries" FontSize="18" Foreground="Yellow" Margin="10"/>
+            <TextBlock x:Name="Startupoptimizations" FontSize="18" Foreground="Yellow" Margin="10"/>
+            <TextBlock x:Name="PrivacyTraces" FontSize="18" Foreground="Yellow" Margin="10"/>
+            <TextBlock x:Name="FragmentedFiles" FontSize="18" Foreground="Yellow" Margin="10"/>
+            <TextBlock x:Name="Systemoptimizations" FontSize="18" Foreground="Yellow" Margin="10"/>
+        </StackPanel>
+    </Grid>
+</Window>

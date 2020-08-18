@@ -1,0 +1,60 @@
+﻿<Window x:Class="WPFUI.PopupWindow2"
+        x:Name="popupwindow2"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFUI"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="PopupWindow2" Height="350" Width="600" Topmost="True" ResizeMode="NoResize" WindowStyle="None">
+
+    <Grid Background="#FF252C42">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Background="#FF252C42">
+            <Button x:Name="popupclose" Style="{StaticResource MaterialDesignFlatButton}" Foreground="LightSkyBlue" Click="popupclose_Click">
+                <materialDesign:PackIcon Kind="Close"/>
+            </Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" Background="#FF242B41">
+            <Image Source="Resources/shield.ico" Width="40"/>
+            <TextBlock Text=" Winzard System Repair | Stability Alert" FontSize="20" Foreground="White" Margin="10"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Background="#FF343D58">
+            <Image Source="Resources/warning.png" Width="60" Margin="10"/>
+            <Image Source="Resources/icons8-wrench-96.png" Width="45" Margin="10"/>
+            <TextBlock Text="Corrupt System Files Detected" FontSize="20" Foreground="White" Margin="0,25,0,0" FontWeight="Bold"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Background="#FF343D58">
+            <Border BorderBrush="Black" BorderThickness="1" Margin="10,5,0,0">
+                <TextBlock Text="    Identified Item" FontSize="14" Foreground="White" FontWeight="Bold" Width="300"/>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="0,5,0,0">
+                <TextBlock Text="    Items" FontSize="14" Foreground="White" FontWeight="Bold" Width="80"/>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="0,5,0,0">
+                <TextBlock Text="    Recommendation" FontSize="14" Foreground="White" FontWeight="Bold" Width="170"/>
+            </Border>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Background="#FF343D58">
+            <Image Source="Resources/icons8-delete-file-64.png" Width="50" Margin="10"/>
+            <TextBlock Text="Corrupt System Files" FontSize="14" Foreground="White" Margin="0,20,0,0"/>
+            <TextBlock x:Name="popupcrptfilenum" FontSize="14" Foreground="Yellow" Margin="140,20,0,0"/>
+            <TextBlock Text="Fix" FontSize="14" Foreground="Yellow" Margin="70,20,0,0"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Right" Margin="0,0,20,0">
+            <Button x:Name="fixissue" Content="FIX ISSUE NOW" FontSize="30" Background="#FF01C964" Height="60" Width="250" Click="fixissue_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

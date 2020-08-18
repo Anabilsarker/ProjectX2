@@ -1,0 +1,39 @@
+﻿<Window x:Class="WPFUI.PopupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFUI"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="PopupWindow" Height="350" Width="600" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Closing="Window_Closing" >
+    <Grid Background="#FF1E2639">
+        <Grid.Effect>
+            <DropShadowEffect BlurRadius="100" ShadowDepth="20"/>
+        </Grid.Effect>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="45"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="popupclose" Grid.Row="0" Grid.Column="3" Style="{StaticResource MaterialDesignFlatButton}" Foreground="LightSkyBlue" Click="popupclose_Click">
+            <materialDesign:PackIcon Kind="Close"/>
+        </Button>
+        <Image Source="Resources/iconfinder_101_Warning.png" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Stretch="Uniform"/>
+        <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Center">
+            <TextBlock Text="Your System Is At Risk" FontSize="30" Foreground="Yellow"/>
+            <TextBlock Text="Security Issues Detected" FontSize="30" Foreground="Yellow"/>
+        </StackPanel>
+        <TextBlock Text="Purchase the product to stay secured" Grid.Row="5" Grid.ColumnSpan="2" FontSize="20" Foreground="White" Margin="30,10,0,0"/>
+        <Button x:Name="paybutton" Grid.Row="5" Grid.Column="2" Content="Purchase" Background="Goldenrod" Click="paybutton_Click"/>
+    </Grid>
+</Window>
