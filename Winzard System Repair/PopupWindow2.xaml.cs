@@ -23,26 +23,40 @@ namespace WPFUI
         private async void location()
         {
             Random rnd = new Random();
-            int corruptnum = rnd.Next(1, 100);
+            int corruptnum = rnd.Next(10, 100);
             popupcrptfilenum.Text = corruptnum.ToString();
             int screenheight = Screen.PrimaryScreen.Bounds.Height;
             int screenwidth = Screen.PrimaryScreen.Bounds.Width;
             popupwindow2.Top = screenheight - 350;
             popupwindow2.Left = screenwidth - 600;
             popupwindow2.Opacity = 0;
-            await Task.Delay(20);
-            popupwindow2.Opacity = 0.25;
-            await Task.Delay(20);
-            popupwindow2.Opacity = 0.50;
-            await Task.Delay(20);
-            popupwindow2.Opacity = 0.75;
-            await Task.Delay(20);
+            await Task.Delay(1);
+            popupwindow2.Opacity = 0.1;
+            await Task.Delay(1);
+            popupwindow2.Opacity = 0.2;
+            await Task.Delay(1);
+            popupwindow2.Opacity = 0.3;
+            await Task.Delay(1);
+            popupwindow2.Opacity = 0.4;
+            await Task.Delay(1);
+            popupwindow2.Opacity = 0.5;
+            await Task.Delay(1);
+            popupwindow2.Opacity = 0.6;
+            await Task.Delay(1);
+            popupwindow2.Opacity = 0.7;
+            await Task.Delay(1);
+            popupwindow2.Opacity = 0.8;
+            await Task.Delay(1);
+            popupwindow2.Opacity = 0.9;
+            await Task.Delay(1);
             popupwindow2.Opacity = 1;
         }
 
         private void fixissue_Click(object sender, RoutedEventArgs e)
         {
-
+            MainWindow MW = new MainWindow();
+            MW.Show();
+            Close();
         }
     }
 }
