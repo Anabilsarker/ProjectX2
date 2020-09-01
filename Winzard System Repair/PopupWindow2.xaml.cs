@@ -10,6 +10,8 @@ namespace WPFUI
     /// </summary>
     public partial class PopupWindow2 : Window
     {
+        public BrowserWindow bwobj;
+        bool result = false;
         public PopupWindow2()
         {
             InitializeComponent();
@@ -54,9 +56,13 @@ namespace WPFUI
 
         private void fixissue_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow MW = new MainWindow();
-            MW.Show();
+            BrowserWindow bwObj = new BrowserWindow();
+            result = bwObj.ShowDialog().Value;
             Close();
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DialogResult = result;
         }
     }
 }

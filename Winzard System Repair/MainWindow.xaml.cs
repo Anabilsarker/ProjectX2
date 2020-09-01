@@ -12,6 +12,8 @@ using Winzard_System_Repair;
 using Microsoft.Win32;
 using IWshRuntimeLibrary;
 using System.Reflection;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace WPFUI
 {
@@ -20,6 +22,7 @@ namespace WPFUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        NotifyIcon nIcon = new NotifyIcon();
         PopupWindow1 Popupsub;
         PopupWindow2 Popupsub2;
         PopupWindow4 Popupsub3;
@@ -159,12 +162,24 @@ namespace WPFUI
         //For Minimize Close and Draging the program
         private void Button_Click_Minimize(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized;
+            WindowState = WindowState.Minimized;
         }
         private void Button_Click_Exit(object sender, RoutedEventArgs e)
         {
-            WindowState = WindowState.Minimized;
+            BaseUI.Visibility = Visibility.Collapsed;
+            nIcon.Icon = new Icon("shield.ico");
+            nIcon.Visible = true;
+            ShowInTaskbar = false;
+            nIcon.DoubleClick += NIcon_DoubleClick;
         }
+
+        private void NIcon_DoubleClick(object sender, EventArgs e)
+        {
+            BaseUI.Visibility = Visibility.Visible;
+            ShowInTaskbar = true;
+            nIcon.Visible = false;
+        }
+
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -864,18 +879,30 @@ namespace WPFUI
         {
             await System.Threading.Tasks.Task.Delay(480000);
             Popupsub = new PopupWindow1();
-            Popupsub.Show();
-            await System.Threading.Tasks.Task.Delay(600000);
-            Popups();
-            Popups1();
+            if (Popupsub.ShowDialog().Value)
+            {
+                Activatekey(true);
+            }
+            else
+            {
+                Activatekey(false);
+                Popups();
+            }
         }
         
         private async void Popups1()
         {
             await System.Threading.Tasks.Task.Delay(480000);
             Popupsub2 = new PopupWindow2();
-            Popupsub2.Show();
-            await System.Threading.Tasks.Task.Delay(600000);
+            if (Popupsub2.ShowDialog().Value)
+            {
+                Activatekey(true);
+            }
+            else
+            {
+                Activatekey(false);
+                Popups1();
+            }
         }
         private async void Popups2()
         {
