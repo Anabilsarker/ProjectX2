@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFUI"
         mc:Ignorable="d"
-        Height="600" Width="600" Topmost="True" Closing="Window_Closing">
+        Height="600" Width="600" Topmost="False" Closing="Window_Closing">
     <Grid x:Name="Browser" Background="WhiteSmoke">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -13,6 +13,7 @@
         </Grid.RowDefinitions>
         <WebBrowser x:Name="WebBrowser1" Grid.Row="0" Grid.RowSpan="2" Visibility="Collapsed"/>
         <TextBlock Text="The Alliance Tech" Grid.Row="0" Margin="20,0,0,0" FontSize="30"/>
+        <Image Source="Resources/PaySlip.png" Grid.Row="1" Width="570" Height="100" VerticalAlignment="Top"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="80,100,80,0">
             <StackPanel Orientation="Vertical">
                 <TextBox x:Name="FirstName" Margin="0,0,0,0"/>

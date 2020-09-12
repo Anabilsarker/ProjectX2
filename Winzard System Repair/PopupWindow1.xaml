@@ -6,8 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFUI" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="PopupWindow1" Height="700" Width="300" ResizeMode="NoResize" Topmost="True" WindowStyle="None">
-    <Grid Background="#FF252C42">
+        Height="700" Width="300" ResizeMode="NoResize" Topmost="True" WindowStyle="None" Visibility="Visible">
+    <Grid Background="#FF252C42" Visibility="Visible">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="60"/>
@@ -26,12 +26,12 @@
             </Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="#FF252C42">
-            <Image Source="Resources/shield.ico" Width="40" Margin="10,0,0,0"/>
-            <TextBlock Text=" Winzard System Repair" FontSize="20" Foreground="White" Margin="10"/>
+            <Image Source="Resources/logo.png" Width="80" Margin="10,0,0,0"/>
+            <TextBlock Text="Optimizer and System Repair" FontSize="14" Foreground="White" Margin="10"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#FF343D58">
             <Image Source="Resources/warning.png" Width="90"/>
-            <TextBlock Text="Attention" FontSize="22" Foreground="White" FontWeight="Bold" Margin="20,40,0,0"/>
+            <TextBlock Text="Attention" FontSize="22" Foreground="White" FontWeight="Bold" Margin="20,20,0,0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Background="#FF343D58">
             <TextBlock FontSize="18" Foreground="White" Margin="10,0,0,0">

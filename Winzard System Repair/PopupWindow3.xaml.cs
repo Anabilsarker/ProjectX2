@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
 using WPFUI;
 
 namespace Winzard_System_Repair
@@ -14,6 +15,7 @@ namespace Winzard_System_Repair
         public PopupWindow3()
         {
             InitializeComponent();
+            RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
             problemnum();
         }
 

@@ -9,7 +9,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:r="clr-namespace:System;assembly=mscorlib"
-        Title="" Height="721" Width="998" Background="#FF292B38" WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Height="680" Width="998" Background="#FF292B38" WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <!--This Controls the slide animation of status panel(does not work)-->
     <Window.Resources>
         <Storyboard x:Key="statusopen"/>
@@ -63,10 +63,9 @@
 
         <!--Top control panel for draging window & name of the program-->
         <Rectangle Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" Fill="Transparent" MouseDown="TextBlock_MouseDown" HorizontalAlignment="Left" Width="840" />
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="Winzard" Foreground="LightSkyBlue" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,5" />
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="100,0,0,0">
-            <TextBlock FontSize="30" Foreground="White" Text="Winzard"/>
-            <TextBlock FontSize="28" Foreground="White" Text="System Repair"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+            <Image Source="Resources/logo.png" Width="200" HorizontalAlignment="Left"/>
+            <TextBlock Text="Optimizer and System Repair" FontSize="23" Foreground="Gold" Margin="0,20,0,0"/>
         </StackPanel>
 
         <!--System details processor ram gpu windows version info-->
@@ -220,9 +219,9 @@
             <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="0">
                 <Image gif:ImageBehavior.AnimatedSource="Resources/AridDependableBelugawhale-max-1mb.gif" />
                 <TextBlock x:Name="Statuspanel" FontSize="14" Foreground="White" Margin="0,20,0,0">
-                    WINZARD SYSTEM REPAIR is currently collecting information from your computer for scanning 
+                    PC Gold Optimizer and System Repair is currently collecting information from your computer for 
                     <LineBreak/>
-                    purpose. Please wait until the scanning is complete
+                    scanning purpose. Please wait until the scanning is complete
                 </TextBlock>
             </StackPanel>
             <ProgressBar x:Name="scanprogress" Grid.Column="2" Grid.Row="0" Height="5" Maximum="100" Minimum="0" Margin="0,90,0,0" Foreground="#FF18C5CC" Background="#FF000A0E"/>
@@ -318,7 +317,10 @@
                 <TextBlock Text="Settings" Margin="20,0,0,0" FontSize="30" Foreground="White"/>
                 <CheckBox Content="Enable Deep Scan" Margin="20,10,0,0" FontSize="20" Foreground="AliceBlue" IsChecked="True"/>
                 <CheckBox Content="Low CPU Usage (slower scan speed)" Margin="20,10,0,0" FontSize="20" Foreground="AliceBlue" IsChecked="True"/>
-                <TextBlock x:Name="settingsapplied" Margin="30,150,0,0" FontSize="20" Foreground="Green"/>
+                <CheckBox Content="Automatic System Optimization" Margin="20,10,0,0" FontSize="20" Foreground="AliceBlue" IsChecked="True"/>
+                <CheckBox Content="Realtime Protection" Margin="20,10,0,0" FontSize="20" Foreground="AliceBlue" IsChecked="True"/>
+                <CheckBox Content="Boost System Performance" Margin="20,10,0,0" FontSize="20" Foreground="AliceBlue" IsChecked="True"/>
+                <TextBlock x:Name="settingsapplied" Margin="30,40,0,0" FontSize="20" Foreground="Green"/>
             </StackPanel>
             <Button x:Name="apply" Grid.Row="2" Grid.ColumnSpan="2" Content="Apply" Background="Goldenrod" Margin="390,7,10,11" Click="apply_Click" />
         </Grid>
@@ -344,7 +346,9 @@
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
                 <TextBlock Text="Support" Margin="20,0,0,0" FontSize="30" Foreground="White"/>
-                <TextBlock Text="Contact us: support@winzards.com" Margin="20,10,0,0" FontSize="20" Foreground="White"/>
+                <TextBlock Text="Contact us: support@thealliancetech.com" Margin="20,10,0,0" FontSize="20" Foreground="White"/>
+                <TextBlock Text="Read EULA" Margin="20,10,0,0" FontSize="20" Foreground="White"/>
+                <Button x:Name="EULA" Content="here" Background="{x:Null}" Width="70" Margin="0,-25,220,0" Click="EULA_Click"/>
             </StackPanel>
         </Grid>
         
@@ -369,7 +373,7 @@
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
                 <TextBlock Text="About" Margin="20,0,0,0" FontSize="30" Foreground="White"/>
-                <TextBlock Text="Winzard System Repair" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
+                <TextBlock Text="PC Gold Optimizer and system repair" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
                 <TextBlock Text="The Alliance Tech" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
                 <TextBlock Text="Version 1.0" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
             </StackPanel>

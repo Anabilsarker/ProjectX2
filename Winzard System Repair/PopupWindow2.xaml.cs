@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace WPFUI
 {
@@ -15,6 +16,7 @@ namespace WPFUI
         public PopupWindow2()
         {
             InitializeComponent();
+            RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
             location();
         }
 
@@ -27,10 +29,13 @@ namespace WPFUI
             Random rnd = new Random();
             int corruptnum = rnd.Next(10, 100);
             popupcrptfilenum.Text = corruptnum.ToString();
-            int screenheight = Screen.PrimaryScreen.Bounds.Height;
+            /*int screenheight = Screen.PrimaryScreen.Bounds.Height;
             int screenwidth = Screen.PrimaryScreen.Bounds.Width;
             popupwindow2.Top = screenheight - 350;
-            popupwindow2.Left = screenwidth - 600;
+            popupwindow2.Left = screenwidth - 600;*/
+            var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
+            this.Left = desktopWorkingArea.Right - this.Width;
+            this.Top = desktopWorkingArea.Bottom - this.Height;
             popupwindow2.Opacity = 0;
             await Task.Delay(1);
             popupwindow2.Opacity = 0.1;

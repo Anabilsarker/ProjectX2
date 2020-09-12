@@ -6,8 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Winzard_System_Repair" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="PopupWindow4" Height="450" Width="800" Topmost="True" ResizeMode="NoResize" WindowStyle="None">
-    <Grid Background="#FF343D58">
+        Height="450" Width="800" Topmost="True" ResizeMode="NoResize" WindowStyle="None" Visibility="Visible">
+    <Grid Background="#FF343D58" Visibility="Visible">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -20,9 +20,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-            <Image Source="Resources/shield.ico" Width="40" Margin="10,0,0,0"/>
-            <TextBlock Text="Winzard System Repair" Margin="10" FontSize="16" FontWeight="Bold" Foreground="White"/>
-            <Button x:Name="popupclose" Style="{StaticResource MaterialDesignFlatButton}" Margin="510,0,0,20" Foreground="LightSkyBlue" Click="popupclose_Click">
+            <Image Source="Resources/logo.png" Width="80" Margin="10,0,0,0"/>
+            <TextBlock Text="PC Gold Optimizer and System Repair" Margin="10" FontSize="16" FontWeight="Bold" Foreground="White"/>
+            <Button x:Name="popupclose" Style="{StaticResource MaterialDesignFlatButton}" Margin="360,0,0,20" Foreground="LightSkyBlue" Click="popupclose_Click">
                 <materialDesign:PackIcon Kind="Close"/>
             </Button>
         </StackPanel>

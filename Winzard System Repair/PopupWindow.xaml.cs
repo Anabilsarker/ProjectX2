@@ -3,6 +3,7 @@ using System.Timers;
 using System.Threading;
 using System.Diagnostics;
 using System;
+using System.Windows.Media;
 
 namespace WPFUI
 {
@@ -16,6 +17,7 @@ namespace WPFUI
         public PopupWindow()
         {
             InitializeComponent();
+            RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
         }
 
         private void paybutton_Click(object sender, RoutedEventArgs e)

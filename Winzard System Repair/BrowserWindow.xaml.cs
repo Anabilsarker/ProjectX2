@@ -1,9 +1,7 @@
 ﻿using Microsoft.Win32;
 using ServiceStack.Stripe;
 using ServiceStack.Stripe.Types;
-using Stripe;
 using System;
-using System.Collections.Generic;
 using System.Windows;
 
 namespace WPFUI
@@ -94,20 +92,15 @@ namespace WPFUI
             }
             try
             {
-                StripeConfiguration.ApiKey = "sk_live_DmUVQDTpe9tOV0b6kFvy9y6K00bNafAJyN";
-                var options = new SubscriptionCreateOptions
+                var gateway = new StripeGateway("sk_live_DmUVQDTpe9tOV0b6kFvy9y6K00bNafAJyN");
+                var subscription = gateway.Post(new SubscribeStripeCustomer
                 {
-                    Customer = customerID,
-                    Items = new List<SubscriptionItemOptions>
-                    {
-                        new SubscriptionItemOptions
-                        {
-                            Price = "price_1HBF7nJHdLsTZND2wIu22JHK",
-                        },
-                    },
-                };
-                var service = new SubscriptionService();
-                Subscription subscription = service.Create(options);
+                    CustomerId = customerID,
+                    Plan = "price_1H2kCBJHdLsTZND2MIJsWEEk",
+                    Quantity = 1,
+                });
+
+
                 WebBrowser1.Visibility = Visibility.Visible;
                 WebBrowser1.Navigate("http://alliancetechhub.com/submit.php?uid=" + mc);
                 Productkeyentry = true;
@@ -127,7 +120,11 @@ namespace WPFUI
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            DialogResult = Productkeyentry;
+            try
+            {
+                DialogResult = Productkeyentry;
+            }
+            catch { }
         }
     }
 }

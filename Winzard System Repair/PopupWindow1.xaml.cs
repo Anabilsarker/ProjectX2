@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace WPFUI
 {
@@ -15,6 +16,7 @@ namespace WPFUI
         public PopupWindow1()
         {
             InitializeComponent();
+            RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
             location();
         }
 
@@ -45,10 +47,13 @@ namespace WPFUI
             FragmentedFiles.Text = frgfiles.ToString() + "%";
             int sysopt = rnd.Next(10, 30);
             Systemoptimizations.Text = sysopt.ToString();
-            int screenheight = Screen.PrimaryScreen.Bounds.Height;
+            /*int screenheight = Screen.PrimaryScreen.Bounds.Height;
             int screenwidth = Screen.PrimaryScreen.Bounds.Width;
             popupwindow1.Top = screenheight - 700;
-            popupwindow1.Left = screenwidth - 300;
+            popupwindow1.Left = screenwidth - 300;*/
+            var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
+            this.Left = desktopWorkingArea.Right - this.Width;
+            this.Top = desktopWorkingArea.Bottom - this.Height;
             popupwindow1.Opacity = 0;
             await Task.Delay(1);
             popupwindow1.Opacity = 0.1;

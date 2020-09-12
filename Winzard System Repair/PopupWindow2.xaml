@@ -7,9 +7,9 @@
         xmlns:local="clr-namespace:WPFUI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="PopupWindow2" Height="350" Width="600" Topmost="True" ResizeMode="NoResize" WindowStyle="None">
+        Height="350" Width="600" Topmost="True" ResizeMode="NoResize" WindowStyle="None" Visibility="Visible">
 
-    <Grid Background="#FF252C42">
+    <Grid Background="#FF252C42" Visibility="Visible">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -28,8 +28,8 @@
             </Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" Background="#FF242B41">
-            <Image Source="Resources/shield.ico" Width="40"/>
-            <TextBlock Text=" Winzard System Repair | Stability Alert" FontSize="20" Foreground="White" Margin="10"/>
+            <Image Source="Resources/logo.png" Width="80"/>
+            <TextBlock Text=" PC Gold Optimizer and System Repair | Stability Alert" FontSize="20" Foreground="White" Margin="10"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Background="#FF343D58">
             <Image Source="Resources/warning.png" Width="60" Margin="10"/>
