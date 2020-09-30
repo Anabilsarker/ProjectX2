@@ -4,7 +4,6 @@ using System.Management;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Winzard_System_Repair;
 using Microsoft.Win32;
 using System.Reflection;
 using System.Windows.Forms;
@@ -25,7 +24,8 @@ namespace WPFUI
         PopupWindow2 Popupsub2;
         PopupWindow3 popupmain;
         PopupWindow4 popupmain1;
-        int premium = 0, mega = 0;
+        PopupWindow5 popupmain2;
+        int premium = 0, notification = 0, mega = 2000;
         float sizedir;
         public MainWindow()
         {
@@ -41,27 +41,29 @@ namespace WPFUI
             sysdet3.Content = GetAccount3() + Environment.NewLine;
             sysdet4.Content = GetAccount4() + Environment.NewLine;
             NotPremium();
+            NotificationOnOff();
             afternumber();
             Popups();
+            Popups3();
         }
         //display number
         private void afternumber()
         {
-            Random rnd = new Random();
+            /*Random rnd = new Random();
             int malware = rnd.Next(1, 20);
             MalwareThreats.Text = malware.ToString();
             int holes = rnd.Next(1, 20);
             SecurityHoles.Text = holes.ToString();
-            int corruptsysfiles = rnd.Next(20, 100);
+            int corruptsysfiles = rnd.Next(1, 10);
             CorruptedSystemFiles.Text = corruptsysfiles.ToString();
-            int driver = rnd.Next(1, 20);
+            int driver = rnd.Next(1, 10);
             OutdatedDrivers.Text = driver.ToString();
-            int brknreg = rnd.Next(100, 2000);
+            int brknreg = rnd.Next(1, 10);
             BrokenRegistryEntries.Text = brknreg.ToString();
             int startup = rnd.Next(1, 20);
             Startupoptimizations.Text = startup.ToString();
-            int privacy = rnd.Next(100, 700);
-            PrivacyTraces.Text = privacy.ToString();
+            int privacy = rnd.Next(1, 10);
+            PrivacyTraces.Text = privacy.ToString();*/
         }
         //For getting system detail info
         private string GetAccount1()
@@ -205,6 +207,8 @@ namespace WPFUI
                 catch { }*/
                 //Progress
                 //scantext.Text = "Scanning: Malware";
+                Statuspanel.Text = "PC Gold Optimizer and System Repair is currently collecting information from your computer for\nscanning purpose. Please wait until the scanning is complete";
+                Loading1.Visibility = Visibility.Visible;
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
@@ -408,7 +412,7 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                //await Task.Delay(mega);
                 Loading9.Visibility = Visibility.Hidden;
                 Loading10.Visibility = Visibility.Visible;
                 //scantext.Text = "Scanning: System Files";
@@ -431,11 +435,12 @@ namespace WPFUI
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
-                await Task.Delay(mega);
+                //await Task.Delay(mega);
                 Loading10.Visibility = Visibility.Hidden;
 
                 load.Visibility = Visibility.Collapsed;
                 scanfix.Visibility = Visibility.Visible;
+                onetimefix.Visibility = Visibility.Visible;
                 resultpanel.Visibility = Visibility.Visible;
                 resultpanel2.Visibility = Visibility.Visible;
             }
@@ -449,13 +454,16 @@ namespace WPFUI
             PCstatus.Visibility = Visibility.Visible;
             loadvid.LoadedBehavior = MediaState.Stop;
             load.Visibility = Visibility.Collapsed;
+            resultpanel3.Visibility = Visibility.Collapsed;
+            resultpanel4.Visibility = Visibility.Collapsed;
         }
         //The Repair Button
-        private async void Scanfix_Click(object sender, RoutedEventArgs e)
+        public async void Scanfix_Click(object sender, RoutedEventArgs e)
         {
             if (premium == 1)
             {
                 scanfix.Visibility = Visibility.Collapsed;
+                onetimefix.Visibility = Visibility.Collapsed;
                 resultpanel.Visibility = Visibility.Collapsed;
                 resultpanel2.Visibility = Visibility.Collapsed;
                 load.Visibility = Visibility.Collapsed;
@@ -516,7 +524,8 @@ namespace WPFUI
                 #region Progress
                 double reset = 0;
                 scanprogress.Value = reset;
-                Statuspanel.Text = "Fixing: Malware";
+                Loading1.Visibility = Visibility.Visible;
+                Statuspanel.Text = "Fixing: Junk";
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
@@ -539,90 +548,6 @@ namespace WPFUI
                 await Task.Delay(mega);
                 Loading1.Visibility = Visibility.Hidden;
                 Loading2.Visibility = Visibility.Visible;
-                Statuspanel.Text = "Fixing: Registry";
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                await Task.Delay(mega);
-                Statuspanel.Text = "Fixing: Security";
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                await Task.Delay(mega);
-                Statuspanel.Text = "Boosting: Startup";
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                await Task.Delay(mega);
-                Statuspanel.Text = "Defragmenting: Drive";
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                
-                scanprogress.Value++;
-                await Task.Delay(mega);
                 Statuspanel.Text = "Fixing: Privacy";
                 scanprogress.Value++;
                 
@@ -644,7 +569,9 @@ namespace WPFUI
                 
                 scanprogress.Value++;
                 await Task.Delay(mega);
-                Statuspanel.Text = "Repairing: System";
+                Loading2.Visibility = Visibility.Hidden;
+                Loading3.Visibility = Visibility.Visible;
+                Statuspanel.Text = "Fixing: Registry";
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
@@ -665,7 +592,9 @@ namespace WPFUI
                 
                 scanprogress.Value++;
                 await Task.Delay(mega);
-                Statuspanel.Text = "Deleting: Junk";
+                Loading3.Visibility = Visibility.Hidden;
+                Loading4.Visibility = Visibility.Visible;
+                Statuspanel.Text = "Fixing: Startup";
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
@@ -686,7 +615,9 @@ namespace WPFUI
                 
                 scanprogress.Value++;
                 await Task.Delay(mega);
-                Statuspanel.Text = "Fixing: Drivers";
+                Loading4.Visibility = Visibility.Hidden;
+                Loading5.Visibility = Visibility.Visible;
+                Statuspanel.Text = "Optimizing: Driver";
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
@@ -707,7 +638,9 @@ namespace WPFUI
                 
                 scanprogress.Value++;
                 await Task.Delay(mega);
-                Statuspanel.Text = "Fixing: System Files";
+                Loading5.Visibility = Visibility.Hidden;
+                Loading6.Visibility = Visibility.Visible;
+                Statuspanel.Text = "Fixing: Malware";
                 scanprogress.Value++;
                 
                 scanprogress.Value++;
@@ -728,8 +661,104 @@ namespace WPFUI
                 
                 scanprogress.Value++;
                 await Task.Delay(mega);
+                Loading6.Visibility = Visibility.Hidden;
+                Loading7.Visibility = Visibility.Visible;
+                Statuspanel.Text = "Defragmenting";
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                await Task.Delay(mega);
+                Loading7.Visibility = Visibility.Hidden;
+                Loading8.Visibility = Visibility.Visible;
+                Statuspanel.Text = "Fixing: Security Holes";
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                await Task.Delay(mega);
+                Loading8.Visibility = Visibility.Hidden;
+                Loading9.Visibility = Visibility.Visible;
+                Statuspanel.Text = "Optimizing: System";
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                await Task.Delay(mega);
+                Loading9.Visibility = Visibility.Hidden;
+                Loading10.Visibility = Visibility.Visible;
+                Statuspanel.Text = "Optimizing: System";
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                
+                scanprogress.Value++;
+                Statuspanel.Text = "Repairing Files";
+                await Task.Delay(mega);
+                Loading10.Visibility = Visibility.Hidden;
+                scanprogress.Value = reset;
                 #endregion
-
+                resultpanel3.Visibility = Visibility.Visible;
+                resultpanel4.Visibility = Visibility.Visible;
                 //scanresult.Visibility = Visibility.Visible;
                 Statuspanel.Text = "Success";
                 //scanresult.Text = "Junk: " + sizedir.ToString() + "MB cleaned\n" + "Security Holes: " + "Fixed" + "\nPrivacy Issue: " + "Fixed" + "\nDevice Optimized";
@@ -741,15 +770,320 @@ namespace WPFUI
                 if (popupmain.ShowDialog().Value)
                 {
                     Activatekey(true);
+                    RepairfirstTime();
                 }
                 else
                 {
                     Activatekey(false);
-                    PopupTimer();
+                    //PopupTimer();
                 }
             }
         }
-        
+        public async void RepairfirstTime()
+        {
+            scanfix.Visibility = Visibility.Collapsed;
+            resultpanel.Visibility = Visibility.Collapsed;
+            resultpanel2.Visibility = Visibility.Collapsed;
+            load.Visibility = Visibility.Collapsed;
+            //scanresult.Visibility = Visibility.Collapsed;
+            try
+            {
+                DirectoryInfo di1 = new DirectoryInfo("C:/Windows/Prefetch");
+                foreach (FileInfo file in di1.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di1.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            catch { }
+            try
+            {
+                string Temppath = Path.GetTempPath();
+                DirectoryInfo di2 = new DirectoryInfo(Temppath);
+                foreach (FileInfo file in di2.EnumerateFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di2.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            catch { }
+            try
+            {
+                DirectoryInfo di3 = new DirectoryInfo("C:/Windows/Temp");
+                foreach (FileInfo file in di3.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di3.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            catch { }
+            try
+            {
+                DirectoryInfo di4 = new DirectoryInfo("C:/Windows/SoftwareDistribution/Download");
+                foreach (FileInfo file in di4.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di4.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            catch { }
+            #region Progress
+            double reset = 0;
+            scanprogress.Value = reset;
+            Loading1.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Junk";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading1.Visibility = Visibility.Hidden;
+            Loading2.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Privacy";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading2.Visibility = Visibility.Hidden;
+            Loading3.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Registry";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading3.Visibility = Visibility.Hidden;
+            Loading4.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Startup";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading4.Visibility = Visibility.Hidden;
+            Loading5.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Optimizing: Driver";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading5.Visibility = Visibility.Hidden;
+            Loading6.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Malware";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading6.Visibility = Visibility.Hidden;
+            Loading7.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Defragmenting";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading7.Visibility = Visibility.Hidden;
+            Loading8.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Security Holes";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading8.Visibility = Visibility.Hidden;
+            Loading9.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Optimizing: System";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading9.Visibility = Visibility.Hidden;
+            Loading10.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Optimizing: System";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            Statuspanel.Text = "Repairing Files";
+            await Task.Delay(mega);
+            Loading10.Visibility = Visibility.Hidden;
+            scanprogress.Value = reset;
+            #endregion
+            resultpanel3.Visibility = Visibility.Visible;
+            resultpanel4.Visibility = Visibility.Visible;
+            //scanresult.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Success";
+            //scanresult.Text = "Junk: " + sizedir.ToString() + "MB cleaned\n" + "Security Holes: " + "Fixed" + "\nPrivacy Issue: " + "Fixed" + "\nDevice Optimized";
+            scanstop.Content = "Back";
+            popupmain2 = new PopupWindow5();
+            popupmain2.Show();
+        }
 
         //Activation Button & Logic
         public void Activatekey(bool result)
@@ -760,10 +1094,11 @@ namespace WPFUI
                 BinaryWriter bw = new BinaryWriter(fs);
                 bw.Write(true);
                 fs.Close();
+                bw.Close();
                 premium = 1;
             }
         }
-        private void NotPremium()
+        public void NotPremium()
         {
             if (System.IO.File.Exists("sysfunction.bin"))
             {
@@ -828,63 +1163,490 @@ namespace WPFUI
         }
 
         //Popup
-        private async void PopupTimer()
+        /*private async void PopupTimer()
         {
             await Task.Delay(300000);
             popupmain = new PopupWindow3();
             if (popupmain.ShowDialog().Value)
             {
                 Activatekey(true);
+                RepairfirstTime();
             }
             else
             {
                 Activatekey(false);
                 PopupTimer();
             }
-        }
+        }*/
+
         
         private async void Popups()
         {
-            await Task.Delay(120000);
-            Popupsub = new PopupWindow1();
-            if (Popupsub.ShowDialog().Value)
+            if (premium == 0 && notification == 0)
             {
-                Activatekey(true);
+                await Task.Delay(120000);
+                Popupsub = new PopupWindow1();
+                if (Popupsub.ShowDialog().Value)
+                {
+                    Activatekey(true);
+                    RepairfirstTime();
+                }
+                else
+                {
+                    Activatekey(false);
+                    await Task.Delay(400000);
+                    Popups1();
+                }
             }
             else
             {
-                Activatekey(false);
-                Popups1();
+                return;
             }
         }
 
         private async void Popups1()
         {
-            await Task.Delay(120000);
-            Popupsub2 = new PopupWindow2();
-            if (Popupsub2.ShowDialog().Value)
+            if (premium == 0 && notification == 0)
             {
-                Activatekey(true);
+                await Task.Delay(120000);
+                Popupsub2 = new PopupWindow2();
+                if (Popupsub2.ShowDialog().Value)
+                {
+                    Activatekey(true);
+                    RepairfirstTime();
+                }
+                else
+                {
+                    Activatekey(false);
+                    Popups2();
+                }
             }
             else
             {
-                Activatekey(false);
-                Popups2();
+                return;
             }
+
         }
         private async void Popups2()
         {
-            await Task.Delay(120000);
-            popupmain1 = new PopupWindow4();
-            if (popupmain1.ShowDialog().Value)
+            if (premium == 0 && notification == 0)
             {
-                Activatekey(true);
+                await Task.Delay(120000);
+                popupmain1 = new PopupWindow4();
+                if (popupmain1.ShowDialog().Value)
+                {
+                    Activatekey(true);
+                    RepairfirstTime();
+                }
+                else
+                {
+                    Activatekey(false);
+                    Popups();
+                }
             }
             else
             {
-                Activatekey(false);
-                Popups();
+                return;
             }
+        }
+        private async void Popups3()
+        {
+            if (premium == 1)
+            {
+                await Task.Delay(5000000);
+                popupmain2 = new PopupWindow5();
+                popupmain2.Show();
+                Popups3();
+            }
+            else
+            {
+                await Task.Delay(60000);
+                Popups3();
+            }
+        }
+
+        private void Turnoffnotifications_Checked(object sender, RoutedEventArgs e)
+        {
+            FileStream fs = new FileStream("sysset.bin", FileMode.Create);
+            BinaryWriter bw = new BinaryWriter(fs);
+            bw.Write(true);
+            fs.Close();
+        }
+        public void NotificationOnOff()
+        {
+            if (System.IO.File.Exists("sysset.bin"))
+            {
+                FileStream fs = new FileStream("sysset.bin", FileMode.Open);
+                BinaryReader br = new BinaryReader(fs);
+                if (br.ReadBoolean() == true)
+                {
+                    notification = 1;
+                    fs.Close();
+                }
+                else
+                {
+                    br.Close();
+                    fs.Close();
+                }
+            }
+            else
+            {
+                FileStream fs = new FileStream("sysset.bin", FileMode.Create);
+                BinaryWriter bw = new BinaryWriter(fs);
+                bw.Write(false);
+                fs.Close();
+            }
+        }
+
+        private void onetimefix_Click(object sender, RoutedEventArgs e)
+        {
+            OneTimeFix();
+        }
+        public void OneTimeFix()
+        {
+            if (System.IO.File.Exists("sysdone.bin"))
+            {
+                FileStream fs = new FileStream("sysdone.bin", FileMode.Open);
+                BinaryReader br = new BinaryReader(fs);
+                if (br.ReadBoolean() == true)
+                {
+                    br.Close();
+                    BinaryWriter bw = new BinaryWriter(fs);
+                    bw.Write(false);
+                    bw.Close();
+                    fs.Close();
+                    OneTimeRepair();
+                }
+                else
+                {
+                    br.Close();
+                    fs.Close();
+                    popupmain = new PopupWindow3();
+                    if (popupmain.ShowDialog().Value)
+                    {
+                        Activatekey(true);
+                        RepairfirstTime();
+                    }
+                    else
+                    {
+                        Activatekey(false);
+                        //PopupTimer();
+                    }
+                }
+            }
+            else
+            {
+                FileStream fs = new FileStream("sysdone.bin", FileMode.Create);
+                BinaryWriter bw = new BinaryWriter(fs);
+                bw.Write(false);
+                bw.Close();
+                fs.Close();
+                OneTimeRepair();
+            }
+        }
+        public async void OneTimeRepair()
+        {
+            scanfix.Visibility = Visibility.Collapsed;
+            onetimefix.Visibility = Visibility.Collapsed;
+            resultpanel.Visibility = Visibility.Collapsed;
+            resultpanel2.Visibility = Visibility.Collapsed;
+            load.Visibility = Visibility.Collapsed;
+            //scanresult.Visibility = Visibility.Collapsed;
+            try
+            {
+                DirectoryInfo di1 = new DirectoryInfo("C:/Windows/Prefetch");
+                foreach (FileInfo file in di1.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di1.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            catch { }
+            try
+            {
+                string Temppath = Path.GetTempPath();
+                DirectoryInfo di2 = new DirectoryInfo(Temppath);
+                foreach (FileInfo file in di2.EnumerateFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di2.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            catch { }
+            try
+            {
+                DirectoryInfo di3 = new DirectoryInfo("C:/Windows/Temp");
+                foreach (FileInfo file in di3.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di3.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            catch { }
+            try
+            {
+                DirectoryInfo di4 = new DirectoryInfo("C:/Windows/SoftwareDistribution/Download");
+                foreach (FileInfo file in di4.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di4.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            catch { }
+            #region Progress
+            double reset = 0;
+            scanprogress.Value = reset;
+            Loading1.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Junk";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading1.Visibility = Visibility.Hidden;
+            Loading2.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Privacy";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading2.Visibility = Visibility.Hidden;
+            Loading3.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Registry";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading3.Visibility = Visibility.Hidden;
+            Loading4.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Startup";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading4.Visibility = Visibility.Hidden;
+            Loading5.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Optimizing: Driver";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading5.Visibility = Visibility.Hidden;
+            Loading6.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Malware";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading6.Visibility = Visibility.Hidden;
+            Loading7.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Defragmenting";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading7.Visibility = Visibility.Hidden;
+            Loading8.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Fixing: Security Holes";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading8.Visibility = Visibility.Hidden;
+            Loading9.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Optimizing: System";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            await Task.Delay(mega);
+            Loading9.Visibility = Visibility.Hidden;
+            Loading10.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Optimizing: System";
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+
+            scanprogress.Value++;
+            Statuspanel.Text = "Repairing Files";
+            await Task.Delay(mega);
+            Loading10.Visibility = Visibility.Hidden;
+            scanprogress.Value = reset;
+            #endregion
+            resultpanel3.Visibility = Visibility.Visible;
+            resultpanel4.Visibility = Visibility.Visible;
+            //scanresult.Visibility = Visibility.Visible;
+            Statuspanel.Text = "Success";
+            //scanresult.Text = "Junk: " + sizedir.ToString() + "MB cleaned\n" + "Security Holes: " + "Fixed" + "\nPrivacy Issue: " + "Fixed" + "\nDevice Optimized";
+            scanstop.Content = "Back";
         }
         //Verbose
         /*private async void VerboseDir()

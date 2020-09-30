@@ -1,12 +1,12 @@
-﻿<Window x:Class="Winzard_System_Repair.PopupWindow3"
+﻿<Window x:Class="WPFUI.PopupWindow3"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Winzard_System_Repair" 
+        xmlns:local="clr-namespace:WPFUI" 
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Height="350" Width="400" Topmost="True" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Visibility="Visible">
+        Height="350" Width="400" Topmost="True" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Visibility="Visible" Closing="Window_Closing">
     <Grid Visibility="Visible">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -14,8 +14,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/><!--this was 40-->
+            <RowDefinition Height="0"/><!--this was 50-->
             <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -28,21 +28,22 @@
             </Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Background="White">
-            <Image Source="Resources/warning.png" Width="60"/>
+            <!--<Image Source="Resources/warning.png" Width="60"/>-->
             <TextBlock Text="Recomended to register now!" FontSize="20" Margin="10,15,0,0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Background="White">
-            <TextBlock x:Name="issues" FontSize="16" Foreground="OrangeRed" Margin="20,10,0,0"/>
+            <!--<TextBlock x:Name="issues" FontSize="16" Foreground="OrangeRed" Margin="20,10,0,0"/>
             <TextBlock Text=" issues to fix, " FontSize="16" Margin="0,10,0,0"/>
             <TextBlock x:Name="items" FontSize="16" Foreground="OrangeRed" Margin="0,10,0,0"/>
-            <TextBlock Text=" item(s) to clean and" FontSize="16" Margin="0,10,0,0"/>
+            <TextBlock Text=" item(s) to clean and" FontSize="16" Margin="0,10,0,0"/>-->
+            <TextBlock Text="Trial repair can be done once only" FontSize="16" Margin="20,0,0,0"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Background="White">
+        <!--<StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Background="White">
             <TextBlock Text="optimize and " FontSize="16" Margin="20,0,0,0"/>
             <TextBlock x:Name="freespace" FontSize="16" Foreground="OrangeRed"/>
             <TextBlock Text=" GB" FontSize="16" Foreground="OrangeRed"/>
             <TextBlock Text=" of disk space to free up" FontSize="16"/>
-        </StackPanel>
+        </StackPanel>-->
         <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Background="White">
             <TextBlock FontSize="14" FontWeight="Light" Margin="20,0,0,0">
                 To immediately fix,Clean and optimize your PC you need to

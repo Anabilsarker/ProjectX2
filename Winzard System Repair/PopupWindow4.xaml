@@ -1,12 +1,12 @@
-﻿<Window x:Class="Winzard_System_Repair.PopupWindow4"
+﻿<Window x:Class="WPFUI.PopupWindow4"
         x:Name="popupwindow4"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Winzard_System_Repair" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:WPFUI" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Height="450" Width="800" Topmost="True" ResizeMode="NoResize" WindowStyle="None" Visibility="Visible">
+        Height="450" Width="800" Topmost="True" ResizeMode="NoResize" WindowStyle="None" Visibility="Visible" Closing="Window_Closing">
     <Grid Background="#FF343D58" Visibility="Visible">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

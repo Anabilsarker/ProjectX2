@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
 
 namespace WPFUI
@@ -27,12 +26,8 @@ namespace WPFUI
         private async void location()
         {
             Random rnd = new Random();
-            int corruptnum = rnd.Next(10, 100);
+            int corruptnum = rnd.Next(1, 10);
             popupcrptfilenum.Text = corruptnum.ToString();
-            /*int screenheight = Screen.PrimaryScreen.Bounds.Height;
-            int screenwidth = Screen.PrimaryScreen.Bounds.Width;
-            popupwindow2.Top = screenheight - 350;
-            popupwindow2.Left = screenwidth - 600;*/
             var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
             this.Left = desktopWorkingArea.Right - this.Width;
             this.Top = desktopWorkingArea.Bottom - this.Height;

@@ -241,13 +241,14 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
+            <Button x:Name="onetimefix" Grid.Column="2" Grid.Row="1" Content="Trial Repair" BorderBrush="{x:Null}" Width="130" Height="30" Margin="363,410,262,0" Visibility="Collapsed" Click="onetimefix_Click" Background="{x:Null}"/>
             <!--For scanning animation-->
             <StackPanel x:Name="load" Orientation="Vertical" Grid.Row="1" Grid.Column="2">
                 <MediaElement x:Name="loadvid" Source="C:\Windows\systemrell.mkv" LoadedBehavior="Stop" Height="400" Stretch="Fill"/>
             </StackPanel>
             <StackPanel x:Name="resultpanel" Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Visibility="Collapsed" Background="#FF333E59" Margin="0,0,0,45">
-                <Image Source="Resources/Warning.png" Width="140" Height="140" HorizontalAlignment="Left" Margin="0,0,0,0"/>
-                <TextBlock Text="System Instability Detected Repair Now" FontSize="30" FontWeight="Bold" Foreground="OrangeRed" Margin="140,-80,0,0"/>
+                <Image Width="140" Height="140" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+                <TextBlock Text="System Instability Detected Repair Now" FontSize="30" FontWeight="Bold" Foreground="White" Margin="140,-80,0,0"/>
                 <TextBlock Text="Malware Threats" FontSize="18" Foreground="White" Margin="10"/>
                 <TextBlock Text="Security Holes" FontSize="18" Foreground="White" Margin="10"/>
                 <TextBlock Text="Corrupted System Files" FontSize="18" Foreground="White" Margin="10"/>
@@ -264,6 +265,26 @@
                 <TextBlock x:Name="BrokenRegistryEntries" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
                 <TextBlock x:Name="Startupoptimizations" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
                 <TextBlock x:Name="PrivacyTraces" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
+            </StackPanel>
+            <StackPanel x:Name="resultpanel3" Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Visibility="Collapsed" Background="#FF333E59" Margin="0,0,0,45">
+                <Image Source="Resources/safety.png" Width="140" Height="140" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+                <TextBlock Text="Repair Complete" FontSize="30" FontWeight="Bold" Foreground="#FFB9DD39" Margin="200,-100,0,0"/>
+                <TextBlock Text="Malware Threats" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Security Holes" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Corrupted System Files" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Outdated Drivers" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Broken Registry Entries" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Startup optimizations" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Privacy Traces" FontSize="18" Foreground="White" Margin="10"/>
+            </StackPanel>
+            <StackPanel x:Name="resultpanel4" Orientation="Vertical" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Visibility="Collapsed">
+                <Image Source="Resources/tick.png" Width="20" Margin="0,153,200,0"/>
+                <Image Source="Resources/tick.png" Width="20" Margin="0,23,200,0"/>
+                <Image Source="Resources/tick.png" Width="20" Margin="0,23,200,0"/>
+                <Image Source="Resources/tick.png" Width="20" Margin="0,25,200,0"/>
+                <Image Source="Resources/tick.png" Width="20" Margin="0,25,200,0"/>
+                <Image Source="Resources/tick.png" Width="20" Margin="0,23,200,0"/>
+                <Image Source="Resources/tick.png" Width="20" Margin="0,23,200,0"/>
             </StackPanel>
         </Grid>
 
@@ -320,11 +341,12 @@
                 <CheckBox Content="Automatic System Optimization" Margin="20,10,0,0" FontSize="20" Foreground="AliceBlue" IsChecked="True"/>
                 <CheckBox Content="Realtime Protection" Margin="20,10,0,0" FontSize="20" Foreground="AliceBlue" IsChecked="True"/>
                 <CheckBox Content="Boost System Performance" Margin="20,10,0,0" FontSize="20" Foreground="AliceBlue" IsChecked="True"/>
+                <CheckBox x:Name="Turnoffnotifications" Content="Turn off notifications" Margin="20,10,0,0" FontSize="20" Foreground="AliceBlue" IsChecked="False" Checked="Turnoffnotifications_Checked"/>
                 <TextBlock x:Name="settingsapplied" Margin="30,40,0,0" FontSize="20" Foreground="Green"/>
             </StackPanel>
             <Button x:Name="apply" Grid.Row="2" Grid.ColumnSpan="2" Content="Apply" Background="Goldenrod" Margin="390,7,10,11" Click="apply_Click" />
         </Grid>
-        
+
         <!--Support-->
         <Grid x:Name="support" Margin="186,18,124,-351" Grid.Column="1" Grid.Row="2" Background="#FF1E2639" Width="540" Height="330" Visibility="Collapsed">
             <Grid.Effect>
@@ -349,9 +371,11 @@
                 <TextBlock Text="Contact us: support@thealliancetech.com" Margin="20,10,0,0" FontSize="20" Foreground="White"/>
                 <TextBlock Text="Read EULA" Margin="20,10,0,0" FontSize="20" Foreground="White"/>
                 <Button x:Name="EULA" Content="here" Background="{x:Null}" Width="70" Margin="0,-25,220,0" Click="EULA_Click"/>
+                <TextBlock Text="To Uninstall the product go to Programs and Features" Margin="20,10,0,0" FontSize="20" Foreground="White"/>
+                <TextBlock Text="in Control Panel. Select the product and click uninstall" Margin="20,10,0,0" FontSize="20" Foreground="White"/>
             </StackPanel>
         </Grid>
-        
+
         <!--About-->
         <Grid x:Name="about" Margin="186,18,124,-351" Grid.Column="1" Grid.Row="2" Background="#FF1E2639" Width="540" Height="330" Visibility="Collapsed">
             <Grid.Effect>

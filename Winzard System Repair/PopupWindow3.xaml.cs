@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
-using WPFUI;
 
-namespace Winzard_System_Repair
+namespace WPFUI
 {
     /// <summary>
     /// Interaction logic for PopupWindow3.xaml
@@ -43,12 +42,12 @@ namespace Winzard_System_Repair
         private void problemnum()
         {
             Random rnd = new Random();
-            int issuesnum = rnd.Next(70, 200);
-            int itemsnum = rnd.Next(100, 3000);
-            int freespacenum = rnd.Next(1, 20);
-            issues.Text = issuesnum.ToString();
+            int issuesnum = rnd.Next(1, 20);
+            int itemsnum = rnd.Next(1, 10);
+            int freespacenum = rnd.Next(1, 3);
+            /*issues.Text = issuesnum.ToString();
             items.Text = itemsnum.ToString();
-            freespace.Text = freespacenum.ToString();
+            freespace.Text = freespacenum.ToString();*/
         }
     }
 }

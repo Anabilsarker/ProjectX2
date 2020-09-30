@@ -1,8 +1,4 @@
 ﻿using System.Windows;
-using System.Timers;
-using System.Threading;
-using System.Diagnostics;
-using System;
 using System.Windows.Media;
 
 namespace WPFUI

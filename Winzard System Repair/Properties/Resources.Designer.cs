@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Winzard_System_Repair.Properties
+namespace WPFUI.Properties
 {
 
 

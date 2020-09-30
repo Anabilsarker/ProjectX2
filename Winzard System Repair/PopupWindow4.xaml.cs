@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
-using WPFUI;
 
-namespace Winzard_System_Repair
+namespace WPFUI
 {
     /// <summary>
     /// Interaction logic for PopupWindow4.xaml
@@ -26,13 +24,9 @@ namespace Winzard_System_Repair
         }
         private async void location()
         {
-            /*int screenheight = Screen.PrimaryScreen.Bounds.Height;
-            int screenwidth = Screen.PrimaryScreen.Bounds.Width;
-            popupwindow4.Top = screenheight - 450;
-            popupwindow4.Left = screenwidth - 800;*/
-            var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
-            this.Left = desktopWorkingArea.Right - this.Width;
-            this.Top = desktopWorkingArea.Bottom - this.Height;
+            var desktopWorkingArea = SystemParameters.WorkArea;
+            Left = desktopWorkingArea.Right - Width;
+            Top = desktopWorkingArea.Bottom - Height;
             popupwindow4.Opacity = 0;
             await Task.Delay(1);
             popupwindow4.Opacity = 0.1;

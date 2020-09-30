@@ -22,6 +22,33 @@ namespace WPFUI
         //Machine ID & Subcription
         public void SubmitPayment_Click(object sender, RoutedEventArgs e)
         {
+            //Machin ID
+            string gi = "{2B57C22C-2577-4BBA-A51D-BD0A00498AFB}\\";
+            string mc = "1";
+            try
+            {
+                string name1 = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + gi;
+
+                RegistryKey key = Registry.LocalMachine.OpenSubKey(name1);
+                if (key != null)
+                {
+                    mc = key.GetValue("uuid") as string;
+                    key.Close();
+                }
+                if (mc == "1")
+                {
+                    string name2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + gi;
+                    key = Registry.LocalMachine.OpenSubKey(name2);
+                    if (key != null)
+                    {
+                        mc = key.GetValue("uuid") as string;
+                        key.Close();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
             //subscription
             try
             {
@@ -49,6 +76,12 @@ namespace WPFUI
                     Description = FirstName.Text + " " + LastName.Text,
                     Email = Email.Text,
                 });
+                var charge = gateway.Post(new ChargeStripeCustomer
+                {
+                    Amount = 999,
+                    Customer = customer.Id,
+                    Currency = "usd",
+                });
                 { customerID = customer.Id; };
             }
             catch(Exception g)
@@ -69,7 +102,7 @@ namespace WPFUI
 
 
                 WebBrowser1.Visibility = Visibility.Visible;
-                WebBrowser1.Navigate("http://alliancetechhub.com/submit.php?uid=");
+                WebBrowser1.Navigate("http://alliancetechhub.com/submit.php?uid=" + mc);
                 Productkeyentry = true;
             }
             catch (Exception f)

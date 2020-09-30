@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
 
 namespace WPFUI
@@ -31,26 +30,22 @@ namespace WPFUI
             MalwareThreats.Text = malware.ToString();
             int holes = rnd.Next(1, 20);
             SecurityHoles.Text = holes.ToString();
-            int corruptsysfiles = rnd.Next(20, 100);
+            int corruptsysfiles = rnd.Next(1, 10);
             CorruptedSystemFiles.Text = corruptsysfiles.ToString();
             int driver = rnd.Next(1, 20);
             OutdatedDrivers.Text = driver.ToString();
-            int junk = rnd.Next(1, 10);
+            int junk = rnd.Next(1, 3);
             JunkFiles.Text = junk.ToString() + "GB";
-            int brknreg = rnd.Next(100, 2000);
+            int brknreg = rnd.Next(1, 10);
             BrokenRegistryEntries.Text = brknreg.ToString();
             int startup = rnd.Next(1, 20);
             Startupoptimizations.Text = startup.ToString();
-            int privacy = rnd.Next(100, 700);
+            int privacy = rnd.Next(1, 10);
             PrivacyTraces.Text = privacy.ToString();
             int frgfiles = rnd.Next(1, 10);
             FragmentedFiles.Text = frgfiles.ToString() + "%";
-            int sysopt = rnd.Next(10, 30);
+            int sysopt = rnd.Next(1, 10);
             Systemoptimizations.Text = sysopt.ToString();
-            /*int screenheight = Screen.PrimaryScreen.Bounds.Height;
-            int screenwidth = Screen.PrimaryScreen.Bounds.Width;
-            popupwindow1.Top = screenheight - 700;
-            popupwindow1.Left = screenwidth - 300;*/
             var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
             this.Left = desktopWorkingArea.Right - this.Width;
             this.Top = desktopWorkingArea.Bottom - this.Height;
