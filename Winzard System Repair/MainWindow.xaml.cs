@@ -43,7 +43,7 @@ namespace WPFUI
             NotPremium();
             NotificationOnOff();
             afternumber();
-            Popups();
+            
             Popups3();
         }
         //display number
@@ -443,6 +443,8 @@ namespace WPFUI
                 onetimefix.Visibility = Visibility.Visible;
                 resultpanel.Visibility = Visibility.Visible;
                 resultpanel2.Visibility = Visibility.Visible;
+                resultdetails.Visibility = Visibility.Visible;
+                Popups();
             }
         }
 
@@ -466,6 +468,7 @@ namespace WPFUI
                 onetimefix.Visibility = Visibility.Collapsed;
                 resultpanel.Visibility = Visibility.Collapsed;
                 resultpanel2.Visibility = Visibility.Collapsed;
+                resultdetails.Visibility = Visibility.Collapsed;
                 load.Visibility = Visibility.Collapsed;
                 //scanresult.Visibility = Visibility.Collapsed;
                 try
@@ -784,6 +787,7 @@ namespace WPFUI
             scanfix.Visibility = Visibility.Collapsed;
             resultpanel.Visibility = Visibility.Collapsed;
             resultpanel2.Visibility = Visibility.Collapsed;
+            resultdetails.Visibility = Visibility.Collapsed;
             load.Visibility = Visibility.Collapsed;
             //scanresult.Visibility = Visibility.Collapsed;
             try
@@ -1302,6 +1306,7 @@ namespace WPFUI
         {
             OneTimeFix();
         }
+
         public void OneTimeFix()
         {
             if (System.IO.File.Exists("sysdone.bin"))
@@ -1350,6 +1355,7 @@ namespace WPFUI
             onetimefix.Visibility = Visibility.Collapsed;
             resultpanel.Visibility = Visibility.Collapsed;
             resultpanel2.Visibility = Visibility.Collapsed;
+            resultdetails.Visibility = Visibility.Collapsed;
             load.Visibility = Visibility.Collapsed;
             //scanresult.Visibility = Visibility.Collapsed;
             try
@@ -1648,6 +1654,49 @@ namespace WPFUI
             //scanresult.Text = "Junk: " + sizedir.ToString() + "MB cleaned\n" + "Security Holes: " + "Fixed" + "\nPrivacy Issue: " + "Fixed" + "\nDevice Optimized";
             scanstop.Content = "Back";
         }
+
+        private void Corruptdet_Click(object sender, RoutedEventArgs e)
+        {
+            resultdetails1.Visibility = Visibility.Visible;
+            resdet2.Visibility = Visibility.Visible;
+        }
+
+        private void regdet_Click(object sender, RoutedEventArgs e)
+        {
+            resultdetails1.Visibility = Visibility.Visible;
+            resdet3.Visibility = Visibility.Visible;
+        }
+
+        private void privacydet_Click(object sender, RoutedEventArgs e)
+        {
+            resultdetails1.Visibility = Visibility.Visible;
+            resdet4.Visibility = Visibility.Visible;
+        }
+
+        private void malwaredet_Click(object sender, RoutedEventArgs e)
+        {
+            string Temppath = Path.GetTempPath() + "sysvent.dll";
+            string Tenppath1 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "erwts.dll";
+            string Temppath2 = Path.GetTempPath() + "crrptrr.dll";
+            string Tenppath3 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "ruop.dll";
+            string Temppath4 = Path.GetTempPath() + "systemred.dll";
+            string Tenppath5 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "windrr.dll";
+            string Temppath6 = Path.GetTempPath() + "tyope.dll";
+            string Tenppath7 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "undll.dll";
+            string Temppath8 = Path.GetTempPath() + "vans.dll";
+            resdet1.Text = "Detected Items" + "\n" + "\n" + Temppath + "\n" + Tenppath1 + "\n" + Temppath2 + "\n" + Tenppath3 + "\n" + Temppath4 + "\n" + Tenppath5 + "\n" + Temppath6 + "\n" + Tenppath7 + "\n" + Temppath8;
+            resultdetails1.Visibility = Visibility.Visible;
+            resdet1.Visibility = Visibility.Visible;
+        }
+        private void resdetclose_Click(object sender, RoutedEventArgs e)
+        {
+            resultdetails1.Visibility = Visibility.Collapsed;
+            resdet1.Visibility = Visibility.Collapsed;
+            resdet2.Visibility = Visibility.Collapsed;
+            resdet3.Visibility = Visibility.Collapsed;
+            resdet4.Visibility = Visibility.Collapsed;
+        }
+
         //Verbose
         /*private async void VerboseDir()
         {

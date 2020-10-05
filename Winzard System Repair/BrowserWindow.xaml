@@ -10,16 +10,24 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="100"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <WebBrowser x:Name="WebBrowser1" Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="3" Visibility="Collapsed"/>
+        <WebBrowser x:Name="WebBrowser1" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="4" Visibility="Collapsed"/>
         <TextBlock Text="The Alliance Tech" Grid.Row="0" Margin="20,0,0,0" FontSize="30"/>
         <Image Source="Resources/PaySlip.png" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Width="570" Height="100" VerticalAlignment="Top"/>
-        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" Margin="10">
+        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            You may cancel your subscription by sending mail to us on support@thealliancetech.com or you may contact
+            <LineBreak/>
+            us. You should cancel prior to your renewal billing date to allow us time for processing.
+            <LineBreak/>
+            If you're still renewed, please contact us for help with a refund.
+        </TextBlock>
+        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="0" Margin="10">
             <TextBlock Text="First Name*" Margin="0,5,0,0"/>
             <Border Background="AliceBlue" BorderBrush="Black" BorderThickness="1" Margin="0,0,50,0">
                 <TextBox x:Name="FirstName"/>
@@ -65,7 +73,7 @@
             </Border>
             <Button x:Name="SubmitPayment" Margin="0,20,50,10" Content="Submit Payment" Click="SubmitPayment_Click"/>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="10">
+        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="1" Margin="10">
             <TextBlock Text="CVV" Margin="0,5,0,0"/>
             <Border Background="AliceBlue" BorderBrush="Black" BorderThickness="1" Margin="0,0,50,0">
                 <TextBox x:Name="CVV"/>

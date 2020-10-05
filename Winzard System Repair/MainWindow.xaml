@@ -258,13 +258,29 @@
                 <TextBlock Text="Privacy Traces" FontSize="18" Foreground="White" Margin="10"/>
             </StackPanel>
             <StackPanel x:Name="resultpanel2" Orientation="Vertical" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Visibility="Collapsed">
-                <TextBlock x:Name="MalwareThreats" FontSize="18" Foreground="Yellow" Margin="300,150,0,0"/>
-                <TextBlock x:Name="SecurityHoles" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
-                <TextBlock x:Name="CorruptedSystemFiles" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
-                <TextBlock x:Name="OutdatedDrivers" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
-                <TextBlock x:Name="BrokenRegistryEntries" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
-                <TextBlock x:Name="Startupoptimizations" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
-                <TextBlock x:Name="PrivacyTraces" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
+                <TextBlock x:Name="MalwareThreats" FontSize="18" Foreground="Yellow" Margin="300,150,400,0"/>
+                <TextBlock x:Name="SecurityHoles" FontSize="18" Foreground="Yellow" Margin="300,20,400,0"/>
+                <TextBlock x:Name="CorruptedSystemFiles" FontSize="18" Foreground="Yellow" Margin="300,20,400,0"/>
+                <TextBlock x:Name="OutdatedDrivers" FontSize="18" Foreground="Yellow" Margin="300,20,400,0"/>
+                <TextBlock x:Name="BrokenRegistryEntries" FontSize="18" Foreground="Yellow" Margin="300,20,400,0"/>
+                <TextBlock x:Name="Startupoptimizations" FontSize="18" Foreground="Yellow" Margin="300,20,400,0"/>
+                <TextBlock x:Name="PrivacyTraces" FontSize="18" Foreground="Yellow" Margin="300,20,400,0"/>
+            </StackPanel>
+            <StackPanel x:Name="resultdetails" Orientation="Vertical" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Visibility="Collapsed">
+                <Button x:Name="malwaredet" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="80,150,00,0" Click="malwaredet_Click"/>
+                <Button Content="View Details" Height="23" Width="0" Background="{x:Null}" BorderBrush="{x:Null}" Margin="80,22,00,0"/>
+                <Button x:Name="Corruptdet" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="80,22,00,0" Click="Corruptdet_Click"/>
+                <Button Content="View Details" Height="23" Width="0" Background="{x:Null}" BorderBrush="{x:Null}" Margin="80,22,00,0"/>
+                <Button x:Name="regdet" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="80,22,00,0" Click="regdet_Click"/>
+                <Button Content="View Details" Height="23" Width="0" Background="{x:Null}" BorderBrush="{x:Null}" Margin="80,22,00,0"/>
+                <Button x:Name="privacydet" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="80,20,00,0" Click="privacydet_Click"/>
+            </StackPanel>
+            <StackPanel x:Name="resultdetails1" Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Background="#FF333E59" Visibility="Collapsed" Margin="0,0,0,45">
+                <Button x:Name="resdetclose" Content="Close" Width="70" HorizontalAlignment="Right" Click="resdetclose_Click"/>
+                <TextBlock x:Name="resdet1" FontSize="20" Foreground="White" Visibility="Collapsed"/>
+                <Image x:Name="resdet2" Source="Resources/corrupt.png" Width="750" Stretch="Fill" Visibility="Collapsed"/>
+                <Image x:Name="resdet3" Source="Resources/registry.png" Width="750" Stretch="Fill" Visibility="Collapsed"/>
+                <Image x:Name="resdet4" Source="Resources/privacy.png" Width="750" Stretch="Fill" Visibility="Collapsed"/>
             </StackPanel>
             <StackPanel x:Name="resultpanel3" Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Visibility="Collapsed" Background="#FF333E59" Margin="0,0,0,45">
                 <Image Source="Resources/safety.png" Width="140" Height="140" HorizontalAlignment="Left" Margin="0,0,0,0"/>
@@ -399,7 +415,7 @@
                 <TextBlock Text="About" Margin="20,0,0,0" FontSize="30" Foreground="White"/>
                 <TextBlock Text="PC Gold Optimizer and system repair" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
                 <TextBlock Text="The Alliance Tech" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
-                <TextBlock Text="Version 1.0" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
+                <TextBlock Text="Version 1.1.0" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
             </StackPanel>
         </Grid>
     </Grid>
