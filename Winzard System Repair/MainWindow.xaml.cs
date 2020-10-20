@@ -184,7 +184,7 @@ namespace WPFUI
                     if (close == 1) { return; };
                     load.Children.Add(new TextBlock { Text = startupitems[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
-                    await Task.Delay(7);
+                    await Task.Delay(1000);
                     if (close == 1) { return; };
                 }
                 if (close == 1) { return; };
@@ -194,7 +194,7 @@ namespace WPFUI
                     if (close == 1) { return; };
                     load.Children.Add(new TextBlock { Text = startupitems1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
-                    await Task.Delay(7);
+                    await Task.Delay(1000);
                     if (close == 1) { return; };
                 }
                 if (close == 1) { return; };
@@ -2064,7 +2064,6 @@ namespace WPFUI
                 await Task.Delay(mega);
                 Loading4.Visibility = Visibility.Hidden;
                 Loading5.Visibility = Visibility.Visible;
-                Statuspanel.Text = "Optimizing: Driver";
                 scanprogress.Value++;
 
                 scanprogress.Value++;
