@@ -2257,10 +2257,10 @@ namespace WPFUI
             resdet6.Visibility = Visibility.Visible;
             try
             {
-                Task.Run(() => ScannerFunctions.StartScanning());
-                for (int i = 0; i < 500; i++)
+                //Task.Run(() => ScannerFunctions.StartScanning());
+                for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
                 {
-                    resdet6.Children.Add(new TextBlock { Text = ScannerFunctions.CurrentScannedObject, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    resdet6.Children.Add(new TextBlock { Text = ScannerFunctions.arrBadRegistryKeys[i].Problem, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
                 }
             }
             catch { }
