@@ -2261,7 +2261,7 @@ namespace WPFUI
                 //Task.Run(() => ScannerFunctions.StartScanning());
                 for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
                 {
-                    resdet6.Children.Add(new TextBlock { Text = ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    resdet6.Children.Add(new TextBlock { Text = ScannerFunctions.arrBadRegistryKeys[i].Problem, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
                 }
             }
             catch { }
