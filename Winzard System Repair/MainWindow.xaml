@@ -195,13 +195,16 @@
                 <Button x:Name="junkcleaner" Content="Junk Cleaner" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
                 <Button x:Name="privacycleaner" Content="Privacy Cleaner" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
                 <Button x:Name="regisrtycleaner" Content="Registry Cleaner" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
-                <Button x:Name="startupoptimizer" Content="Startup Optimizer" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
-                <Button x:Name="driverupdate" Content="Driver Update" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
+                <!--<Button x:Name="driverupdate" Content="Driver Update" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>-->
                 <Button x:Name="malwarecleaner" Content="Malware Cleaner" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
-                <Button x:Name="diskdefragment" Content="Disk Defragmenter" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
-                <Button x:Name="securityholes" Content="Security Holes" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
-                <Button x:Name="systemoptimizer" Content="System Optimizer" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
+                <Button x:Name="diskdefragment" Content="Disk Defragment" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
+                <Button x:Name="startupoptimizer" Content="Startup Optimizer" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
                 <Button x:Name="repairfiles" Content="Repair Files" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
+                <Button x:Name="diskcleaner" Content="Disk Cleaner" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
+                <Button x:Name="fixsystemissue" Content="Fix System Issue" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
+                <!--<Button x:Name="securityholes" Content="Security Holes" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
+                <Button x:Name="systemoptimizer" Content="System Optimizer" FontSize="20" Foreground="White" Margin="0,0,5,0" Height="45" Background="#FF333E59" BorderBrush="{x:Null}"/>
+                -->
             </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
                 <Image x:Name="Loading1" gif:ImageBehavior.AnimatedSource="Resources/Infinity-2s-200px.gif"/>
@@ -243,39 +246,72 @@
             </Button>
             <Button x:Name="onetimefix" Grid.Column="2" Grid.Row="1" Content="Trial Repair" BorderBrush="{x:Null}" Width="130" Height="30" Margin="363,410,262,0" Visibility="Collapsed" Click="onetimefix_Click" Background="{x:Null}"/>
             <!--For scanning animation-->
-            <StackPanel x:Name="load" Orientation="Vertical" Grid.Row="1" Grid.Column="2">
-                <MediaElement x:Name="loadvid" Source="C:\Windows\systemrell.mkv" LoadedBehavior="Stop" Height="400" Stretch="Fill"/>
-            </StackPanel>
+            <ScrollViewer x:Name="regdetails" Grid.Row="1" Grid.Column="2" Margin="0,0,-250,50">
+                <StackPanel x:Name="load" Orientation="Vertical">
+                    <TextBlock x:Name="Status" FontSize="20"/>
+                </StackPanel>
+            </ScrollViewer>
             <StackPanel x:Name="resultpanel" Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Visibility="Collapsed" Background="#FF333E59" Margin="0,0,0,45">
                 <Image Width="140" Height="140" HorizontalAlignment="Left" Margin="0,0,0,0"/>
-                <TextBlock Text="System Instability Detected Repair Now" FontSize="30" FontWeight="Bold" Foreground="White" Margin="140,-80,0,0"/>
-                <TextBlock Text="Malware Threats" FontSize="18" Foreground="White" Margin="10"/>
-                <TextBlock Text="Security Holes" FontSize="18" Foreground="White" Margin="10"/>
-                <TextBlock Text="Corrupted System Files" FontSize="18" Foreground="White" Margin="10"/>
-                <TextBlock Text="Outdated Drivers" FontSize="18" Foreground="White" Margin="10"/>
-                <TextBlock Text="Broken Registry Entries" FontSize="18" Foreground="White" Margin="10"/>
-                <TextBlock Text="Startup optimizations" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="System Instability Detected Repair Now" FontSize="30" FontWeight="Bold" Foreground="White" Margin="140,-80,0,40"/>
+                <TextBlock Text="Malware Threats" FontSize="18" Foreground="White" Margin="10,-25,0,0"/>
+                <TextBlock Text="Junk Files" FontSize="18" Foreground="White" Margin="10"/>
                 <TextBlock Text="Privacy Traces" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Startup optimizations" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Repair Files" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Registry Items" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Fragments" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Disk Cleaner" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="System Issue" FontSize="18" Foreground="White" Margin="10"/>
             </StackPanel>
             <StackPanel x:Name="resultpanel2" Orientation="Vertical" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Visibility="Collapsed">
-                <TextBlock x:Name="MalwareThreats" FontSize="18" Foreground="Yellow" Margin="300,150,0,0"/>
-                <TextBlock x:Name="SecurityHoles" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
-                <TextBlock x:Name="CorruptedSystemFiles" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
-                <TextBlock x:Name="OutdatedDrivers" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
-                <TextBlock x:Name="BrokenRegistryEntries" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
-                <TextBlock x:Name="Startupoptimizations" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
-                <TextBlock x:Name="PrivacyTraces" FontSize="18" Foreground="Yellow" Margin="300,20,0,0"/>
+                <TextBlock x:Name="MalwareThreats" FontSize="18" Foreground="Yellow" Margin="300,115,350,0"/>
+                <TextBlock x:Name="JunkFiles" FontSize="18" Foreground="Yellow" Margin="300,10,350,0"/>
+                <TextBlock x:Name="PrivacyFiles" FontSize="18" Foreground="Yellow" Margin="300,20,350,0"/>
+                <TextBlock x:Name="Startupoptimizations" FontSize="18" Foreground="Yellow" Margin="300,20,350,0"/>
+                <TextBlock x:Name="repairfile" FontSize="18" Foreground="Yellow" Margin="300,20,350,0"/>
+                <TextBlock x:Name="registrydetails" FontSize="18" Foreground="Yellow" Margin="300,20,350,0"/>
+                <TextBlock x:Name="defragmentation" FontSize="18" Foreground="Yellow" Margin="300,20,350,0"/>
+                <TextBlock x:Name="diskclean" FontSize="18" Foreground="Yellow" Margin="300,20,350,0"/>
+                <TextBlock x:Name="systemissue" FontSize="18" Foreground="Yellow" Margin="300,20,350,0"/>
             </StackPanel>
+            <StackPanel x:Name="resultdetails" Orientation="Vertical" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Visibility="Collapsed">
+                <Button x:Name="malwaredet" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="120,115,00,0" Click="malwaredet_Click"/>
+                <Button x:Name="junkdet" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="120,12,0,0" Click="junkdet_Click"/>
+                <Button x:Name="privacydet" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="120,19,00,0" Click="privacydet_Click"/>
+                <Button x:Name="startupdet" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="120,20,00,0" Click="startupdet_Click"/>
+                <Button x:Name="filerepair" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="120,20,00,0" Click="filerepair_Click"/>
+                <Button x:Name="regdet" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="120,22,00,0" Click="regdet_Click"/>
+                <Button x:Name="fragments" Content="View Details" Height="23" Width="0" Background="{x:Null}" BorderBrush="{x:Null}" Margin="120,22,00,0" Click="fragments_Click"/>
+                <Button x:Name="diskcln" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="120,22,00,0" Click="diskcln_Click"/>
+                <Button x:Name="systemissu" Content="View Details" Height="23" Width="110" Background="{x:Null}" BorderBrush="{x:Null}" Margin="120,22,00,0" Click="systemissu_Click"/>
+            </StackPanel>
+            <ScrollViewer x:Name="resultdetails1" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Background="#FF333E59" Visibility="Collapsed" Margin="0,0,0,45">
+                <StackPanel x:Name="FinalResult" Orientation="Vertical">
+                <Button x:Name="resdetclose" Content="Close" Width="70" HorizontalAlignment="Left" Click="resdetclose_Click"/>
+                <StackPanel x:Name="resdet1" Visibility="Collapsed"/>
+                <StackPanel x:Name="resdet2" Visibility="Collapsed"/>
+                <StackPanel x:Name="resdet3" Visibility="Collapsed"/>
+                <StackPanel x:Name="resdet4" Visibility="Collapsed"/>
+                <StackPanel x:Name="resdet5" Visibility="Collapsed"/>
+                <StackPanel x:Name="resdet6" Visibility="Collapsed"/>
+                <StackPanel x:Name="resdet7" Visibility="Collapsed"/>
+                <StackPanel x:Name="resdet8" Visibility="Collapsed"/>
+                <StackPanel x:Name="resdet9" Visibility="Collapsed"/>
+            </StackPanel>
+            </ScrollViewer>
             <StackPanel x:Name="resultpanel3" Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Visibility="Collapsed" Background="#FF333E59" Margin="0,0,0,45">
                 <Image Source="Resources/safety.png" Width="140" Height="140" HorizontalAlignment="Left" Margin="0,0,0,0"/>
                 <TextBlock Text="Repair Complete" FontSize="30" FontWeight="Bold" Foreground="#FFB9DD39" Margin="200,-100,0,0"/>
                 <TextBlock Text="Malware Threats" FontSize="18" Foreground="White" Margin="10"/>
-                <TextBlock Text="Security Holes" FontSize="18" Foreground="White" Margin="10"/>
-                <TextBlock Text="Corrupted System Files" FontSize="18" Foreground="White" Margin="10"/>
-                <TextBlock Text="Outdated Drivers" FontSize="18" Foreground="White" Margin="10"/>
-                <TextBlock Text="Broken Registry Entries" FontSize="18" Foreground="White" Margin="10"/>
-                <TextBlock Text="Startup optimizations" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Junk Files" FontSize="18" Foreground="White" Margin="10"/>
                 <TextBlock Text="Privacy Traces" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Startup optimizations" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Repair Files" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Registry Items" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Fragments" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="Disk Cleaner" FontSize="18" Foreground="White" Margin="10"/>
+                <TextBlock Text="System Issue" FontSize="18" Foreground="White" Margin="10"/>
             </StackPanel>
             <StackPanel x:Name="resultpanel4" Orientation="Vertical" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Visibility="Collapsed">
                 <Image Source="Resources/tick.png" Width="20" Margin="0,153,200,0"/>
@@ -283,6 +319,7 @@
                 <Image Source="Resources/tick.png" Width="20" Margin="0,23,200,0"/>
                 <Image Source="Resources/tick.png" Width="20" Margin="0,25,200,0"/>
                 <Image Source="Resources/tick.png" Width="20" Margin="0,25,200,0"/>
+                <Image Source="Resources/tick.png" Width="20" Margin="0,23,200,0"/>
                 <Image Source="Resources/tick.png" Width="20" Margin="0,23,200,0"/>
                 <Image Source="Resources/tick.png" Width="20" Margin="0,23,200,0"/>
             </StackPanel>
@@ -399,8 +436,12 @@
                 <TextBlock Text="About" Margin="20,0,0,0" FontSize="30" Foreground="White"/>
                 <TextBlock Text="PC Gold Optimizer and system repair" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
                 <TextBlock Text="The Alliance Tech" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
-                <TextBlock Text="Version 1.0" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
+                <TextBlock Text="Version 1.1.0" Margin="20,10,0,0" FontSize="15" Foreground="White"/>
             </StackPanel>
         </Grid>
+        <StackPanel x:Name="OtherSoftware" Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Visibility="Visible">
+            <Button x:Name="RegistryCleaner" Content="Registry Cleaner" Width="150" HorizontalAlignment="Left" Background="{x:Null}"  Click="RegistryCleaner_Click" Margin="0,0,0,30"/>
+            <Button x:Name="EasyBackup" Content="Backup" Width="150" HorizontalAlignment="Left" Background="{x:Null}" Click="EasyBackup_Click" Margin="0,0,0,30"/>
+        </StackPanel>
     </Grid>
 </Window>

@@ -10,7 +10,7 @@
     <Grid Background="#FF252C42" Visibility="Visible">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -41,29 +41,26 @@
             </TextBlock>
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="0" Background="#FF242B41">
-            <TextBlock Text="Malware Threats" FontSize="18" Foreground="White" Margin="10"/>
-            <TextBlock Text="Security Holes" FontSize="18" Foreground="White" Margin="10"/>
-            <TextBlock Text="Corrupted System Files" FontSize="18" Foreground="White" Margin="10"/>
-            <TextBlock Text="Outdated Drivers" FontSize="18" Foreground="White" Margin="10"/>
-            <TextBlock Text="Junk Files" FontSize="18" Foreground="White" Margin="10"/>
-            <TextBlock Text="Broken Registry Entries" FontSize="18" Foreground="White" Margin="10"/>
-            <TextBlock Text="Startup optimizations" FontSize="18" Foreground="White" Margin="10"/>
-            <TextBlock Text="Privacy Traces" FontSize="18" Foreground="White" Margin="10"/>
-            <TextBlock Text="Fragmented Files" FontSize="18" Foreground="White" Margin="10"/>
-            <TextBlock Text="System optimizations" FontSize="18" Foreground="White" Margin="10"/>
-            <Button x:Name="popupfixclean" Content="FIX NOW" Margin="90,5,50,0" Height="30" Background="#FF01C964" Click="popupfixclean_Click"/>
+            <TextBlock Text="Malware Threats" FontSize="18" Foreground="White" Margin="10,10,0,0"/>
+            <!--<TextBlock Text="Security Holes" FontSize="18" Foreground="White" Margin="10"/>
+            <TextBlock Text="Outdated Drivers" FontSize="18" Foreground="White" Margin="10"/>-->
+            <TextBlock Text="Junk Files" FontSize="18" Foreground="White" Margin="10,10,0,0"/>
+            <TextBlock Text="Broken Registry Entries" FontSize="18" Foreground="White" Margin="10,10,0,0"/>
+            <TextBlock Text="Startup optimizations" FontSize="18" Foreground="White" Margin="10,10,0,0"/>
+            <TextBlock Text="Privacy Traces" FontSize="18" Foreground="White" Margin="10,10,0,0"/>
+            <TextBlock Text="Corrupted System Files" FontSize="18" Foreground="White" Margin="10,10,0,0"/>
+            <!--<TextBlock Text="Fragmented Files" FontSize="18" Foreground="White" Margin="10"/>-->
+            <TextBlock Text="System Issue" FontSize="18" Foreground="White" Margin="10,10,0,0"/>
+            <Button x:Name="popupfixclean" Content="FIX NOW" Margin="90,100,0,0" Height="30" Background="#FF01C964" Click="popupfixclean_Click"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="1" Background="#FF242B41">
-            <TextBlock x:Name="MalwareThreats" FontSize="18" Foreground="Yellow" Margin="10"/>
-            <TextBlock x:Name="SecurityHoles" FontSize="18" Foreground="Yellow" Margin="10"/>
-            <TextBlock x:Name="CorruptedSystemFiles" FontSize="18" Foreground="Yellow" Margin="10"/>
-            <TextBlock x:Name="OutdatedDrivers" FontSize="18" Foreground="Yellow" Margin="10"/>
-            <TextBlock x:Name="JunkFiles" FontSize="18" Foreground="Yellow" Margin="10"/>
-            <TextBlock x:Name="BrokenRegistryEntries" FontSize="18" Foreground="Yellow" Margin="10"/>
-            <TextBlock x:Name="Startupoptimizations" FontSize="18" Foreground="Yellow" Margin="10"/>
-            <TextBlock x:Name="PrivacyTraces" FontSize="18" Foreground="Yellow" Margin="10"/>
-            <TextBlock x:Name="FragmentedFiles" FontSize="18" Foreground="Yellow" Margin="10"/>
-            <TextBlock x:Name="Systemoptimizations" FontSize="18" Foreground="Yellow" Margin="10"/>
+            <TextBlock x:Name="MalwareThreats" FontSize="18" Foreground="Yellow" Margin="10,10,0,0"/>
+            <TextBlock x:Name="JunkFiles" FontSize="18" Foreground="Yellow" Margin="10,10,0,0"/>
+            <TextBlock x:Name="BrokenRegistryEntries" FontSize="18" Foreground="Yellow" Margin="10,10,0,0"/>
+            <TextBlock x:Name="Startupoptimizations" FontSize="18" Foreground="Yellow" Margin="10,10,0,0"/>
+            <TextBlock x:Name="PrivacyTraces" FontSize="18" Foreground="Yellow" Margin="10,10,0,0"/>
+            <TextBlock x:Name="CorruptedSystemFiles" FontSize="18" Foreground="Yellow" Margin="10,10,0,0"/>
+            <TextBlock x:Name="SystemIssue" FontSize="18" Foreground="Yellow" Margin="10,10,0,0"/>
         </StackPanel>
     </Grid>
 </Window>
