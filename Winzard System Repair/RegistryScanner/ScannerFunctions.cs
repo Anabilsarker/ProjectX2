@@ -1,14 +1,24 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using ServiceStack.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Winzard_System_Repair.RegistryScanner
 {
     public class ScannerFunctions
     {
+        private const int ERROR_SUCCESS = 0;
+
+        private const string IDS_DEFAULTVALUENAME = "(DEFAULT)";
+        private const string IDS_DEFAULTVALUEVALUE = "(value not set)";
 
         private static string _currentObject = string.Empty;
         private static int _objectsScanned = 0;
@@ -38,6 +48,8 @@ namespace Winzard_System_Repair.RegistryScanner
         private static ScannerBase currentScanner;
 
         public static BadRegKeyArray arrBadRegistryKeys = new BadRegKeyArray();
+
+        [DllImport("advapi32.dll", EntryPoint = "RegDeleteValue")] public static extern int RegDeleteValueA(int hKey, string lpValueName);
 
         /// <summary>
         /// Begins scanning for errors in the registry
@@ -115,6 +127,15 @@ namespace Winzard_System_Repair.RegistryScanner
             ScannerFunctions.arrBadRegistryKeys.Add(scannerName.RootNode);
         }
 
+        public static int getRegistryHandle(RegistryKey registryKey)
+        {
+            Type type = registryKey.GetType();
+            FieldInfo fieldInfo = type.GetField("hkey", BindingFlags.Instance | BindingFlags.NonPublic);
+            System.Runtime.InteropServices.SafeHandle i = (System.Runtime.InteropServices.SafeHandle)fieldInfo.GetValue(registryKey);
+
+            return i.DangerousGetHandle().ToInt32();
+        }
+
         /// <summary>
         /// <para>Stores an invalid registry key to array list</para>
         /// <para>Use IsOnIgnoreList to check for ignored registry keys and paths</para>
@@ -173,6 +194,92 @@ namespace Winzard_System_Repair.RegistryScanner
             arrBadRegistryKeys.Problems++;
 
             return true;
+        }
+
+        public void FixProblems()
+        {
+            foreach (BadRegistryKey p in arrBadRegistryKeys)
+            {
+                // Remove problem from registry
+                deleteRegistryKey(p.baseRegKey, p.subRegKey, p.ValueName);
+            }
+        }
+
+        bool deleteRegistryKey(string strBaseKey, string strSubKey, string strLimitValue)
+        {
+            RegistryKey regKey = Utils.RegOpenKey(strBaseKey, strSubKey);
+
+            if (regKey == null)
+                return false;
+
+            try
+            {
+                // Throws exception if user doesnt have permission
+                RegistryPermission regPermission = new RegistryPermission(RegistryPermissionAccess.AllAccess, regKey.Name);
+                regPermission.Demand();
+
+                if (!string.IsNullOrEmpty(strLimitValue))
+                    DeleteAsXml_DeleteValue(getRegistryHandle(regKey), strLimitValue);
+                else
+                {
+                    RegistryKey reg = null;
+
+                    if (strBaseKey.ToUpper().CompareTo("HKEY_CLASSES_ROOT") == 0)
+                    {
+                        reg = Registry.ClassesRoot;
+                    }
+                    else if (strBaseKey.ToUpper().CompareTo("HKEY_CURRENT_USER") == 0)
+                    {
+                        reg = Registry.CurrentUser;
+                    }
+                    else if (strBaseKey.ToUpper().CompareTo("HKEY_LOCAL_MACHINE") == 0)
+                    {
+                        reg = Registry.LocalMachine;
+                    }
+                    else if (strBaseKey.ToUpper().CompareTo("HKEY_USERS") == 0)
+                    {
+                        reg = Registry.Users;
+                    }
+                    else if (strBaseKey.ToUpper().CompareTo("HKEY_CURRENT_CONFIG") == 0)
+                    {
+                        reg = Registry.CurrentConfig;
+                    }
+                    else
+                        return false; // break here
+
+                    if (reg != null)
+                    {
+                        reg.DeleteSubKeyTree(strSubKey);
+                        reg.Flush();
+                        reg.Close();
+                        //DeleteAsXml_DeleteTree(getRegistryHandle(regKey));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            regKey.Close();
+
+            return true;
+        }
+
+        void DeleteAsXml_DeleteValue(int hKey, string strName)
+        {
+            if (hKey == 0) return;
+
+            // handle the (Default) value
+            strName = strName.ToUpper().CompareTo(IDS_DEFAULTVALUENAME) == 0 ? "" : strName;
+
+            int hr = 0;
+
+            hr = RegDeleteValueA(hKey,  // handle to key
+                strName); // value name
+
+            if (hr == ERROR_SUCCESS) // it's ok
+                return;
         }
 
         /*private void FixProblems()
