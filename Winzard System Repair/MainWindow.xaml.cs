@@ -175,12 +175,24 @@ namespace WPFUI
                 if (close == 1) { return; };
                 RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
                 string regvalue = reg.ValueCount.ToString();
+                RegistryKey reg1 = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+                string regvalue1 = reg1.ValueCount.ToString();
                 Startupoptimizations.Text = regvalue + "Items";
                 string[] startupitems = reg.GetValueNames();
                 for (int i = 0; i < reg.GetValueNames().Length; i++)
                 {
                     if (close == 1) { return; };
                     load.Children.Add(new TextBlock { Text = startupitems[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
+                    regdetails.ScrollToEnd();
+                    await Task.Delay(7);
+                    if (close == 1) { return; };
+                }
+                if (close == 1) { return; };
+                string[] startupitems1 = reg1.GetValueNames();
+                for (int i = 0; i < reg.GetValueNames().Length; i++)
+                {
+                    if (close == 1) { return; };
+                    load.Children.Add(new TextBlock { Text = startupitems1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
                     await Task.Delay(7);
                     if (close == 1) { return; };
@@ -355,13 +367,24 @@ namespace WPFUI
             }
             return size;
         }
+        public async Task Registrycleanfix()
+        {
+            try
+            {
+                Task.Run(() => ScannerFunctions.FixProblems());
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show(e.Message);
+            }
+        }
         public async Task RegistryFix()
         {
             if (close == 1) { return; };
             try
             {
                 if (close == 1) { return; };
-                Task.Run(() => new ScannerFunctions().StartScanning());
+                Task.Run(() => ScannerFunctions.StartScanning());
                 for (int i = 0; i < 500; i++)
                 {
                     if (close == 1) { return; };
@@ -1405,7 +1428,7 @@ namespace WPFUI
             Loading6.Visibility = Visibility.Hidden;
             Loading7.Visibility = Visibility.Visible;
             Statuspanel.Text = "Defragmenting";
-            DiskDefragmentation();
+            await DiskDefragmentation();
             scanprogress.Value++;
 
             scanprogress.Value++;
@@ -1451,7 +1474,8 @@ namespace WPFUI
             await Task.Delay(mega);
             Loading8.Visibility = Visibility.Hidden;
             Loading9.Visibility = Visibility.Visible;
-            Statuspanel.Text = "Optimizing: System";
+            Statuspanel.Text = "Optimizing: Registry";
+            await Registrycleanfix();
             scanprogress.Value++;
 
             scanprogress.Value++;
@@ -1474,7 +1498,7 @@ namespace WPFUI
             await Task.Delay(mega);
             Loading9.Visibility = Visibility.Hidden;
             Loading10.Visibility = Visibility.Visible;
-            Statuspanel.Text = "Optimizing: System";
+            //Statuspanel.Text = "Optimizing: System";
             scanprogress.Value++;
 
             scanprogress.Value++;
@@ -2233,7 +2257,7 @@ namespace WPFUI
             resdet6.Visibility = Visibility.Visible;
             try
             {
-                Task.Run(() => new ScannerFunctions().StartScanning());
+                Task.Run(() => ScannerFunctions.StartScanning());
                 for (int i = 0; i < 500; i++)
                 {
                     resdet6.Children.Add(new TextBlock { Text = ScannerFunctions.CurrentScannedObject, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });

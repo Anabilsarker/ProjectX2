@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace Winzard_System_Repair.RegistryScanner
 {
-    public class ScannerFunctions
+    public static class ScannerFunctions
     {
         private const int ERROR_SUCCESS = 0;
 
@@ -24,7 +24,7 @@ namespace Winzard_System_Repair.RegistryScanner
         private static int _objectsScanned = 0;
         public delegate void ScanDelegate();
 
-        Thread threadMain, threadScan;
+        static Thread threadMain, threadScan;
 
         public static string CurrentSection
         {
@@ -54,7 +54,7 @@ namespace Winzard_System_Repair.RegistryScanner
         /// <summary>
         /// Begins scanning for errors in the registry
         /// </summary>
-        public void StartScanning()
+        public static void StartScanning()
         {
             // Get start time of scan
             DateTime dateTimeStart = DateTime.Now;
@@ -66,33 +66,33 @@ namespace Winzard_System_Repair.RegistryScanner
             try
             {
 
-                    this.StartScanner(new StartupFiles());
+                    StartScanner(new StartupFiles());
 
-                    this.StartScanner(new SharedDLLs());
+                    StartScanner(new SharedDLLs());
 
-                    this.StartScanner(new WindowsFonts());
+                    StartScanner(new WindowsFonts());
 
-                    this.StartScanner(new ApplicationInfo());
+                    StartScanner(new ApplicationInfo());
 
-                    this.StartScanner(new ApplicationPaths());
+                    StartScanner(new ApplicationPaths());
 
-                    this.StartScanner(new ActivexComObjects());
+                    StartScanner(new ActivexComObjects());
 
-                    this.StartScanner(new SystemDrivers());
+                    StartScanner(new SystemDrivers());
 
-                    this.StartScanner(new WindowsHelpFiles());
+                    StartScanner(new WindowsHelpFiles());
 
-                    this.StartScanner(new WindowsSounds());
+                    StartScanner(new WindowsSounds());
 
-                    this.StartScanner(new ApplicationSettings());
+                    StartScanner(new ApplicationSettings());
 
-                    this.StartScanner(new RecentDocs());
+                    StartScanner(new RecentDocs());
             }
             catch (ThreadAbortException)
             {
                 // Scanning was aborted
-                if (this.threadScan.IsAlive)
-                    this.threadScan.Abort();
+                if (threadScan.IsAlive)
+                    threadScan.Abort();
             }
 
             // End Critical Region
@@ -104,7 +104,7 @@ namespace Winzard_System_Repair.RegistryScanner
         /// <summary>
         /// Starts a scanner
         /// </summary>
-        public void StartScanner(ScannerBase scannerName)
+        public static void StartScanner(ScannerBase scannerName)
         {
             currentScanner = scannerName;
 
@@ -117,9 +117,9 @@ namespace Winzard_System_Repair.RegistryScanner
             ScannerFunctions.CurrentSection = scannerName.ScannerName;
 
             // Start scanning
-            this.threadScan = new Thread(new ThreadStart(objScan));
-            this.threadScan.Start();
-            this.threadScan.Join();
+            threadScan = new Thread(new ThreadStart(objScan));
+            threadScan.Start();
+            threadScan.Join();
 
             // Wait 250ms
             Thread.Sleep(250);
