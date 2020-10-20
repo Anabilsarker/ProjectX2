@@ -196,7 +196,7 @@ namespace Winzard_System_Repair.RegistryScanner
             return true;
         }
 
-        public void FixProblems()
+        public static void FixProblems()
         {
             foreach (BadRegistryKey p in arrBadRegistryKeys)
             {
@@ -205,7 +205,7 @@ namespace Winzard_System_Repair.RegistryScanner
             }
         }
 
-        bool deleteRegistryKey(string strBaseKey, string strSubKey, string strLimitValue)
+        static bool deleteRegistryKey(string strBaseKey, string strSubKey, string strLimitValue)
         {
             RegistryKey regKey = Utils.RegOpenKey(strBaseKey, strSubKey);
 
@@ -266,7 +266,7 @@ namespace Winzard_System_Repair.RegistryScanner
             return true;
         }
 
-        void DeleteAsXml_DeleteValue(int hKey, string strName)
+        static void DeleteAsXml_DeleteValue(int hKey, string strName)
         {
             if (hKey == 0) return;
 
