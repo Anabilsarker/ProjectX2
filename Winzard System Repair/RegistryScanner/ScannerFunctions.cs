@@ -15,6 +15,7 @@ namespace Winzard_System_Repair.RegistryScanner
 {
     public static class ScannerFunctions
     {
+        public static int mynum = 0;
         private const int ERROR_SUCCESS = 0;
 
         private const string IDS_DEFAULTVALUENAME = "(DEFAULT)";

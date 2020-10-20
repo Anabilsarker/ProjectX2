@@ -810,7 +810,8 @@ namespace WPFUI
                 diskclean.Text = sizedir.ToString() + totalcachenum.ToString();
                 JunkFiles.Text = sizedir.ToString() + "MB";
                 PrivacyFiles.Text = totalcachenum.ToString() + "Items";
-                registrydetails.Text = RegistryItems.RegistryProblemNumbers().ToString() + "Items";
+                ScannerFunctions.mynum = ScannerFunctions.arrBadRegistryKeys.Problems;
+                registrydetails.Text = ScannerFunctions.mynum.ToString() + "Items";
                 scanfix.Visibility = Visibility.Visible;
                 onetimefix.Visibility = Visibility.Visible;
                 resultpanel.Visibility = Visibility.Visible;
@@ -2260,7 +2261,7 @@ namespace WPFUI
                 //Task.Run(() => ScannerFunctions.StartScanning());
                 for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
                 {
-                    resdet6.Children.Add(new TextBlock { Text = ScannerFunctions.arrBadRegistryKeys[i].Problem, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    resdet6.Children.Add(new TextBlock { Text = ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
                 }
             }
             catch { }
