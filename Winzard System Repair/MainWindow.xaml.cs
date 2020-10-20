@@ -2157,7 +2157,8 @@ namespace WPFUI
                 await Task.Delay(mega);
                 Loading8.Visibility = Visibility.Hidden;
                 Loading9.Visibility = Visibility.Visible;
-                Statuspanel.Text = "Optimizing: System";
+                Statuspanel.Text = "Optimizing: Registry";
+                await Registrycleanfix();
                 scanprogress.Value++;
 
                 scanprogress.Value++;
