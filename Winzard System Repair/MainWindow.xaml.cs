@@ -28,8 +28,7 @@ namespace WPFUI
         PopupWindow3 popupmain;
         PopupWindow4 popupmain1;
         PopupWindow5 popupmain2;
-        Thread t;
-        int premium = 0, notification = 0, mega = 2000, totalcachenum = 0, malwarever = 0, filever = 0, systemissuever = 0, close = 0, MalwareNumbers = 0;
+        int premium = 0, notification = 0, mega = 2000, close = 0, MalwareNumbers = 0;
         float sizedir = 0;
         public MainWindow()
         {
@@ -551,13 +550,14 @@ namespace WPFUI
                     //Tempsize += DirSize(new DirectoryInfo(ICacheFirefoxpath));
                     //Tempsize += DirSize(new DirectoryInfo(ICacheExpolrerpath));
                     sizedir = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize / (1024 * 1024))));
+
                     if(Directory.Exists(ICacheExpolrerpath))
                     {
-                        totalcachenum += Directory.GetFiles(ICacheExpolrerpath).Length;
+                        ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheExpolrerpath).Length;
                     }
                     if (Directory.Exists(ICacheChromepath))
                     {
-                        totalcachenum += Directory.GetFiles(ICacheChromepath).Length;
+                        ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheChromepath).Length;
                     }
                     /*if (Directory.Exists(ICacheChromepath1))
                     {
@@ -565,42 +565,36 @@ namespace WPFUI
                     }*/
                     if (Directory.Exists(ICacheFirefoxpath))
                     {
-                        totalcachenum += Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories).Length;
+                        ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories).Length;
                     }
                     for (int i = 0; i < 2; i++)
                     {
                         if(Directory.GetFiles("C:\\Windows\\Prefetch\\", "*.*", SearchOption.AllDirectories).Length > 0)
                         {
-                            systemissuever = i + 1;
+                            ScannerFunctions.systemissuever = i + 1;
                         }
                         else
                         {
-                            systemissuever = 0;
+                            ScannerFunctions.systemissuever = 0;
                         }
                     }
                     for (int i = 0; i < 2; i++)
                     {
                         if (Directory.GetFiles("C:\\Windows\\Temp\\", ".", SearchOption.AllDirectories).Length > 0)
                         {
-                            filever = i + 1;
+                            ScannerFunctions.filever = i + 1;
                         }
                         else
                         {
-                            filever = 0;
+                            ScannerFunctions.filever = 0;
                         }
                     }
                     Random rnd1 = new Random();
                     MalwareNumbers = rnd1.Next(0, 5);
+                    string[] List = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
                     for (int i = 0; i < MalwareNumbers; i++)
                     {
-                        if (Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\").Length > 0)
-                        {
-                            malwarever = i + 1;
-                        }
-                        else
-                        {
-                            malwarever = 0;
-                        }
+                        ScannerFunctions.malwarlist.Add(List[i]);
                     }
                 }
                 catch (Exception e)
@@ -807,12 +801,12 @@ namespace WPFUI
                 Random rnd = new Random();
                 int defrag = rnd.Next(0, 9);
                 defragmentation.Text = defrag.ToString() + "%";
-                MalwareThreats.Text = malwarever.ToString();
-                repairfile.Text = filever.ToString();
-                systemissue.Text = systemissuever.ToString();
-                diskclean.Text = sizedir.ToString() + totalcachenum.ToString();
+                MalwareThreats.Text = ScannerFunctions.malwarlist.Count.ToString();
+                repairfile.Text = ScannerFunctions.filever.ToString();
+                systemissue.Text = ScannerFunctions.systemissuever.ToString();
+                diskclean.Text = sizedir.ToString() + ScannerFunctions.totalcachenum.ToString();
                 JunkFiles.Text = sizedir.ToString() + "MB";
-                PrivacyFiles.Text = totalcachenum.ToString() + "Items";
+                PrivacyFiles.Text = ScannerFunctions.totalcachenum.ToString() + "Items";
                 ScannerFunctions.mynum = ScannerFunctions.arrBadRegistryKeys.Problems;
                 registrydetails.Text = ScannerFunctions.mynum.ToString() + "Items";
                 scanfix.Visibility = Visibility.Visible;
@@ -2464,10 +2458,9 @@ namespace WPFUI
         }
         private void malwaredet_Click(object sender, RoutedEventArgs e)
         {
-            string[] Junk2 = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
-            for (int i = 0; i < MalwareNumbers; i++)
+            for (int i = 0; i < ScannerFunctions.malwarlist.Count; i++)
             {
-                resdet1.Children.Add(new TextBlock { Text = Junk2[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                resdet1.Children.Add(new TextBlock { Text = ScannerFunctions.malwarlist[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
             }
             
             resultdetails1.Visibility = Visibility.Visible;

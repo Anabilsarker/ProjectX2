@@ -15,7 +15,6 @@ namespace WPFUI
     public partial class PopupWindow1 : Window
     {
         public static int regissuenum = ScannerFunctions.arrBadRegistryKeys.Problems;
-        int totalcachenum = 0, malwarever = 0, filever = 0, systemissuever = 0;
         float sizedir = 0;
         public BrowserWindow bwobj;
         bool result = false;
@@ -65,70 +64,21 @@ namespace WPFUI
                 //Tempsize += DirSize(new DirectoryInfo(ICacheFirefoxpath));
                 //Tempsize += DirSize(new DirectoryInfo(ICacheExpolrerpath));
                 sizedir = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize / (1024 * 1024))));
-
-                for (int i = 0; i < 2; i++)
-                {
-                    if (Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\", "*.*", SearchOption.AllDirectories).Length > 0)
-                    {
-                        systemissuever = i + 1;
-                    }
-                    else
-                    {
-                        systemissuever = 0;
-                    }
-                }
-                for (int i = 0; i < 2; i++)
-                {
-                    if (Directory.GetFiles("C:\\Windows\\Temp\\", ".", SearchOption.AllDirectories).Length > 0)
-                    {
-                        filever = i + 1;
-                    }
-                    else
-                    {
-                        filever = 0;
-                    }
-                }
-                for (int i = 0; i < 2; i++)
-                {
-                    if (Directory.GetFiles("C:\\Windows\\Prefetch\\").Length > 0)
-                    {
-                        malwarever = i + 1;
-                    }
-                    else
-                    {
-                        malwarever = 0;
-                    }
-                }
+                
                 RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
                 string regvalue = reg.ValueCount.ToString();
                 Startupoptimizations.Text = regvalue;
-                if (Directory.Exists(ICacheExpolrerpath))
-                {
-                    totalcachenum += Directory.GetFiles(ICacheExpolrerpath).Length;
-                }
-                if (Directory.Exists(ICacheChromepath))
-                {
-                    totalcachenum += Directory.GetFiles(ICacheChromepath).Length;
-                }
-                /*if (Directory.Exists(ICacheChromepath1))
-                {
-                    totalcachenum += Directory.GetFiles(ICacheChromepath1).Length;
-                }*/
-                if (Directory.Exists(ICacheFirefoxpath))
-                {
-                    totalcachenum += Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories).Length;
-                }
             }
             catch (Exception e)
             {
                 //System.Windows.MessageBox.Show(e.Message);
             }
-            MalwareThreats.Text = malwarever.ToString();
-            CorruptedSystemFiles.Text = filever.ToString();
+            MalwareThreats.Text = ScannerFunctions.malwarlist.Count.ToString();
+            CorruptedSystemFiles.Text = ScannerFunctions.filever.ToString();
             JunkFiles.Text = sizedir.ToString() + "MB";
             BrokenRegistryEntries.Text = ScannerFunctions.mynum.ToString() + "Items";
-            PrivacyTraces.Text = totalcachenum.ToString();
-            SystemIssue.Text = systemissuever.ToString(); ;
+            PrivacyTraces.Text = ScannerFunctions.totalcachenum.ToString();
+            SystemIssue.Text = ScannerFunctions.systemissuever.ToString(); ;
             var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
             this.Left = desktopWorkingArea.Right - this.Width;
             this.Top = desktopWorkingArea.Bottom - this.Height;
