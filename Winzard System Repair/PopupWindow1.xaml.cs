@@ -115,5 +115,13 @@ namespace WPFUI
         {
             DialogResult = result;
         }
+
+        private void donotshowagain_Checked(object sender, RoutedEventArgs e)
+        {
+            FileStream fs = new FileStream("sysset.bin", FileMode.Create);
+            BinaryWriter bw = new BinaryWriter(fs);
+            bw.Write(true);
+            fs.Close();
+        }
     }
 }

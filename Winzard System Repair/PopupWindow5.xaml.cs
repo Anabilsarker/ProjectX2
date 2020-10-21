@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,14 @@ namespace WPFUI
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void donotshowagain_Checked(object sender, RoutedEventArgs e)
+        {
+            FileStream fs = new FileStream("sysset.bin", FileMode.Create);
+            BinaryWriter bw = new BinaryWriter(fs);
+            bw.Write(true);
+            fs.Close();
         }
     }
 }

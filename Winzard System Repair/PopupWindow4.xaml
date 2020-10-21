@@ -50,5 +50,8 @@
             <TextBlock Text="Click here to Upgrade to repair your system  " FontSize="20" Foreground="White" Margin="160,60,0,0"/>
             <Button x:Name="upgradenow" Content="Upgrade Now" FontSize="25" Width="200" Height="70" Background="#FF01C964" Click="upgradenow_Click"/>
         </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left">
+            <CheckBox x:Name="donotshowagain" Content="Do not show again" Foreground="White" VerticalAlignment="Bottom" IsChecked="False" Checked="donotshowagain_Checked"/>
+        </StackPanel>
     </Grid>
 </Window>

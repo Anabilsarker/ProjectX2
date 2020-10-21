@@ -56,5 +56,8 @@
         <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Right" Margin="0,0,20,0">
             <Button x:Name="fixissue" Content="FIX ISSUE NOW" FontSize="30" Background="#FF01C964" Height="60" Width="250" Click="fixissue_Click"/>
         </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left">
+            <CheckBox x:Name="donotshowagain" Content="Do not show again" Foreground="White" VerticalAlignment="Bottom" IsChecked="False" Checked="donotshowagain_Checked"/>
+        </StackPanel>
     </Grid>
 </Window>

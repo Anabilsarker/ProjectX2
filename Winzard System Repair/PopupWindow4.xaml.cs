@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -59,6 +60,14 @@ namespace WPFUI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             DialogResult = result;
+        }
+
+        private void donotshowagain_Checked(object sender, RoutedEventArgs e)
+        {
+            FileStream fs = new FileStream("sysset.bin", FileMode.Create);
+            BinaryWriter bw = new BinaryWriter(fs);
+            bw.Write(true);
+            fs.Close();
         }
     }
 }
