@@ -534,6 +534,10 @@ namespace WPFUI
         public async void Tempdelete()
         {
             {
+                ScannerFunctions.mynum = 0;
+                ScannerFunctions.systemissuever = 0;
+                ScannerFunctions.filever = 0;
+                ScannerFunctions.totalcachenum = 0;
                 try
                 {
                     string Temppath = Path.GetTempPath();
@@ -1691,6 +1695,7 @@ namespace WPFUI
             }
             popupmain2 = new PopupWindow5();
             popupmain2.Show();
+
         }
 
         //Activation Button & Logic
@@ -1913,7 +1918,7 @@ namespace WPFUI
 
         public void OneTimeFix()
         {
-            var RunningProcessPaths = ProcessFileNameFinderClass.GetAllRunningProcessFilePaths();
+            /*var RunningProcessPaths = ProcessFileNameFinderClass.GetAllRunningProcessFilePaths();
 
             if (RunningProcessPaths.Contains("firefox.exe"))
             {
@@ -1926,7 +1931,7 @@ namespace WPFUI
                 //Google Chrome is running
                 System.Windows.MessageBox.Show("Please Close your browser to continue");
                 return;
-            }
+            }*/
             if (System.IO.File.Exists("sysdone.bin"))
             {
                 FileStream fs = new FileStream("sysdone.bin", FileMode.Open);
@@ -1969,7 +1974,9 @@ namespace WPFUI
         }
         public void OneTimeRepair()
         {
-            
+            resultpanel.Visibility = Visibility.Collapsed;
+            resultpanel2.Visibility = Visibility.Collapsed;
+            resultdetails.Visibility = Visibility.Collapsed;
             resultpanel5.Visibility = Visibility.Visible;
         }
 
