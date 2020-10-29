@@ -2262,6 +2262,7 @@ namespace WPFUI
 
         private async void ManualMalwareFix_Click(object sender, RoutedEventArgs e)
         {
+
             Loading01.Visibility = Visibility.Visible;
             await Task.Delay(1000);
             try
@@ -2292,6 +2293,34 @@ namespace WPFUI
         }
         private async void ManualJunkFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel61.Visibility = Visibility.Visible;
+            try
+            {
+                string[] Junk1 = Directory.GetFiles(Path.GetTempPath());
+                string[] Junk2 = Directory.GetFiles("C:\\Windows\\Prefetch\\");
+                string[] Junk3 = Directory.GetFiles("C:\\Windows\\Temp\\");
+                string[] Junk4 = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
+                for (int i = 0; i < Directory.GetFiles(Path.GetTempPath()).Length; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Prefetch\\").Length; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk2[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Temp\\").Length; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\").Length; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk4[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+            }
+            catch (Exception)
+            {
+                //System.Windows.MessageBox.Show(e.Message + "\n" + e.Source + "\n" + e.InnerException + "\n" + e.StackTrace);
+            }
             Loading02.Visibility = Visibility.Visible;
             await Task.Delay(1000);
             try
@@ -2380,12 +2409,49 @@ namespace WPFUI
             }
             catch { }
             await Task.Delay(1000);
+            resultpanel6.Children.Clear();
+            resultpanel61.Visibility = Visibility.Collapsed;
             ManualJunkFix.Content = "Fixed";
             ManualJunkFix.Background = System.Windows.Media.Brushes.Green;
             Loading02.Visibility = Visibility.Hidden;
         }
         private async void ManualPrivacyFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel61.Visibility = Visibility.Visible;
+            try
+            {
+                string ICacheFirefoxpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
+                string ICacheChromepath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\";
+                //string ICacheChromepath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Application Cache\\Cache\\";
+                if (Directory.Exists(ICacheChromepath))
+                {
+                    string[] chromedetails = Directory.GetFiles(ICacheChromepath);
+                    for (int i = 0; i < 200; i++)
+                    {
+                        resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + chromedetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    }
+                }
+                /*if (Directory.Exists(ICacheChromepath1))
+                {
+                    string[] chromedetails1 = Directory.GetFiles(ICacheChromepath1);
+                    for (int i = 0; i < 200; i++)
+                    {
+                        resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + chromedetails1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    }
+                }*/
+                if (Directory.Exists(ICacheFirefoxpath))
+                {
+                    string[] firefoxdetails = Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories);
+                    for (int i = 0; i < 200; i++)
+                    {
+                        resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + firefoxdetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 9 });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //System.Windows.MessageBox.Show(e.Message);
+            }
             Loading03.Visibility = Visibility.Visible;
             await Task.Delay(1000);
             try
@@ -2452,22 +2518,50 @@ namespace WPFUI
             }
             catch { }
             await Task.Delay(1000);
+            resultpanel6.Children.Clear();
+            resultpanel61.Visibility = Visibility.Collapsed;
             ManualPrivacyFix.Content = "Fixed";
             ManualPrivacyFix.Background = System.Windows.Media.Brushes.Green;
             Loading03.Visibility = Visibility.Hidden;
         }
         private async void ManualStartupFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel61.Visibility = Visibility.Visible;
+            try
+            {
+                RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+                string[] startupitems = reg.GetValueNames();
+                for (int i = 0; i < reg.GetValueNames().Length; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + startupitems[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+            }
+            catch (Exception)
+            {
+                //System.Windows.MessageBox.Show(e.Message);
+            }
             Loading04.Visibility = Visibility.Visible;
             await Task.Delay(1000);
             startupoptimizationfix();
             await Task.Delay(1000);
+            resultpanel6.Children.Clear();
+            resultpanel61.Visibility = Visibility.Collapsed;
             ManualStartupFix.Content = "Fixed";
             ManualStartupFix.Background = System.Windows.Media.Brushes.Green;
             Loading04.Visibility = Visibility.Hidden;
         }
         private async void ManualRepairFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel61.Visibility = Visibility.Visible;
+            try
+            {
+                string[] Junk3 = Directory.GetFiles("C:\\Windows\\Temp\\", ".", SearchOption.AllDirectories);
+                for (int i = 0; i < 2; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+            }
+            catch { }
             Loading05.Visibility = Visibility.Visible;
             await Task.Delay(1000);
             try
@@ -2492,16 +2586,30 @@ namespace WPFUI
             }
             catch { }
             await Task.Delay(1000);
+            resultpanel6.Children.Clear();
+            resultpanel61.Visibility = Visibility.Collapsed;
             ManualRepairFix.Content = "Fixed";
             ManualRepairFix.Background = System.Windows.Media.Brushes.Green;
             Loading05.Visibility = Visibility.Hidden;
         }
         private async void ManualRegistryFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel61.Visibility = Visibility.Visible;
+            try
+            {
+                //Task.Run(() => ScannerFunctions.StartScanning());
+                for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + ScannerFunctions.arrBadRegistryKeys[i].Problem, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+            }
+            catch { }
             Loading06.Visibility = Visibility.Visible;
             await Task.Delay(1000);
             await Registrycleanfix();
             await Task.Delay(1000);
+            resultpanel6.Children.Clear();
+            resultpanel61.Visibility = Visibility.Collapsed;
             ManualRegistryFix.Content = "Fixed";
             ManualRegistryFix.Background = System.Windows.Media.Brushes.Green;
             Loading06.Visibility = Visibility.Hidden;
@@ -2518,6 +2626,68 @@ namespace WPFUI
         }
         private async void ManualDiskFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel61.Visibility = Visibility.Visible;
+            try
+            {
+                string[] Junk1 = Directory.GetFiles(Path.GetTempPath());
+                string[] Junk2 = Directory.GetFiles("C:\\Windows\\Prefetch\\");
+                string[] Junk3 = Directory.GetFiles("C:\\Windows\\Temp\\");
+                string[] Junk4 = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
+                for (int i = 0; i < Directory.GetFiles(Path.GetTempPath()).Length; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Prefetch\\").Length; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk2[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Temp\\").Length; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\").Length; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk4[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                }
+            }
+            catch (Exception)
+            {
+                //System.Windows.MessageBox.Show(e.Message + "\n" + e.Source + "\n" + e.InnerException + "\n" + e.StackTrace);
+            }
+            try
+            {
+                string ICacheFirefoxpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
+                string ICacheChromepath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\";
+                string ICacheChromepath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Application Cache\\Cache\\";
+                if (Directory.Exists(ICacheChromepath))
+                {
+                    string[] chromedetails = Directory.GetFiles(ICacheChromepath);
+                    for (int i = 0; i < 200; i++)
+                    {
+                        resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + chromedetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    }
+                }
+                if (Directory.Exists(ICacheChromepath1))
+                {
+                    string[] chromedetails1 = Directory.GetFiles(ICacheChromepath1);
+                    for (int i = 0; i < 200; i++)
+                    {
+                        resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + chromedetails1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    }
+                }
+                if (Directory.Exists(ICacheFirefoxpath))
+                {
+                    string[] firefoxdetails = Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories);
+                    for (int i = 0; i < 200; i++)
+                    {
+                        resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + firefoxdetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 9 });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //System.Windows.MessageBox.Show(e.Message);
+            }
             Loading08.Visibility = Visibility.Visible;
             await Task.Delay(1000);
             try
@@ -2669,6 +2839,8 @@ namespace WPFUI
             }
             catch { }
             await Task.Delay(1000);
+            resultpanel6.Children.Clear();
+            resultpanel61.Visibility = Visibility.Collapsed;
             ManualDiskFix.Content = "Fixed";
             ManualDiskFix.Background = System.Windows.Media.Brushes.Green;
             Loading08.Visibility = Visibility.Hidden;

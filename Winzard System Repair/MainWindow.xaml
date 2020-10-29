@@ -181,7 +181,7 @@
         </Grid>
 
         <!--After pressing scan button this panel appears & shows status of the scan progress-->
-        <Grid x:Name="statusgrid" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Background="#FF313C59" Visibility="Collapsed" Height="550">
+        <Grid x:Name="statusgrid" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Background="#FF313C59" Visibility="Visible" Height="550">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="45"/>
@@ -300,7 +300,7 @@
                 <StackPanel x:Name="resdet9" Visibility="Collapsed"/>
             </StackPanel>
             </ScrollViewer>
-            <StackPanel x:Name="resultpanel5" Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Visibility="Collapsed">
+            <StackPanel x:Name="resultpanel5" Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Visibility="Visible">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Malware Threats" FontSize="18" Foreground="White" Margin="10"/>
                 <TextBlock Text="Junk Files" FontSize="18" Foreground="White" Margin="10"/>
@@ -335,6 +335,9 @@
                     <Image x:Name="Loading09" gif:ImageBehavior.AnimatedSource="Resources/Infinity-2s-200px.gif" Visibility="Hidden"/>
                 </StackPanel>
             </StackPanel>
+            <ScrollViewer x:Name="resultpanel61" Grid.Row="1" Grid.Column="2" Visibility="Collapsed">
+                <StackPanel x:Name="resultpanel6" Orientation="Vertical"/>
+            </ScrollViewer>
             <StackPanel x:Name="resultpanel3" Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Visibility="Collapsed" Background="#FF333E59" Margin="0,0,0,45">
                 <Image Source="Resources/safety.png" Width="140" Height="140" HorizontalAlignment="Left" Margin="0,0,0,0"/>
                 <TextBlock Text="Repair Complete" FontSize="30" FontWeight="Bold" Foreground="#FFB9DD39" Margin="200,-100,0,0"/>
@@ -370,7 +373,7 @@
         </Grid>
 
         <!--Shows overall PC status with a image & scan history-->
-        <Grid x:Name="PCstatus" Width="550" Margin="430.5,41,0,-278" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Visibility="Visible">
+        <Grid x:Name="PCstatus" Width="550" Margin="430.5,41,0,-278" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
