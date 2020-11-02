@@ -14,6 +14,8 @@ using System.Windows.Media;
 using Winzard_System_Repair.RegistryScanner;
 using System.Threading;
 using Winzard_System_Repair;
+using System.Collections.ObjectModel;
+using ServiceStack;
 
 namespace WPFUI
 {
@@ -23,6 +25,7 @@ namespace WPFUI
     public partial class MainWindow : Window
     {
         NotifyIcon nIcon = new NotifyIcon();
+        Process malscan;
         PopupWindow1 Popupsub;
         PopupWindow2 Popupsub2;
         PopupWindow3 popupmain;
@@ -308,11 +311,12 @@ namespace WPFUI
         }
         private void Button_Click_Exit(object sender, RoutedEventArgs e)
         {
-            BaseUI.Visibility = Visibility.Collapsed;
+            System.Windows.Application.Current.Shutdown(0);
+            /*BaseUI.Visibility = Visibility.Collapsed;
             nIcon.Icon = new Icon("shield.ico");
             nIcon.Visible = true;
             ShowInTaskbar = false;
-            nIcon.DoubleClick += NIcon_DoubleClick;
+            nIcon.DoubleClick += NIcon_DoubleClick;*/
         }
 
         private void NIcon_DoubleClick(object sender, EventArgs e)
@@ -339,13 +343,29 @@ namespace WPFUI
             await Task.Delay(100);
             if (close == 1) { await Task.Delay(1000); };
             close = 0;
+            //t = new Thread (Tempdelete);
+            //t.Start();
+            quickfullscan.Visibility = Visibility.Visible;
+        }
+        //quick & full scan
+        private void quickscan_Click(object sender, RoutedEventArgs e)
+        {
+            quickfullscan.Visibility = Visibility.Collapsed;
             statusgrid.Visibility = Visibility.Visible;
             scan.Visibility = Visibility.Collapsed;
             PCstatus.Visibility = Visibility.Collapsed;
             OtherSoftware.Visibility = Visibility.Collapsed;
             onetimefix.Visibility = Visibility.Collapsed;
-            //t = new Thread (Tempdelete);
-            //t.Start();
+            Tempdelete();
+        }
+        private void fullscan_Click(object sender, RoutedEventArgs e)
+        {
+            quickfullscan.Visibility = Visibility.Collapsed;
+            statusgrid.Visibility = Visibility.Visible;
+            scan.Visibility = Visibility.Collapsed;
+            PCstatus.Visibility = Visibility.Collapsed;
+            OtherSoftware.Visibility = Visibility.Collapsed;
+            onetimefix.Visibility = Visibility.Collapsed;
             Tempdelete();
         }
 
@@ -388,7 +408,12 @@ namespace WPFUI
                 for (int i = 0; i < 500; i++)
                 {
                     if (close == 1) { return; };
-                    load.Children.Add(new TextBlock { Text = ScannerFunctions.CurrentScannedObject, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
+                    string reg = "[Scanning] " + ScannerFunctions.CurrentScannedObject;
+                    if(reg.Length > 100)
+                    {
+                        reg = reg.Substring(0, 100) + "...";
+                    }
+                    load.Children.Add(new TextBlock { Text = reg, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
                     if (close == 1) { return; };
                     await Task.Delay(7);
@@ -405,13 +430,60 @@ namespace WPFUI
         {
             try
             {
-                await JunkCleaner();
+                malscan = new Process();
+                malscan.StartInfo = new ProcessStartInfo
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    FileName = @"malware\clamscan.exe",
+                    Arguments = "\"C:\\Program Files\" \"C:\\Program Files (x86)\" \"C:\\ProgramData\" -r --detect-pua=yes",
+                    RedirectStandardOutput = true
+                };
+                malscan.Start();
+                await Task.Run(() =>
+                {
+                    while (!malscan.HasExited)
+                    {
+                        if (malscan.StandardOutput.EndOfStream) continue;
+                        string line = malscan.StandardOutput.ReadLine();
+                        if(line.Split(':')[line.Split(':').Length - 1].Trim().Contains("FOUND"))
+                        {
+                            ScannerFunctions.malwarelist.Add(line.Substring(0, line.LastIndexOf(':')).Trim());
+                        }
+                        else if (line.Contains(@"SCAN SUMMARY"))
+                        {
+                            ScannerFunctions.malwarsummary = malscan.StandardOutput.ReadToEnd();
+                            foreach(string s in ScannerFunctions.malwarsummary.Split('\n'))
+                            {
+                                if(s.Trim().Contains("Infected files"))
+                                {
+                                    ScannerFunctions.infected = s.Trim().Split(':')[1].Trim();
+                                }
+                            }
+                            break;
+                        }
+                        Dispatcher.Invoke(() =>
+                        {
+                            string tmp = "[Scanning] " + line;
+                            if (tmp.Length > 100) 
+                            {
+                                tmp = tmp.Substring(0, 100) + "...";
+                            }
+                            load.Children.Add(new TextBlock { Text = tmp, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
+                        }
+                    );
+                    }
+                    if (ScannerFunctions.malwarsummary.IsEmpty()) ScannerFunctions.infected = "0";
+                });
+                
+                //Task.Run(() => proc.WaitForExit())
             }
             catch (Exception e)
             {
                 //System.Windows.MessageBox.Show(e.Message);
             }
         }
+
         public async Task PrivacyCleaner()
         {
             if (close == 1) { return; };
@@ -427,7 +499,12 @@ namespace WPFUI
                     for (int i = 0; i < 200; i++)
                     {
                         if (close == 1) { return; };
-                        load.Children.Add(new TextBlock { Text = chromedetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
+                        string chrometmp = "[Scanning] " + chromedetails[i];
+                        if (chrometmp.Length > 100)
+                        {
+                            chrometmp = chrometmp.Substring(0, 100) + "...";
+                        }
+                        load.Children.Add(new TextBlock { Text = chrometmp, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                         regdetails.ScrollToEnd();
                         if (close == 1) { return; };
                         await Task.Delay(7);
@@ -440,7 +517,12 @@ namespace WPFUI
                     for (int i = 0; i < 200; i++)
                     {
                         if (close == 1) { return; };
-                        load.Children.Add(new TextBlock { Text = chromedetails1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
+                        string chrometmp1 = "[Scanning] " + chromedetails1[i];
+                        if (chrometmp1.Length > 100)
+                        {
+                            chrometmp1 = chrometmp1.Substring(0, 100) + "...";
+                        }
+                        load.Children.Add(new TextBlock { Text = chrometmp1, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                         regdetails.ScrollToEnd();
                         if (close == 1) { return; };
                         await Task.Delay(7);
@@ -453,7 +535,12 @@ namespace WPFUI
                     for (int i = 0; i < 200; i++)
                     {
                         if (close == 1) { return; };
-                        load.Children.Add(new TextBlock { Text = firefoxdetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
+                        string firefoxtmp = "[Scanning] " + firefoxdetails[i];
+                        if (firefoxtmp.Length > 100)
+                        {
+                            firefoxtmp = firefoxtmp.Substring(0, 100) + "...";
+                        }
+                        load.Children.Add(new TextBlock { Text = firefoxtmp, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                         regdetails.ScrollToEnd();
                         if (close == 1) { return; };
                         await Task.Delay(7);
@@ -593,13 +680,6 @@ namespace WPFUI
                             ScannerFunctions.filever = 0;
                         }
                     }
-                    Random rnd1 = new Random();
-                    MalwareNumbers = rnd1.Next(0, 5);
-                    string[] List = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
-                    for (int i = 0; i < MalwareNumbers; i++)
-                    {
-                        ScannerFunctions.malwarlist.Add(List[i]);
-                    }
                 }
                 catch (Exception e)
                 {
@@ -607,6 +687,7 @@ namespace WPFUI
                 }
                 //Progress
                 //scantext.Text = "Scanning: Malware";
+                #region Progress
                 Statuspanel.Text = "PC Gold Optimizer and System Repair is currently collecting information from your computer for\nscanning purpose. Please wait until the scanning is complete";
                 Loading1.Visibility = Visibility.Visible;
                 Status.Text = "Scanning: Junk";
@@ -809,12 +890,13 @@ namespace WPFUI
                 scanprogress.Value++;
                 //await Task.Delay(mega);
                 Loading10.Visibility = Visibility.Hidden;
+                #endregion
                 if (close == 1) { return; };
                 //load.Visibility = Visibility.Collapsed;
                 Random rnd = new Random();
                 int defrag = rnd.Next(0, 9);
                 defragmentation.Text = defrag.ToString() + "%";
-                MalwareThreats.Text = ScannerFunctions.malwarlist.Count.ToString();
+                MalwareThreats.Text = ScannerFunctions.infected;
                 repairfile.Text = ScannerFunctions.filever.ToString();
                 systemissue.Text = ScannerFunctions.systemissuever.ToString();
                 diskclean.Text = sizedir.ToString() + ScannerFunctions.totalcachenum.ToString();
@@ -857,6 +939,15 @@ namespace WPFUI
             Loading8.Visibility = Visibility.Hidden;
             Loading9.Visibility = Visibility.Hidden;
             Loading10.Visibility = Visibility.Hidden;
+            try
+            {
+                malscan.Kill();
+            }
+            catch(Exception g)
+            {
+                
+            }
+            
         }
         //The Repair Button
         public async void Scanfix_Click(object sender, RoutedEventArgs e)
@@ -1095,6 +1186,13 @@ namespace WPFUI
                     Loading3.Visibility = Visibility.Hidden;
                     Loading4.Visibility = Visibility.Visible;
                     Statuspanel.Text = "Fixing: Malware";
+                    Process proc = new Process();
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.StartInfo.FileName = "malware\\clamscan.exe";
+                    proc.StartInfo.Arguments = "C:\\ -r";
+                    proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    proc.Start();
+                    await Task.Run(() => proc.WaitForExit());
                     scanprogress.Value++;
 
                     scanprogress.Value++;
@@ -1519,6 +1617,13 @@ namespace WPFUI
                 Loading3.Visibility = Visibility.Hidden;
                 Loading4.Visibility = Visibility.Visible;
                 Statuspanel.Text = "Fixing: Malware";
+                Process proc = new Process();
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.FileName = "malware\\clamscan.exe";
+                proc.StartInfo.Arguments = "C:\\ -r";
+                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.Start();
+                await Task.Run(() => proc.WaitForExit());
                 scanprogress.Value++;
 
                 scanprogress.Value++;
@@ -2069,11 +2174,23 @@ namespace WPFUI
         }
         private void malwaredet_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < ScannerFunctions.malwarlist.Count; i++)
+            if (ScannerFunctions.malwarsummary.IsEmpty())
             {
-                resdet1.Children.Add(new TextBlock { Text = ScannerFunctions.malwarlist[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                resultdetails1.Visibility = Visibility.Visible;
+                resdet1.Visibility = Visibility.Visible;
+                return;
             }
-            
+            resdet1.Children.Add(new TextBlock { Text = "----------------Infected Flies-----------------", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
+            for (int i = 0; i < ScannerFunctions.malwarelist.Count; i++)
+            {
+                resdet1.Children.Add(new TextBlock { Text = ScannerFunctions.malwarelist.ToString(), Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+            }
+            resdet1.Children.Add(new TextBlock { Text = "", FontSize = 14 });
+            resdet1.Children.Add(new TextBlock { Text = "------------------Scan Summary-------------------", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
+            foreach(string l in ScannerFunctions.malwarsummary.Split('\n'))
+            {
+                resdet1.Children.Add(new TextBlock { Text = l.Trim(), Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+            }
             resultdetails1.Visibility = Visibility.Visible;
             resdet1.Visibility = Visibility.Visible;
         }
@@ -2262,37 +2379,33 @@ namespace WPFUI
 
         private async void ManualMalwareFix_Click(object sender, RoutedEventArgs e)
         {
-
-            Loading01.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
+            resultpanel5.Visibility = Visibility.Collapsed;
+            resultpanel61.Visibility = Visibility.Visible;
             try
             {
-                DirectoryInfo di4 = new DirectoryInfo("C:/Windows/SoftwareDistribution/Download");
-                foreach (FileInfo file in di4.GetFiles())
+                for (int i = 0; i < ScannerFunctions.malwarelist.Count; i++)
                 {
-                    try
-                    {
-                        file.Delete();
-                    }
-                    catch { }
+                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + ScannerFunctions.malwarelist, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
                 }
-                foreach (DirectoryInfo dir in di4.GetDirectories())
+                foreach (string f in ScannerFunctions.malwarelist)
                 {
-                    try
+                    if (File.Exists(f))
                     {
-                        dir.Delete(true);
+                        File.Delete(f);
                     }
-                    catch { }
                 }
             }
             catch { }
-            await Task.Delay(1000);
-            ManualMalwareFix.Content = "Fixed";
-            ManualMalwareFix.Background = System.Windows.Media.Brushes.Green;
-            Loading01.Visibility = Visibility.Hidden;
+            await Task.Delay(2000);
+            resultpanel6.Children.Clear();
+            resultpanel61.Visibility = Visibility.Collapsed;
+            ManualJunkFix.Content = "Fixed";
+            ManualJunkFix.Background = System.Windows.Media.Brushes.Green;
+            resultpanel5.Visibility = Visibility.Visible;
         }
         private async void ManualJunkFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel5.Visibility = Visibility.Collapsed;
             resultpanel61.Visibility = Visibility.Visible;
             try
             {
@@ -2322,7 +2435,7 @@ namespace WPFUI
                 //System.Windows.MessageBox.Show(e.Message + "\n" + e.Source + "\n" + e.InnerException + "\n" + e.StackTrace);
             }
             Loading02.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             try
             {
                 DirectoryInfo di1 = new DirectoryInfo("C:/Windows/Prefetch");
@@ -2408,15 +2521,17 @@ namespace WPFUI
                 }
             }
             catch { }
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             resultpanel6.Children.Clear();
             resultpanel61.Visibility = Visibility.Collapsed;
             ManualJunkFix.Content = "Fixed";
             ManualJunkFix.Background = System.Windows.Media.Brushes.Green;
             Loading02.Visibility = Visibility.Hidden;
+            resultpanel5.Visibility = Visibility.Visible;
         }
         private async void ManualPrivacyFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel5.Visibility = Visibility.Collapsed;
             resultpanel61.Visibility = Visibility.Visible;
             try
             {
@@ -2453,7 +2568,7 @@ namespace WPFUI
                 //System.Windows.MessageBox.Show(e.Message);
             }
             Loading03.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             try
             {
                 DirectoryInfo di5 = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\");
@@ -2517,15 +2632,17 @@ namespace WPFUI
                 }
             }
             catch { }
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             resultpanel6.Children.Clear();
             resultpanel61.Visibility = Visibility.Collapsed;
             ManualPrivacyFix.Content = "Fixed";
             ManualPrivacyFix.Background = System.Windows.Media.Brushes.Green;
             Loading03.Visibility = Visibility.Hidden;
+            resultpanel5.Visibility = Visibility.Visible;
         }
         private async void ManualStartupFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel5.Visibility = Visibility.Collapsed;
             resultpanel61.Visibility = Visibility.Visible;
             try
             {
@@ -2541,17 +2658,19 @@ namespace WPFUI
                 //System.Windows.MessageBox.Show(e.Message);
             }
             Loading04.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             startupoptimizationfix();
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             resultpanel6.Children.Clear();
             resultpanel61.Visibility = Visibility.Collapsed;
             ManualStartupFix.Content = "Fixed";
             ManualStartupFix.Background = System.Windows.Media.Brushes.Green;
             Loading04.Visibility = Visibility.Hidden;
+            resultpanel5.Visibility = Visibility.Visible;
         }
         private async void ManualRepairFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel5.Visibility = Visibility.Collapsed;
             resultpanel61.Visibility = Visibility.Visible;
             try
             {
@@ -2563,7 +2682,7 @@ namespace WPFUI
             }
             catch { }
             Loading05.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             try
             {
                 DirectoryInfo di3 = new DirectoryInfo("C:/Windows/Temp");
@@ -2585,15 +2704,18 @@ namespace WPFUI
                 }
             }
             catch { }
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             resultpanel6.Children.Clear();
             resultpanel61.Visibility = Visibility.Collapsed;
             ManualRepairFix.Content = "Fixed";
             ManualRepairFix.Background = System.Windows.Media.Brushes.Green;
             Loading05.Visibility = Visibility.Hidden;
+            resultpanel5.Visibility = Visibility.Visible;
         }
+
         private async void ManualRegistryFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel5.Visibility = Visibility.Collapsed;
             resultpanel61.Visibility = Visibility.Visible;
             try
             {
@@ -2605,27 +2727,31 @@ namespace WPFUI
             }
             catch { }
             Loading06.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             await Registrycleanfix();
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             resultpanel6.Children.Clear();
             resultpanel61.Visibility = Visibility.Collapsed;
             ManualRegistryFix.Content = "Fixed";
             ManualRegistryFix.Background = System.Windows.Media.Brushes.Green;
             Loading06.Visibility = Visibility.Hidden;
+            resultpanel5.Visibility = Visibility.Visible;
         }
         private async void ManualFragmentsFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel5.Visibility = Visibility.Collapsed;
             Loading07.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             await DiskDefragmentation();
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             ManualFragmentsFix.Content = "Fixed";
             ManualFragmentsFix.Background = System.Windows.Media.Brushes.Green;
             Loading07.Visibility = Visibility.Hidden;
+            resultpanel5.Visibility = Visibility.Visible;
         }
         private async void ManualDiskFix_Click(object sender, RoutedEventArgs e)
         {
+            resultpanel5.Visibility = Visibility.Collapsed;
             resultpanel61.Visibility = Visibility.Visible;
             try
             {
@@ -2689,7 +2815,7 @@ namespace WPFUI
                 //System.Windows.MessageBox.Show(e.Message);
             }
             Loading08.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             try
             {
                 DirectoryInfo di1 = new DirectoryInfo("C:/Windows/Prefetch");
@@ -2838,17 +2964,18 @@ namespace WPFUI
                 }
             }
             catch { }
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             resultpanel6.Children.Clear();
             resultpanel61.Visibility = Visibility.Collapsed;
             ManualDiskFix.Content = "Fixed";
             ManualDiskFix.Background = System.Windows.Media.Brushes.Green;
             Loading08.Visibility = Visibility.Hidden;
+            resultpanel5.Visibility = Visibility.Visible;
         }
         private async void ManualSystemFix_Click(object sender, RoutedEventArgs e)
         {
             Loading09.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             try
             {
                 DirectoryInfo di1 = new DirectoryInfo("C:/Windows/Prefetch");
@@ -2870,7 +2997,7 @@ namespace WPFUI
                 }
             }
             catch { }
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             ManualSystemFix.Content = "Fixed";
             ManualSystemFix.Background = System.Windows.Media.Brushes.Green;
             Loading09.Visibility = Visibility.Hidden;

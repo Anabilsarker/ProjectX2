@@ -15,7 +15,9 @@ namespace Winzard_System_Repair.RegistryScanner
 {
     public static class ScannerFunctions
     {
-        public static List<string> malwarlist = new List<string>();
+        public static List<string> malwarelist = new List<string>();
+        public static string malwarsummary;
+        public static string infected;
         public static int mynum = 0, totalcachenum = 0, filever = 0, systemissuever = 0;
         private const int ERROR_SUCCESS = 0;
 

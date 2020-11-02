@@ -176,6 +176,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MalwareScanner\BytecodeOptions.cs" />
+    <Compile Include="MalwareScanner\ClamEngine.cs" />
+    <Compile Include="MalwareScanner\ClamEngine.Settings.cs" />
+    <Compile Include="MalwareScanner\ClamEngineExtensions.cs" />
+    <Compile Include="MalwareScanner\ClamError.cs" />
+    <Compile Include="MalwareScanner\ClamException.cs" />
+    <Compile Include="MalwareScanner\FileScannedCallback.cs" />
+    <Compile Include="MalwareScanner\FileScanResult.cs" />
+    <Compile Include="MalwareScanner\IClamEngine.cs" />
+    <Compile Include="MalwareScanner\IClamEngineSettings.cs" />
+    <Compile Include="MalwareScanner\LoadOptions.cs" />
+    <Compile Include="MalwareScanner\MainWindowViewModel.cs" />
+    <Compile Include="MalwareScanner\RelayCommand.cs" />
     <Compile Include="PopupWindow3.xaml.cs">
       <DependentUpon>PopupWindow3.xaml</DependentUpon>
     </Compile>
@@ -209,6 +222,9 @@
     <Compile Include="RegistryScanner\WindowsFonts.cs" />
     <Compile Include="RegistryScanner\WindowsHelpFiles.cs" />
     <Compile Include="RegistryScanner\WindowsSounds.cs" />
+    <Compile Include="MalwareScanner\ScanOptions.cs" />
+    <Compile Include="MalwareScanner\ScanResult.cs" />
+    <Compile Include="MalwareScanner\UnsafeNativeMethods.cs" />
     <Compile Include="WebBrowserIE11Fix.cs" />
     <Page Include="BrowserWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -372,6 +388,7 @@
   <ItemGroup>
     <Resource Include="Resources\malware.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

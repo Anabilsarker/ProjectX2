@@ -73,7 +73,7 @@ namespace WPFUI
             {
                 //System.Windows.MessageBox.Show(e.Message);
             }
-            MalwareThreats.Text = ScannerFunctions.malwarlist.Count.ToString();
+            MalwareThreats.Text = ScannerFunctions.infected;
             CorruptedSystemFiles.Text = ScannerFunctions.filever.ToString();
             JunkFiles.Text = sizedir.ToString() + "MB";
             BrokenRegistryEntries.Text = ScannerFunctions.mynum.ToString() + "Items";

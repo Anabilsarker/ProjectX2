@@ -181,7 +181,8 @@
         </Grid>
 
         <!--After pressing scan button this panel appears & shows status of the scan progress-->
-        <Grid x:Name="statusgrid" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Background="#FF313C59" Visibility="Visible" Height="550">
+        
+        <Grid x:Name="statusgrid" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Background="#FF313C59" Visibility="Collapsed" Height="550">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="45"/>
@@ -300,7 +301,7 @@
                 <StackPanel x:Name="resdet9" Visibility="Collapsed"/>
             </StackPanel>
             </ScrollViewer>
-            <StackPanel x:Name="resultpanel5" Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Visibility="Visible">
+            <StackPanel x:Name="resultpanel5" Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Visibility="Collapsed">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Malware Threats" FontSize="18" Foreground="White" Margin="10"/>
                 <TextBlock Text="Junk Files" FontSize="18" Foreground="White" Margin="10"/>
@@ -373,7 +374,7 @@
         </Grid>
 
         <!--Shows overall PC status with a image & scan history-->
-        <Grid x:Name="PCstatus" Width="550" Margin="430.5,41,0,-278" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Visibility="Collapsed">
+        <Grid x:Name="PCstatus" Width="550" Margin="430.5,41,0,-278" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Visibility="Visible">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -481,5 +482,9 @@
             <Button x:Name="RegistryCleaner" Content="Registry Cleaner" Width="150" HorizontalAlignment="Left" Background="{x:Null}"  Click="RegistryCleaner_Click" Margin="0,0,0,30"/>
             <Button x:Name="EasyBackup" Content="Backup" Width="150" HorizontalAlignment="Left" Background="{x:Null}" Click="EasyBackup_Click" Margin="0,0,0,30"/>
         </StackPanel>
+        <Grid x:Name="quickfullscan" Grid.Column="1" Grid.Row="3" Grid.RowSpan="3" Visibility="Collapsed">
+            <Button x:Name="quickscan" Content="Quick Scan" Width="100" Margin="406,430,374,-396" Click="quickscan_Click"/>
+            <Button x:Name="fullscan" Content="Full Scan" Width="100" Margin="406,464,374,-431" Click="fullscan_Click"/>
+        </Grid>
     </Grid>
 </Window>
