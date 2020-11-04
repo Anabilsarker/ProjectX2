@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using Winzard_System_Repair.RegistryScanner;
 
 namespace WPFUI
 {
@@ -26,9 +27,7 @@ namespace WPFUI
         }
         private async void location()
         {
-            Random rnd = new Random();
-            int corruptnum = rnd.Next(1, 10);
-            popupcrptfilenum.Text = corruptnum.ToString();
+            popupcrptfilenum.Text = ScannerFunctions.systemissuever.ToString();
             var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
             this.Left = desktopWorkingArea.Right - this.Width;
             this.Top = desktopWorkingArea.Bottom - this.Height;
