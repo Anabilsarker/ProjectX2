@@ -71,6 +71,8 @@ namespace WPFUI
             BinaryWriter bw = new BinaryWriter(fs);
             bw.Write(true);
             fs.Close();
+            bw.Close();
+            ScannerFunctions.NotificationOnOff();
         }
     }
 }

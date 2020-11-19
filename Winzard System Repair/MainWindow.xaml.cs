@@ -25,13 +25,15 @@ namespace WPFUI
     public partial class MainWindow : Window
     {
         NotifyIcon nIcon = new NotifyIcon();
-        Process malscan, regscan;
+        Process malscan, regscan, Defrag, privacyclean, junkclean, fragmentscan;
+        EventLog eventLog;
         PopupWindow1 Popupsub;
         PopupWindow2 Popupsub2;
         PopupWindow3 popupmain;
         PopupWindow4 popupmain1;
         PopupWindow5 popupmain2;
-        int premium = 0, notification = 0, mega = 2000, MalwareNumbers = 0;
+        CancellationToken ct = CancellationToken.None;
+        int premium = 0, mega = 2000, MalwareNumbers = 0;
         float sizedir = 0;
         public MainWindow()
         {
@@ -47,7 +49,7 @@ namespace WPFUI
             sysdet3.Content = GetAccount3() + Environment.NewLine;
             sysdet4.Content = GetAccount4() + Environment.NewLine;
             NotPremium();
-            NotificationOnOff();
+            ScannerFunctions.NotificationOnOff();
             Popups3();
         }
         //Corrupt Sysfiles
@@ -55,10 +57,11 @@ namespace WPFUI
         {
             try
             {
+                if (ct.IsCancellationRequested) return;
                 await JunkCleaner();
                 await PrivacyCleaner();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //System.Windows.MessageBox.Show(e.Message);
             }
@@ -67,6 +70,7 @@ namespace WPFUI
         {
             try
             {
+                if (ct.IsCancellationRequested) return;
                 await RegistryFix();
             }
             catch (Exception e)
@@ -79,71 +83,68 @@ namespace WPFUI
         {
             try
             {
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:0%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
                 await Task.Delay(1000);
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:10%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
-                Process proc = new Process();
-                proc.StartInfo.UseShellExecute = true;
-                proc.StartInfo.FileName = "cmd.exe";
-                proc.StartInfo.Arguments = "/c \"defrag c: /A\" && exit";
-                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.Start();
-                
-                await Task.Run(() => proc.WaitForExit());
-                
+                if (ct.IsCancellationRequested) return;
+                fragmentscan = new Process();
+                fragmentscan.StartInfo = new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    CreateNoWindow = true,
+                    FileName = "cmd.exe",
+                    Arguments = "/c \"defrag c: /A\" && exit",
+                };
+                if (ct.IsCancellationRequested) return;
+                fragmentscan.Start();
+                if (ct.IsCancellationRequested)
+                {
+                    fragmentscan.Kill();
+                    return;
+                }
+                await Task.Run(() => fragmentscan.WaitForExit());
+                if (ct.IsCancellationRequested) return;
                 await Task.Delay(1000);
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:20%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
                 await Task.Delay(1000);
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:30%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
                 await Task.Delay(1000);
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:40%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
                 await Task.Delay(1000);
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:50%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
                 await Task.Delay(1000);
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:60%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
                 await Task.Delay(1000);
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:70%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
                 await Task.Delay(1000);
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:80%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
                 await Task.Delay(1000);
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:90%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
                 await Task.Delay(1000);
-                
+                if (ct.IsCancellationRequested) return;
                 load.Children.Add(new TextBlock { Text = "Checking:100%", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                 regdetails.ScrollToEnd();
-                
                 await Task.Delay(1000);
-                
             }
             catch (Exception e)
             {
@@ -155,13 +156,23 @@ namespace WPFUI
         {
             try
             {
-                Process proc = new Process();
-                proc.StartInfo.UseShellExecute = true;
-                proc.StartInfo.FileName = "cmd.exe";
-                proc.StartInfo.Arguments = "/c \"defrag c: /U /V\" && exit";
-                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.Start();
-                await Task.Run(() => proc.WaitForExit());
+                if (ct.IsCancellationRequested) return;
+                Defrag = new Process();
+                Defrag.StartInfo = new ProcessStartInfo
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    FileName = "cmd.exe",
+                    Arguments = "/c \"defrag c: /U /V\" && exit",
+                };
+                if (ct.IsCancellationRequested) return;
+                Defrag.Start();
+                if (ct.IsCancellationRequested)
+                {
+                    Defrag.Kill();
+                    return;
+                }
+                await Task.Run(() => Defrag.WaitForExit());
             }
             catch (Exception e)
             {
@@ -173,7 +184,7 @@ namespace WPFUI
         {
             try
             {
-                
+                if (ct.IsCancellationRequested) return;
                 RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
                 string regvalue = reg.ValueCount.ToString();
                 RegistryKey reg1 = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
@@ -182,23 +193,21 @@ namespace WPFUI
                 string[] startupitems = reg.GetValueNames();
                 for (int i = 0; i < reg.GetValueNames().Length; i++)
                 {
-                    
+                    if (ct.IsCancellationRequested) return;
                     load.Children.Add(new TextBlock { Text = startupitems[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
                     await Task.Delay(1000);
-                    
                 }
-                
+                if (ct.IsCancellationRequested) return;
                 string[] startupitems1 = reg1.GetValueNames();
                 for (int i = 0; i < reg.GetValueNames().Length; i++)
                 {
-                    
+                    if (ct.IsCancellationRequested) return;
                     load.Children.Add(new TextBlock { Text = startupitems1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
                     await Task.Delay(1000);
-                    
                 }
-                
+                if (ct.IsCancellationRequested) return;
             }
             catch (Exception e)
             {
@@ -209,6 +218,7 @@ namespace WPFUI
         {
             try
             {
+                if (ct.IsCancellationRequested) return;
                 RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
                 reg.DeleteSubKeyTree("Computer\\HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\");
 
@@ -216,6 +226,7 @@ namespace WPFUI
                 Assembly curAssembly = Assembly.GetExecutingAssembly();
                 /*reg1.SetValue(curAssembly.GetName().Name, curAssembly.Location);*/
                 regupdate.SetValue(curAssembly.GetName().Name, System.Windows.Forms.Application.ExecutablePath.ToString());
+                if (ct.IsCancellationRequested) return;
             }
             catch (Exception e)
             {
@@ -328,12 +339,14 @@ namespace WPFUI
         //quick & full scan
         private void quickscan_Click(object sender, RoutedEventArgs e)
         {
+            ct = CancellationToken.None;
             quickfullscan.Visibility = Visibility.Collapsed;
             statusgrid.Visibility = Visibility.Visible;
             scan.Visibility = Visibility.Collapsed;
             PCstatus.Visibility = Visibility.Collapsed;
             OtherSoftware.Visibility = Visibility.Collapsed;
             onetimefix.Visibility = Visibility.Collapsed;
+            regdetails.Visibility = Visibility.Visible;
             Tempdelete();
         }
         private void fullscan_Click(object sender, RoutedEventArgs e)
@@ -344,6 +357,7 @@ namespace WPFUI
             PCstatus.Visibility = Visibility.Collapsed;
             OtherSoftware.Visibility = Visibility.Collapsed;
             onetimefix.Visibility = Visibility.Collapsed;
+            regdetails.Visibility = Visibility.Visible;
             TempdeleteFull();
         }
 
@@ -369,7 +383,8 @@ namespace WPFUI
         {
             try
             {
-                Task.Run(() => ScannerFunctions.FixProblems());
+                if (ct.IsCancellationRequested) return;
+                await Task.Run(() => ScannerFunctions.FixProblems());
             }
             catch (Exception e)
             {
@@ -378,25 +393,22 @@ namespace WPFUI
         }
         public async Task RegistryFix()
         {
-            
             try
             {
-                Task.Run(() => ScannerFunctions.StartScanning());
+                if (ct.IsCancellationRequested) return;
+                ScannerFunctions.StartScanning();
                 for (int i = 0; i < 500; i++)
                 {
-                    
+                    if (ct.IsCancellationRequested) return;
                     string reg = "[Scanning] " + ScannerFunctions.CurrentScannedObject;
-                    if(reg.Length > 100)
+                    if (reg.Length > 100)
                     {
                         reg = reg.Substring(0, 100) + "...";
                     }
                     load.Children.Add(new TextBlock { Text = reg, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
-                    
                     await Task.Delay(7);
-                    
                 }
-                
             }
             catch (Exception e)
             {
@@ -407,6 +419,7 @@ namespace WPFUI
         {
             try
             {
+                if (ct.IsCancellationRequested) return;
                 malscan = new Process();
                 malscan.StartInfo = new ProcessStartInfo
                 {
@@ -416,73 +429,17 @@ namespace WPFUI
                     Arguments = "\"C:\\ProgramData\\Microsoft\" -r --detect-pua=yes",
                     RedirectStandardOutput = true
                 };
+                if (ct.IsCancellationRequested) return;
                 malscan.Start();
                 await Task.Run(() =>
                 {
                     while (!malscan.HasExited)
                     {
-                        if (malscan.StandardOutput.EndOfStream) continue;
-                        string line = malscan.StandardOutput.ReadLine();
-                        if(line.Split(':')[line.Split(':').Length - 1].Trim().Contains("FOUND"))
+                        if (ct.IsCancellationRequested)
                         {
-                            ScannerFunctions.malwarelist.Add(line.Substring(0, line.LastIndexOf(':')).Trim());
+                            malscan.Kill();
+                            return;
                         }
-                        else if (line.Contains(@"SCAN SUMMARY"))
-                        {
-                            ScannerFunctions.malwarsummary = malscan.StandardOutput.ReadToEnd();
-                            foreach(string s in ScannerFunctions.malwarsummary.Split('\n'))
-                            {
-                                if(s.Trim().Contains("Infected files"))
-                                {
-                                    ScannerFunctions.infected = s.Trim().Split(':')[1].Trim();
-                                }
-                            }
-                            break;
-                        }
-                        Dispatcher.Invoke(() =>
-                        {
-                            string tmp = "[Scanning] " + line;
-                            if (tmp.Length > 100) 
-                            {
-                                tmp = tmp.Substring(0, 100) + "...";
-                            }
-                            load.Children.Add(new TextBlock { Text = tmp, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
-                        }
-                    );
-                    }
-                    if (ScannerFunctions.malwarsummary.IsEmpty()) ScannerFunctions.infected = "0";
-                    
-                });
-                if (ScannerFunctions.malwarsummary.IsEmpty() == true)
-                {
-                    ManualMalwareFix.Content = "Fixed";
-                    ManualMalwareFix.Background = System.Windows.Media.Brushes.Green;
-                }
-                //Task.Run(() => proc.WaitForExit())
-            }
-            catch (Exception e)
-            {
-                //System.Windows.MessageBox.Show(e.Message);
-            }
-        }
-        public async Task MalwareCleanerFull()
-        {
-            try
-            {
-                malscan = new Process();
-                malscan.StartInfo = new ProcessStartInfo
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    FileName = @"malware\clamscan.exe",
-                    Arguments = "\"C:\\\" -r --detect-pua=yes",
-                    RedirectStandardOutput = true
-                };
-                malscan.Start();
-                await Task.Run(() =>
-                {
-                    while (!malscan.HasExited)
-                    {
                         if (malscan.StandardOutput.EndOfStream) continue;
                         string line = malscan.StandardOutput.ReadLine();
                         if (line.Split(':')[line.Split(':').Length - 1].Trim().Contains("FOUND"))
@@ -503,6 +460,11 @@ namespace WPFUI
                         }
                         Dispatcher.Invoke(() =>
                         {
+                            if (ct.IsCancellationRequested)
+                            {
+                                malscan.Kill();
+                                return;
+                            }
                             string tmp = "[Scanning] " + line;
                             if (tmp.Length > 100)
                             {
@@ -513,7 +475,81 @@ namespace WPFUI
                     );
                     }
                     if (ScannerFunctions.malwarsummary.IsEmpty()) ScannerFunctions.infected = "0";
-                    
+
+                });
+                if (ScannerFunctions.malwarsummary.IsEmpty() == true)
+                {
+                    ManualMalwareFix.Content = "Fixed";
+                    ManualMalwareFix.Background = System.Windows.Media.Brushes.Green;
+                }
+                //Task.Run(() => proc.WaitForExit())
+            }
+            catch (Exception e)
+            {
+                //System.Windows.MessageBox.Show(e.Message);
+            }
+        }
+        public async Task MalwareCleanerFull()
+        {
+            try
+            {
+                if (ct.IsCancellationRequested) return;
+                malscan = new Process();
+                malscan.StartInfo = new ProcessStartInfo
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    FileName = @"malware\clamscan.exe",
+                    Arguments = "\"C:\\\" -r --detect-pua=yes",
+                    RedirectStandardOutput = true
+                };
+                if (ct.IsCancellationRequested) return;
+                malscan.Start();
+                await Task.Run(() =>
+                {
+                    while (!malscan.HasExited)
+                    {
+                        if (ct.IsCancellationRequested)
+                        {
+                            malscan.Kill();
+                            return;
+                        }
+                        if (malscan.StandardOutput.EndOfStream) continue;
+                        string line = malscan.StandardOutput.ReadLine();
+                        if (line.Split(':')[line.Split(':').Length - 1].Trim().Contains("FOUND"))
+                        {
+                            ScannerFunctions.malwarelist.Add(line.Substring(0, line.LastIndexOf(':')).Trim());
+                        }
+                        else if (line.Contains(@"SCAN SUMMARY"))
+                        {
+                            ScannerFunctions.malwarsummary = malscan.StandardOutput.ReadToEnd();
+                            foreach (string s in ScannerFunctions.malwarsummary.Split('\n'))
+                            {
+                                if (s.Trim().Contains("Infected files"))
+                                {
+                                    ScannerFunctions.infected = s.Trim().Split(':')[1].Trim();
+                                }
+                            }
+                            break;
+                        }
+                        Dispatcher.Invoke(() =>
+                        {
+                            if (ct.IsCancellationRequested)
+                            {
+                                malscan.Kill();
+                                return;
+                            }
+                            string tmp = "[Scanning] " + line;
+                            if (tmp.Length > 100)
+                            {
+                                tmp = tmp.Substring(0, 100) + "...";
+                            }
+                            load.Children.Add(new TextBlock { Text = tmp, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
+                        }
+                    );
+                    }
+                    if (ScannerFunctions.malwarsummary.IsEmpty()) ScannerFunctions.infected = "0";
+
                 });
                 if (ScannerFunctions.malwarsummary.IsEmpty() == true)
                 {
@@ -530,19 +566,19 @@ namespace WPFUI
 
         public async Task PrivacyCleaner()
         {
-            
             try
             {
-                
+                if (ct.IsCancellationRequested) return;
                 string ICacheFirefoxpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
                 string ICacheChromepath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\";
                 string ICacheChromepath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Application Cache\\Cache\\";
-                if(Directory.Exists(ICacheChromepath))
+                if (Directory.Exists(ICacheChromepath))
                 {
+                    if (ct.IsCancellationRequested) return;
                     string[] chromedetails = Directory.GetFiles(ICacheChromepath);
                     for (int i = 0; i < 200; i++)
                     {
-                        
+                        if (ct.IsCancellationRequested) return;
                         string chrometmp = "[Scanning] " + chromedetails[i];
                         if (chrometmp.Length > 100)
                         {
@@ -550,17 +586,16 @@ namespace WPFUI
                         }
                         load.Children.Add(new TextBlock { Text = chrometmp, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                         regdetails.ScrollToEnd();
-                        
                         await Task.Delay(7);
-                        
                     }
                 }
-                if(Directory.Exists(ICacheChromepath1))
+                if (Directory.Exists(ICacheChromepath1))
                 {
+                    if (ct.IsCancellationRequested) return;
                     string[] chromedetails1 = Directory.GetFiles(ICacheChromepath1);
                     for (int i = 0; i < 200; i++)
                     {
-                        
+                        if (ct.IsCancellationRequested) return;
                         string chrometmp1 = "[Scanning] " + chromedetails1[i];
                         if (chrometmp1.Length > 100)
                         {
@@ -568,17 +603,16 @@ namespace WPFUI
                         }
                         load.Children.Add(new TextBlock { Text = chrometmp1, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                         regdetails.ScrollToEnd();
-                        
                         await Task.Delay(7);
-                        
                     }
                 }
-                if(Directory.Exists(ICacheFirefoxpath))
+                if (Directory.Exists(ICacheFirefoxpath))
                 {
+                    if (ct.IsCancellationRequested) return;
                     string[] firefoxdetails = Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories);
                     for (int i = 0; i < 200; i++)
                     {
-                        
+                        if (ct.IsCancellationRequested) return;
                         string firefoxtmp = "[Scanning] " + firefoxdetails[i];
                         if (firefoxtmp.Length > 100)
                         {
@@ -586,63 +620,52 @@ namespace WPFUI
                         }
                         load.Children.Add(new TextBlock { Text = firefoxtmp, Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                         regdetails.ScrollToEnd();
-                        
                         await Task.Delay(7);
-                        
                     }
                 }
-                
             }
             catch (Exception e)
             {
-                //System.Windows.MessageBox.Show(e.Message);
+                System.Windows.MessageBox.Show(e.Message);
             }
         }
         public async Task JunkCleaner()
         {
-            
             try
             {
-                
+                if (ct.IsCancellationRequested) return;
                 string[] Junk1 = Directory.GetFiles(Path.GetTempPath());
                 string[] Junk2 = Directory.GetFiles("C:\\Windows\\Prefetch\\");
                 string[] Junk3 = Directory.GetFiles("C:\\Windows\\Temp\\");
                 string[] Junk4 = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
+                if (ct.IsCancellationRequested) return;
                 for (int i = 0; i < Directory.GetFiles(Path.GetTempPath()).Length; i++)
                 {
-                    
+                    if (ct.IsCancellationRequested) return;
                     load.Children.Add(new TextBlock { Text = Junk1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
-                    
                     await Task.Delay(7);
-                    
                 }
                 for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Prefetch\\").Length; i++)
                 {
-                    
+                    if (ct.IsCancellationRequested) return;
                     load.Children.Add(new TextBlock { Text = Junk2[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
-                    
                     await Task.Delay(7);
-                    
                 }
                 for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Temp\\").Length; i++)
                 {
-                    
+                    if (ct.IsCancellationRequested) return;
                     load.Children.Add(new TextBlock { Text = Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
-                    
                     await Task.Delay(7);
-                    
                 }
                 for (int i = 0; i < Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\").Length; i++)
                 {
-                    
+                    if (ct.IsCancellationRequested) return;
                     load.Children.Add(new TextBlock { Text = Junk4[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
                     regdetails.ScrollToEnd();
-                    
                     await Task.Delay(7);
-                    
                 }
             }
             catch (Exception e)
@@ -654,6 +677,7 @@ namespace WPFUI
         {
             try
             {
+                if (ct.IsCancellationRequested) return;
                 await JunkCleaner();
             }
             catch (Exception e)
@@ -671,300 +695,7 @@ namespace WPFUI
                 ScannerFunctions.totalcachenum = 0;
                 try
                 {
-                    string Temppath = Path.GetTempPath();
-                    string ICacheChromepath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\";
-                    string ICacheFirefoxpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
-                    string ICacheExpolrerpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Local\\Microsoft\\Edge\\User Data\\Default\\";
-                    //string ICacheChromepath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Application Cache\\Cache\\";
-                    double Tempsize = 0;
-                    Tempsize = DirSize(new DirectoryInfo(Temppath));
-                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/Prefetch"));
-                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/Temp"));
-                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/SoftwareDistribution/Download"));
-                    //Tempsize += DirSize(new DirectoryInfo(ICacheChromepath));
-                    //Tempsize += DirSize(new DirectoryInfo(ICacheFirefoxpath));
-                    //Tempsize += DirSize(new DirectoryInfo(ICacheExpolrerpath));
-                    sizedir = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize / (1024 * 1024))));
-
-                    if(Directory.Exists(ICacheExpolrerpath))
-                    {
-                        ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheExpolrerpath).Length;
-                    }
-                    if (Directory.Exists(ICacheChromepath))
-                    {
-                        ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheChromepath).Length;
-                    }
-                    /*if (Directory.Exists(ICacheChromepath1))
-                    {
-                        totalcachenum += Directory.GetFiles(ICacheChromepath1).Length;
-                    }*/
-                    if (Directory.Exists(ICacheFirefoxpath))
-                    {
-                        ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories).Length;
-                    }
-                    for (int i = 0; i < 2; i++)
-                    {
-                        if(Directory.GetFiles("C:\\Windows\\Prefetch\\", "*.*", SearchOption.AllDirectories).Length > 0)
-                        {
-                            ScannerFunctions.systemissuever = i + 1;
-                        }
-                        else
-                        {
-                            ScannerFunctions.systemissuever = 0;
-                        }
-                    }
-                    for (int i = 0; i < 2; i++)
-                    {
-                        if (Directory.GetFiles("C:\\Windows\\Temp\\", ".", SearchOption.AllDirectories).Length > 0)
-                        {
-                            ScannerFunctions.filever = i + 1;
-                        }
-                        else
-                        {
-                            ScannerFunctions.filever = 0;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    //System.Windows.MessageBox.Show(e.Message);
-                }
-                //Progress
-                //scantext.Text = "Scanning: Malware";
-                #region Progress
-                Statuspanel.Text = "PC Gold Optimizer and System Repair is currently collecting information from your computer for\nscanning purpose. Please wait until the scanning is complete";
-                Loading1.Visibility = Visibility.Visible;
-                Status.Text = "Scanning: Junk";
-                await JunkCleaner();
-                
-                await Task.Delay(2000);
-                regdetails.Visibility = Visibility.Collapsed;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                //await Task.Delay(12000);
-                Loading1.Visibility = Visibility.Hidden;
-                Loading2.Visibility = Visibility.Visible;
-                //scantext.Text = "Scanning: Registry";
-                regdetails.Visibility = Visibility.Visible;
-                Status.Text = "Scanning: Privacy";
-                
-                await PrivacyCleaner();
-                
-                await Task.Delay(2000);
-                regdetails.Visibility = Visibility.Collapsed;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                //await Task.Delay(15000);
-                Loading2.Visibility = Visibility.Hidden;
-                Loading3.Visibility = Visibility.Visible;
-                //scantext.Text = "Scanning: Security";
-                regdetails.Visibility = Visibility.Visible;
-                Status.Text = "Scanning: Registry";
-                
-                await RegistryFix();
-                
-                await Task.Delay(2000);
-                regdetails.Visibility = Visibility.Collapsed;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                //await Task.Delay(20000);
-                Loading3.Visibility = Visibility.Hidden;
-                Loading4.Visibility = Visibility.Visible;
-                //scantext.Text = "Scanning: Startup";
-                regdetails.Visibility = Visibility.Visible;
-                Status.Text = "Scanning: Malware";
-                
-                await MalwareCleaner();
-                
-                await Task.Delay(2000);
-                regdetails.Visibility = Visibility.Collapsed;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                //await Task.Delay(31000);
-                Loading4.Visibility = Visibility.Hidden;
-                Loading5.Visibility = Visibility.Visible;
-                //scantext.Text = "Analyzing: Fragments";
-                regdetails.Visibility = Visibility.Visible;
-                Status.Text = "Scanning: Fragments";
-                
-                await Fragments();
-                
-                await Task.Delay(2000);
-                regdetails.Visibility = Visibility.Collapsed;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                //await Task.Delay(17000);
-                Loading5.Visibility = Visibility.Hidden;
-                Loading6.Visibility = Visibility.Visible;
-                //scantext.Text = "Scanning: Privacy";
-                regdetails.Visibility = Visibility.Visible;
-                Status.Text = "Scanning: Startup";
-                
-                await startupoptimization();
-                
-                await Task.Delay(2000);
-                regdetails.Visibility = Visibility.Collapsed;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                //await Task.Delay(23000);
-                Loading6.Visibility = Visibility.Hidden;
-                Loading7.Visibility = Visibility.Visible;
-                //scantext.Text = "Scanning: System";
-                regdetails.Visibility = Visibility.Visible;
-                Status.Text = "Scanning: Repair Files";
-                
-                await RepairFilesAsync();
-                
-                await Task.Delay(2000);
-                regdetails.Visibility = Visibility.Collapsed;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                //await Task.Delay(7000);
-                Loading7.Visibility = Visibility.Hidden;
-                Loading8.Visibility = Visibility.Visible;
-                //scantext.Text = "Scanning: Junk";
-                regdetails.Visibility = Visibility.Visible;
-                Status.Text = "Scanning: Disk Cleaner";
-                
-                await DiskCleanerAsync();
-                
-                await Task.Delay(2000);
-                regdetails.Visibility = Visibility.Collapsed;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                //await Task.Delay(15000);
-                Loading8.Visibility = Visibility.Hidden;
-                Loading9.Visibility = Visibility.Visible;
-                //scantext.Text = "Scanning: Drivers";
-                regdetails.Visibility = Visibility.Visible;
-                Status.Text = "Scanning: Fix System Issue";
-                
-                await FixSystemIssueAsync();
-                
-                await Task.Delay(2000);
-                regdetails.Visibility = Visibility.Collapsed;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                //await Task.Delay(mega);
-                Loading9.Visibility = Visibility.Hidden;
-                Loading10.Visibility = Visibility.Visible;
-                //scantext.Text = "Scanning: System Files";
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                scanprogress.Value++;
-                //await Task.Delay(mega);
-                Loading10.Visibility = Visibility.Hidden;
-                #endregion
-                
-                //load.Visibility = Visibility.Collapsed;
-                Random rnd = new Random();
-                int defrag = rnd.Next(0, 9);
-                defragmentation.Text = defrag.ToString() + "%";
-                MalwareThreats.Text = ScannerFunctions.infected;
-                repairfile.Text = ScannerFunctions.filever.ToString();
-                systemissue.Text = ScannerFunctions.systemissuever.ToString();
-                diskclean.Text = sizedir.ToString() + ScannerFunctions.totalcachenum.ToString();
-                JunkFiles.Text = sizedir.ToString() + "MB";
-                PrivacyFiles.Text = ScannerFunctions.totalcachenum.ToString() + "Items";
-                ScannerFunctions.mynum = ScannerFunctions.arrBadRegistryKeys.Problems;
-                registrydetails.Text = ScannerFunctions.mynum.ToString() + "Items";
-                scanfix.Visibility = Visibility.Visible;
-                onetimefix.Visibility = Visibility.Visible;
-                resultpanel.Visibility = Visibility.Visible;
-                resultpanel2.Visibility = Visibility.Visible;
-                resultdetails.Visibility = Visibility.Visible;
-                Popups();
-                
-            }
-        }
-        public async void TempdeleteFull()
-        {
-            {
-                ScannerFunctions.mynum = 0;
-                ScannerFunctions.systemissuever = 0;
-                ScannerFunctions.filever = 0;
-                ScannerFunctions.totalcachenum = 0;
-                try
-                {
+                    if (ct.IsCancellationRequested) return;
                     string Temppath = Path.GetTempPath();
                     string ICacheChromepath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\";
                     string ICacheFirefoxpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
@@ -996,7 +727,7 @@ namespace WPFUI
                     {
                         ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories).Length;
                     }
-                    for (int i = 0; i < 2; i++)
+                    /*for (int i = 0; i < 2; i++)
                     {
                         if (Directory.GetFiles("C:\\Windows\\Prefetch\\", "*.*", SearchOption.AllDirectories).Length > 0)
                         {
@@ -1017,7 +748,7 @@ namespace WPFUI
                         {
                             ScannerFunctions.filever = 0;
                         }
-                    }
+                    }*/
                 }
                 catch (Exception e)
                 {
@@ -1029,9 +760,8 @@ namespace WPFUI
                 Statuspanel.Text = "PC Gold Optimizer and System Repair is currently collecting information from your computer for\nscanning purpose. Please wait until the scanning is complete";
                 Loading1.Visibility = Visibility.Visible;
                 Status.Text = "Scanning: Junk";
-                
                 await JunkCleaner();
-                
+                if (ct.IsCancellationRequested) return;
                 await Task.Delay(2000);
                 regdetails.Visibility = Visibility.Collapsed;
                 scanprogress.Value++;
@@ -1050,9 +780,8 @@ namespace WPFUI
                 //scantext.Text = "Scanning: Registry";
                 regdetails.Visibility = Visibility.Visible;
                 Status.Text = "Scanning: Privacy";
-                
                 await PrivacyCleaner();
-                
+                if (ct.IsCancellationRequested) return;
                 await Task.Delay(2000);
                 regdetails.Visibility = Visibility.Collapsed;
                 scanprogress.Value++;
@@ -1071,9 +800,9 @@ namespace WPFUI
                 //scantext.Text = "Scanning: Security";
                 regdetails.Visibility = Visibility.Visible;
                 Status.Text = "Scanning: Registry";
-                
+
                 await RegistryFix();
-                
+                if (ct.IsCancellationRequested) return;
                 await Task.Delay(2000);
                 regdetails.Visibility = Visibility.Collapsed;
                 scanprogress.Value++;
@@ -1092,9 +821,9 @@ namespace WPFUI
                 //scantext.Text = "Scanning: Startup";
                 regdetails.Visibility = Visibility.Visible;
                 Status.Text = "Scanning: Malware";
-                
-                await MalwareCleanerFull();
-                
+
+                await MalwareCleaner();
+                if (ct.IsCancellationRequested) return;
                 await Task.Delay(2000);
                 regdetails.Visibility = Visibility.Collapsed;
                 scanprogress.Value++;
@@ -1113,9 +842,9 @@ namespace WPFUI
                 //scantext.Text = "Analyzing: Fragments";
                 regdetails.Visibility = Visibility.Visible;
                 Status.Text = "Scanning: Fragments";
-                
+
                 await Fragments();
-                
+                if (ct.IsCancellationRequested) return;
                 await Task.Delay(2000);
                 regdetails.Visibility = Visibility.Collapsed;
                 scanprogress.Value++;
@@ -1134,9 +863,9 @@ namespace WPFUI
                 //scantext.Text = "Scanning: Privacy";
                 regdetails.Visibility = Visibility.Visible;
                 Status.Text = "Scanning: Startup";
-                
+
                 await startupoptimization();
-                
+                if (ct.IsCancellationRequested) return;
                 await Task.Delay(2000);
                 regdetails.Visibility = Visibility.Collapsed;
                 scanprogress.Value++;
@@ -1155,9 +884,9 @@ namespace WPFUI
                 //scantext.Text = "Scanning: System";
                 regdetails.Visibility = Visibility.Visible;
                 Status.Text = "Scanning: Repair Files";
-                
+
                 await RepairFilesAsync();
-                
+                if (ct.IsCancellationRequested) return;
                 await Task.Delay(2000);
                 regdetails.Visibility = Visibility.Collapsed;
                 scanprogress.Value++;
@@ -1176,9 +905,9 @@ namespace WPFUI
                 //scantext.Text = "Scanning: Junk";
                 regdetails.Visibility = Visibility.Visible;
                 Status.Text = "Scanning: Disk Cleaner";
-                
+
                 await DiskCleanerAsync();
-                
+                if (ct.IsCancellationRequested) return;
                 await Task.Delay(2000);
                 regdetails.Visibility = Visibility.Collapsed;
                 scanprogress.Value++;
@@ -1197,9 +926,9 @@ namespace WPFUI
                 //scantext.Text = "Scanning: Drivers";
                 regdetails.Visibility = Visibility.Visible;
                 Status.Text = "Scanning: Fix System Issue";
-                
+
                 await FixSystemIssueAsync();
-                
+                if (ct.IsCancellationRequested) return;
                 await Task.Delay(2000);
                 regdetails.Visibility = Visibility.Collapsed;
                 scanprogress.Value++;
@@ -1229,14 +958,14 @@ namespace WPFUI
                 //await Task.Delay(mega);
                 Loading10.Visibility = Visibility.Hidden;
                 #endregion
-                
+
                 //load.Visibility = Visibility.Collapsed;
                 Random rnd = new Random();
                 int defrag = rnd.Next(0, 9);
                 defragmentation.Text = defrag.ToString() + "%";
                 MalwareThreats.Text = ScannerFunctions.infected;
-                repairfile.Text = ScannerFunctions.filever.ToString();
-                systemissue.Text = ScannerFunctions.systemissuever.ToString();
+                repairfile.Text = "0";
+                systemissue.Text = "0";
                 diskclean.Text = sizedir.ToString() + ScannerFunctions.totalcachenum.ToString();
                 JunkFiles.Text = sizedir.ToString() + "MB";
                 PrivacyFiles.Text = ScannerFunctions.totalcachenum.ToString() + "Items";
@@ -1248,23 +977,321 @@ namespace WPFUI
                 resultpanel2.Visibility = Visibility.Visible;
                 resultdetails.Visibility = Visibility.Visible;
                 Popups();
-                
+
+            }
+        }
+        public async void TempdeleteFull()
+        {
+            {
+                ScannerFunctions.mynum = 0;
+                ScannerFunctions.systemissuever = 0;
+                ScannerFunctions.filever = 0;
+                ScannerFunctions.totalcachenum = 0;
+                try
+                {
+                    if (ct.IsCancellationRequested) return;
+                    string Temppath = Path.GetTempPath();
+                    string ICacheChromepath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\";
+                    string ICacheFirefoxpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
+                    string ICacheExpolrerpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Local\\Microsoft\\Edge\\User Data\\Default\\";
+                    //string ICacheChromepath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Application Cache\\Cache\\";
+                    double Tempsize = 0;
+                    Tempsize = DirSize(new DirectoryInfo(Temppath));
+                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/Prefetch"));
+                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/Temp"));
+                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/SoftwareDistribution/Download"));
+                    //Tempsize += DirSize(new DirectoryInfo(ICacheChromepath));
+                    //Tempsize += DirSize(new DirectoryInfo(ICacheFirefoxpath));
+                    //Tempsize += DirSize(new DirectoryInfo(ICacheExpolrerpath));
+                    sizedir = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize / (1024 * 1024))));
+
+                    if (Directory.Exists(ICacheExpolrerpath))
+                    {
+                        ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheExpolrerpath).Length;
+                    }
+                    if (Directory.Exists(ICacheChromepath))
+                    {
+                        ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheChromepath).Length;
+                    }
+                    /*if (Directory.Exists(ICacheChromepath1))
+                    {
+                        totalcachenum += Directory.GetFiles(ICacheChromepath1).Length;
+                    }*/
+                    if (Directory.Exists(ICacheFirefoxpath))
+                    {
+                        ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories).Length;
+                    }
+                    /*for (int i = 0; i < 2; i++)
+                    {
+                        if (Directory.GetFiles("C:\\Windows\\Prefetch\\", "*.*", SearchOption.AllDirectories).Length > 0)
+                        {
+                            ScannerFunctions.systemissuever = i + 1;
+                        }
+                        else
+                        {
+                            ScannerFunctions.systemissuever = 0;
+                        }
+                    }
+                    for (int i = 0; i < 2; i++)
+                    {
+                        if (Directory.GetFiles("C:\\Windows\\Temp\\", ".", SearchOption.AllDirectories).Length > 0)
+                        {
+                            ScannerFunctions.filever = i + 1;
+                        }
+                        else
+                        {
+                            ScannerFunctions.filever = 0;
+                        }
+                    }*/
+                }
+                catch (Exception e)
+                {
+                    //System.Windows.MessageBox.Show(e.Message);
+                }
+                //Progress
+                //scantext.Text = "Scanning: Malware";
+                #region Progress
+                Statuspanel.Text = "PC Gold Optimizer and System Repair is currently collecting information from your computer for\nscanning purpose. Please wait until the scanning is complete";
+                Loading1.Visibility = Visibility.Visible;
+                Status.Text = "Scanning: Junk";
+
+                await JunkCleaner();
+                if (ct.IsCancellationRequested) return;
+                await Task.Delay(2000);
+                regdetails.Visibility = Visibility.Collapsed;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                //await Task.Delay(12000);
+                Loading1.Visibility = Visibility.Hidden;
+                Loading2.Visibility = Visibility.Visible;
+                //scantext.Text = "Scanning: Registry";
+                regdetails.Visibility = Visibility.Visible;
+                Status.Text = "Scanning: Privacy";
+
+                await PrivacyCleaner();
+                if (ct.IsCancellationRequested) return;
+                await Task.Delay(2000);
+                regdetails.Visibility = Visibility.Collapsed;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                //await Task.Delay(15000);
+                Loading2.Visibility = Visibility.Hidden;
+                Loading3.Visibility = Visibility.Visible;
+                //scantext.Text = "Scanning: Security";
+                regdetails.Visibility = Visibility.Visible;
+                Status.Text = "Scanning: Registry";
+
+                await RegistryFix();
+                if (ct.IsCancellationRequested) return;
+                await Task.Delay(2000);
+                regdetails.Visibility = Visibility.Collapsed;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                //await Task.Delay(20000);
+                Loading3.Visibility = Visibility.Hidden;
+                Loading4.Visibility = Visibility.Visible;
+                //scantext.Text = "Scanning: Startup";
+                regdetails.Visibility = Visibility.Visible;
+                Status.Text = "Scanning: Malware";
+
+                await MalwareCleanerFull();
+                if (ct.IsCancellationRequested) return;
+                await Task.Delay(2000);
+                regdetails.Visibility = Visibility.Collapsed;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                //await Task.Delay(31000);
+                Loading4.Visibility = Visibility.Hidden;
+                Loading5.Visibility = Visibility.Visible;
+                //scantext.Text = "Analyzing: Fragments";
+                regdetails.Visibility = Visibility.Visible;
+                Status.Text = "Scanning: Fragments";
+
+                await Fragments();
+                if (ct.IsCancellationRequested) return;
+                await Task.Delay(2000);
+                regdetails.Visibility = Visibility.Collapsed;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                //await Task.Delay(17000);
+                Loading5.Visibility = Visibility.Hidden;
+                Loading6.Visibility = Visibility.Visible;
+                //scantext.Text = "Scanning: Privacy";
+                regdetails.Visibility = Visibility.Visible;
+                Status.Text = "Scanning: Startup";
+
+                await startupoptimization();
+                if (ct.IsCancellationRequested) return;
+                await Task.Delay(2000);
+                regdetails.Visibility = Visibility.Collapsed;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                //await Task.Delay(23000);
+                Loading6.Visibility = Visibility.Hidden;
+                Loading7.Visibility = Visibility.Visible;
+                //scantext.Text = "Scanning: System";
+                regdetails.Visibility = Visibility.Visible;
+                Status.Text = "Scanning: Repair Files";
+
+                await RepairFilesAsync();
+                if (ct.IsCancellationRequested) return;
+                await Task.Delay(2000);
+                regdetails.Visibility = Visibility.Collapsed;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                //await Task.Delay(7000);
+                Loading7.Visibility = Visibility.Hidden;
+                Loading8.Visibility = Visibility.Visible;
+                //scantext.Text = "Scanning: Junk";
+                regdetails.Visibility = Visibility.Visible;
+                Status.Text = "Scanning: Disk Cleaner";
+
+                await DiskCleanerAsync();
+                if (ct.IsCancellationRequested) return;
+                await Task.Delay(2000);
+                regdetails.Visibility = Visibility.Collapsed;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                //await Task.Delay(15000);
+                Loading8.Visibility = Visibility.Hidden;
+                Loading9.Visibility = Visibility.Visible;
+                //scantext.Text = "Scanning: Drivers";
+                regdetails.Visibility = Visibility.Visible;
+                Status.Text = "Scanning: Fix System Issue";
+
+                await FixSystemIssueAsync();
+                if (ct.IsCancellationRequested) return;
+                await Task.Delay(2000);
+                regdetails.Visibility = Visibility.Collapsed;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                //await Task.Delay(mega);
+                Loading9.Visibility = Visibility.Hidden;
+                Loading10.Visibility = Visibility.Visible;
+                //scantext.Text = "Scanning: System Files";
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                scanprogress.Value++;
+                //await Task.Delay(mega);
+                Loading10.Visibility = Visibility.Hidden;
+                #endregion
+
+                //load.Visibility = Visibility.Collapsed;
+                Random rnd = new Random();
+                int defrag = rnd.Next(0, 9);
+                defragmentation.Text = defrag.ToString() + "%";
+                MalwareThreats.Text = ScannerFunctions.infected;
+                repairfile.Text = "0";
+                systemissue.Text = "0";
+                diskclean.Text = sizedir.ToString() + ScannerFunctions.totalcachenum.ToString();
+                JunkFiles.Text = sizedir.ToString() + "MB";
+                PrivacyFiles.Text = ScannerFunctions.totalcachenum.ToString() + "Items";
+                ScannerFunctions.mynum = ScannerFunctions.arrBadRegistryKeys.Problems;
+                registrydetails.Text = ScannerFunctions.mynum.ToString() + "Items";
+                scanfix.Visibility = Visibility.Visible;
+                onetimefix.Visibility = Visibility.Visible;
+                resultpanel.Visibility = Visibility.Visible;
+                resultpanel2.Visibility = Visibility.Visible;
+                resultdetails.Visibility = Visibility.Visible;
+                Popups();
+
             }
         }
 
         //The Scan stop button
-        private async void scanstop_Click(object sender, RoutedEventArgs e)
+        private void scanstop_Click(object sender, RoutedEventArgs e)
         {
-            await Task.Delay(4000);
             statusgrid.Visibility = Visibility.Collapsed;
             scan.Visibility = Visibility.Visible;
             PCstatus.Visibility = Visibility.Visible;
             OtherSoftware.Visibility = Visibility.Visible;
             //loadvid.LoadedBehavior = MediaState.Stop;
             //load.Visibility = Visibility.Collapsed;
+            resultpanel.Visibility = Visibility.Collapsed;
+            resultpanel2.Visibility = Visibility.Collapsed;
             resultpanel3.Visibility = Visibility.Collapsed;
             resultpanel4.Visibility = Visibility.Collapsed;
             resultpanel5.Visibility = Visibility.Collapsed;
+            resultdetails.Visibility = Visibility.Collapsed;
             Loading1.Visibility = Visibility.Hidden;
             Loading2.Visibility = Visibility.Hidden;
             Loading3.Visibility = Visibility.Hidden;
@@ -1277,13 +1304,15 @@ namespace WPFUI
             Loading10.Visibility = Visibility.Hidden;
             try
             {
-                malscan.Kill();
+                CancellationTokenSource ts = new CancellationTokenSource();
+                ct = ts.Token;
+                ts.Cancel();
             }
-            catch(Exception g)
+            catch (Exception g)
             {
-                
+
             }
-            
+
         }
         //The Repair Button
         public async void Scanfix_Click(object sender, RoutedEventArgs e)
@@ -1853,7 +1882,7 @@ namespace WPFUI
                     //scanresult.Text = "Junk: " + sizedir.ToString() + "MB cleaned\n" + "Security Holes: " + "Fixed" + "\nPrivacy Issue: " + "Fixed" + "\nDevice Optimized";
                     scanstop.Content = "Back";
                 }
-                catch (Exception )
+                catch (Exception)
                 {
                     //System.Windows.MessageBox.Show(e.Message + "\n" + e.Source);
                 }
@@ -1886,7 +1915,7 @@ namespace WPFUI
                 resultdetails.Visibility = Visibility.Collapsed;
                 //load.Visibility = Visibility.Collapsed;
                 //scanresult.Visibility = Visibility.Collapsed;
-                
+
                 #region Progress
                 double reset = 0;
                 scanprogress.Value = reset;
@@ -2543,10 +2572,10 @@ namespace WPFUI
             }
         }*/
 
-        
+
         private async void Popups()
         {
-            if (premium == 0 && notification == 0)
+            if (premium == 0 && ScannerFunctions.notification == 0)
             {
                 await Task.Delay(120000);
                 Popupsub = new PopupWindow1();
@@ -2570,7 +2599,7 @@ namespace WPFUI
 
         private async void Popups1()
         {
-            if (premium == 0 && notification == 0)
+            if (premium == 0 && ScannerFunctions.notification == 0)
             {
                 await Task.Delay(120000);
                 Popupsub2 = new PopupWindow2();
@@ -2615,7 +2644,7 @@ namespace WPFUI
         }*/
         private async void Popups3()
         {
-            if (premium == 1)
+            if (premium == 1 && ScannerFunctions.notification == 0)
             {
                 await Task.Delay(5000000);
                 popupmain2 = new PopupWindow5();
@@ -2635,35 +2664,9 @@ namespace WPFUI
             BinaryWriter bw = new BinaryWriter(fs);
             bw.Write(true);
             fs.Close();
-            NotificationOnOff();
+            bw.Close();
+            ScannerFunctions.NotificationOnOff();
         }
-        public void NotificationOnOff()
-        {
-            if (System.IO.File.Exists("sysset.bin"))
-            {
-                FileStream fs = new FileStream("sysset.bin", FileMode.Open);
-                BinaryReader br = new BinaryReader(fs);
-                if (br.ReadBoolean() == true)
-                {
-                    notification = 1;
-                    //Turnoffnotifications.IsChecked = true;
-                    fs.Close();
-                }
-                else
-                {
-                    br.Close();
-                    fs.Close();
-                }
-            }
-            else
-            {
-                FileStream fs = new FileStream("sysset.bin", FileMode.Create);
-                BinaryWriter bw = new BinaryWriter(fs);
-                bw.Write(false);
-                fs.Close();
-            }
-        }
-
         private void onetimefix_Click(object sender, RoutedEventArgs e)
         {
             OneTimeFix();
@@ -2671,30 +2674,20 @@ namespace WPFUI
 
         public void OneTimeFix()
         {
-            /*var RunningProcessPaths = ProcessFileNameFinderClass.GetAllRunningProcessFilePaths();
-
-            if (RunningProcessPaths.Contains("firefox.exe"))
-            {
-                //firefox is running
-                System.Windows.MessageBox.Show("Please Close your browser to continue");
-                return;
-            }
-            if (RunningProcessPaths.Contains("chrome.exe"))
-            {
-                //Google Chrome is running
-                System.Windows.MessageBox.Show("Please Close your browser to continue");
-                return;
-            }*/
-            if (System.IO.File.Exists("sysdone.bin"))
+            if (File.Exists("sysdone.bin"))
             {
                 FileStream fs = new FileStream("sysdone.bin", FileMode.Open);
                 BinaryReader br = new BinaryReader(fs);
                 if (br.ReadBoolean() == true)
                 {
                     br.Close();
-                    BinaryWriter bw = new BinaryWriter(fs);
-                    bw.Write(false);
-                    bw.Close();
+                    FileInfo fn = new FileInfo("sysdone.bin");
+                    if (fn.CreationTime < DateTime.Now.AddHours(-23))
+                    {
+                        BinaryWriter bw = new BinaryWriter(fs);
+                        bw.Write(false);
+                        bw.Close();
+                    }
                     fs.Close();
                     OneTimeRepair();
                 }
@@ -2719,7 +2712,7 @@ namespace WPFUI
             {
                 FileStream fs = new FileStream("sysdone.bin", FileMode.Create);
                 BinaryWriter bw = new BinaryWriter(fs);
-                bw.Write(false);
+                bw.Write(true);
                 bw.Close();
                 fs.Close();
                 OneTimeRepair();
@@ -2772,10 +2765,14 @@ namespace WPFUI
             resdet6.Visibility = Visibility.Visible;
             try
             {
-                //Task.Run(() => ScannerFunctions.StartScanning());
                 for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
                 {
-                    resdet6.Children.Add(new TextBlock { Text = ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath + ScannerFunctions.arrBadRegistryKeys[i].ValueName, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    string reg = ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath + ScannerFunctions.arrBadRegistryKeys[i].ValueName;
+                    if (reg.Length > 120)
+                    {
+                        reg = reg.Substring(0, 120) + "...";
+                    }
+                    resdet6.Children.Add(new TextBlock { Text = reg, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
                 }
             }
             catch { }
@@ -2812,7 +2809,7 @@ namespace WPFUI
                     }
                 }
             }
-            catch (Exception )
+            catch (Exception)
             {
                 //System.Windows.MessageBox.Show(e.Message);
             }
@@ -2835,7 +2832,7 @@ namespace WPFUI
             }
             resdet1.Children.Add(new TextBlock { Text = "", FontSize = 14 });
             resdet1.Children.Add(new TextBlock { Text = "------------------Scan Summary-------------------", Foreground = System.Windows.Media.Brushes.White, FontSize = 14 });
-            foreach(string l in ScannerFunctions.malwarsummary.Split('\n'))
+            foreach (string l in ScannerFunctions.malwarsummary.Split('\n'))
             {
                 resdet1.Children.Add(new TextBlock { Text = l.Trim(), Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
             }
@@ -2862,17 +2859,17 @@ namespace WPFUI
         }
         private void filerepair_Click(object sender, RoutedEventArgs e)
         {
-            try
+            /*try
             {
                 string[] Junk3 = Directory.GetFiles("C:\\Windows\\Temp\\",".",SearchOption.AllDirectories);
                 for (int i = 0; i < 2; i++)
                 {
                     resdet5.Children.Add(new TextBlock { Text = Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
                 }
-                resultdetails1.Visibility = Visibility.Visible;
-                resdet5.Visibility = Visibility.Visible;
             }
-            catch { }
+            catch { }*/
+            resultdetails1.Visibility = Visibility.Visible;
+            resdet5.Visibility = Visibility.Visible;
         }
         private void fragments_Click(object sender, RoutedEventArgs e)
         {
@@ -2946,7 +2943,7 @@ namespace WPFUI
         }
         private void systemissu_Click(object sender, RoutedEventArgs e)
         {
-            try
+            /*try
             {
                 string[] Junk4 = Directory.GetFiles("C:\\Windows\\Prefetch\\", "*.*", SearchOption.AllDirectories);
                 for (int i = 0; i < 2; i++)
@@ -2957,7 +2954,7 @@ namespace WPFUI
             catch(Exception f)
             {
                 //System.Windows.MessageBox.Show(f.Message + "\n" + f.StackTrace + "\n" + f.Source);
-            }
+            }*/
             resultdetails1.Visibility = Visibility.Visible;
             resdet9.Visibility = Visibility.Visible;
         }
@@ -3023,7 +3020,7 @@ namespace WPFUI
             }*/
         }
 
-        
+
 
         private async void ManualMalwareFix_Click(object sender, RoutedEventArgs e)
         {

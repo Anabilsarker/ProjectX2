@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using Winzard_System_Repair.RegistryScanner;
 
 namespace WPFUI
 {
@@ -68,6 +69,8 @@ namespace WPFUI
             BinaryWriter bw = new BinaryWriter(fs);
             bw.Write(true);
             fs.Close();
+            bw.Close();
+            ScannerFunctions.NotificationOnOff();
         }
     }
 }

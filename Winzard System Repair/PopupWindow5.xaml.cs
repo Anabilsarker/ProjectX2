@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Winzard_System_Repair.RegistryScanner;
 
 namespace WPFUI
 {
@@ -45,6 +46,8 @@ namespace WPFUI
             BinaryWriter bw = new BinaryWriter(fs);
             bw.Write(true);
             fs.Close();
+            bw.Close();
+            ScannerFunctions.NotificationOnOff();
         }
     }
 }

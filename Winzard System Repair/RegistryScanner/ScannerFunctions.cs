@@ -2,6 +2,7 @@
 using ServiceStack.Messaging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -18,7 +19,7 @@ namespace Winzard_System_Repair.RegistryScanner
         public static List<string> malwarelist = new List<string>();
         public static string malwarsummary;
         public static string infected;
-        public static int mynum = 0, totalcachenum = 0, filever = 0, systemissuever = 0;
+        public static int mynum = 0, totalcachenum = 0, filever = 0, systemissuever = 0, notification = 0;
         private const int ERROR_SUCCESS = 0;
 
         private const string IDS_DEFAULTVALUENAME = "(DEFAULT)";
@@ -284,6 +285,34 @@ namespace Winzard_System_Repair.RegistryScanner
 
             if (hr == ERROR_SUCCESS) // it's ok
                 return;
+        }
+
+        public static void NotificationOnOff()
+        {
+            if (System.IO.File.Exists("sysset.bin"))
+            {
+                FileStream fs = new FileStream("sysset.bin", FileMode.Open);
+                BinaryReader br = new BinaryReader(fs);
+                if (br.ReadBoolean() == true)
+                {
+                    notification = 1;
+                    br.Close();
+                    fs.Close();
+                }
+                else
+                {
+                    br.Close();
+                    fs.Close();
+                }
+            }
+            else
+            {
+                FileStream fs = new FileStream("sysset.bin", FileMode.Create);
+                BinaryWriter bw = new BinaryWriter(fs);
+                bw.Write(false);
+                fs.Close();
+                bw.Close();
+            }
         }
 
         /*private void FixProblems()
