@@ -1302,6 +1302,25 @@ namespace WPFUI
             Loading8.Visibility = Visibility.Hidden;
             Loading9.Visibility = Visibility.Hidden;
             Loading10.Visibility = Visibility.Hidden;
+            resultdetails1.Visibility = Visibility.Collapsed;
+            resdet1.Visibility = Visibility.Collapsed;
+            resdet2.Visibility = Visibility.Collapsed;
+            resdet3.Visibility = Visibility.Collapsed;
+            resdet4.Visibility = Visibility.Collapsed;
+            resdet5.Visibility = Visibility.Collapsed;
+            resdet6.Visibility = Visibility.Collapsed;
+            resdet7.Visibility = Visibility.Collapsed;
+            resdet8.Visibility = Visibility.Collapsed;
+            resdet9.Visibility = Visibility.Collapsed;
+            resdet1.Children.Clear();
+            resdet2.Children.Clear();
+            resdet3.Children.Clear();
+            resdet4.Children.Clear();
+            resdet5.Children.Clear();
+            resdet6.Children.Clear();
+            resdet7.Children.Clear();
+            resdet8.Children.Clear();
+            resdet9.Children.Clear();
             try
             {
                 CancellationTokenSource ts = new CancellationTokenSource();
