@@ -34,7 +34,7 @@ namespace WPFUI
         PopupWindow5 popupmain2;
         CancellationToken ct = CancellationToken.None;
         int premium = 0, mega = 2000, MalwareNumbers = 0;
-        float sizedir = 0;
+        float sizedir = 0, sizedir1 = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -94,7 +94,7 @@ namespace WPFUI
                 fragmentscan = new Process();
                 fragmentscan.StartInfo = new ProcessStartInfo
                 {
-                    UseShellExecute = true,
+                    UseShellExecute = false,
                     CreateNoWindow = true,
                     FileName = "cmd.exe",
                     Arguments = "/c \"defrag c: /A\" && exit",
@@ -388,7 +388,7 @@ namespace WPFUI
             }
             catch (Exception e)
             {
-                System.Windows.MessageBox.Show(e.Message);
+                //System.Windows.MessageBox.Show(e.Message);
             }
         }
         public async Task RegistryFix()
@@ -702,15 +702,16 @@ namespace WPFUI
                     string ICacheExpolrerpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Local\\Microsoft\\Edge\\User Data\\Default\\";
                     //string ICacheChromepath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Application Cache\\Cache\\";
                     double Tempsize = 0;
+                    double Tempsize1 = 0;
                     Tempsize = DirSize(new DirectoryInfo(Temppath));
                     Tempsize += DirSize(new DirectoryInfo("C:/Windows/Prefetch"));
                     Tempsize += DirSize(new DirectoryInfo("C:/Windows/Temp"));
-                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/SoftwareDistribution/Download"));
+                    Tempsize1 = DirSize(new DirectoryInfo("C:/Windows/SoftwareDistribution/Download"));
                     //Tempsize += DirSize(new DirectoryInfo(ICacheChromepath));
                     //Tempsize += DirSize(new DirectoryInfo(ICacheFirefoxpath));
                     //Tempsize += DirSize(new DirectoryInfo(ICacheExpolrerpath));
                     sizedir = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize / (1024 * 1024))));
-
+                    sizedir1 = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize1 / (1024 * 1024))));
                     if (Directory.Exists(ICacheExpolrerpath))
                     {
                         ScannerFunctions.totalcachenum += Directory.GetFiles(ICacheExpolrerpath).Length;
@@ -966,7 +967,7 @@ namespace WPFUI
                 MalwareThreats.Text = ScannerFunctions.infected;
                 repairfile.Text = "0";
                 systemissue.Text = "0";
-                diskclean.Text = sizedir.ToString() + ScannerFunctions.totalcachenum.ToString();
+                diskclean.Text = sizedir1.ToString();
                 JunkFiles.Text = sizedir.ToString() + "MB";
                 PrivacyFiles.Text = ScannerFunctions.totalcachenum.ToString() + "Items";
                 ScannerFunctions.mynum = ScannerFunctions.arrBadRegistryKeys.Problems;
@@ -995,15 +996,16 @@ namespace WPFUI
                     string ICacheFirefoxpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
                     string ICacheExpolrerpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Local\\Microsoft\\Edge\\User Data\\Default\\";
                     //string ICacheChromepath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Application Cache\\Cache\\";
-                    double Tempsize = 0;
+                    double Tempsize = 0, Tempsize1 = 0;
                     Tempsize = DirSize(new DirectoryInfo(Temppath));
                     Tempsize += DirSize(new DirectoryInfo("C:/Windows/Prefetch"));
                     Tempsize += DirSize(new DirectoryInfo("C:/Windows/Temp"));
-                    Tempsize += DirSize(new DirectoryInfo("C:/Windows/SoftwareDistribution/Download"));
+                    Tempsize1 = DirSize(new DirectoryInfo("C:/Windows/SoftwareDistribution/Download"));
                     //Tempsize += DirSize(new DirectoryInfo(ICacheChromepath));
                     //Tempsize += DirSize(new DirectoryInfo(ICacheFirefoxpath));
                     //Tempsize += DirSize(new DirectoryInfo(ICacheExpolrerpath));
                     sizedir = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize / (1024 * 1024))));
+                    sizedir1 = (float)Convert.ToDouble(string.Format("{0:0.00}", (Tempsize / (1024 * 1024))));
 
                     if (Directory.Exists(ICacheExpolrerpath))
                     {
@@ -1262,7 +1264,7 @@ namespace WPFUI
                 MalwareThreats.Text = ScannerFunctions.infected;
                 repairfile.Text = "0";
                 systemissue.Text = "0";
-                diskclean.Text = sizedir.ToString() + ScannerFunctions.totalcachenum.ToString();
+                diskclean.Text = sizedir1.ToString();
                 JunkFiles.Text = sizedir.ToString() + "MB";
                 PrivacyFiles.Text = ScannerFunctions.totalcachenum.ToString() + "Items";
                 ScannerFunctions.mynum = ScannerFunctions.arrBadRegistryKeys.Problems;
@@ -2752,7 +2754,6 @@ namespace WPFUI
                 string[] Junk1 = Directory.GetFiles(Path.GetTempPath());
                 string[] Junk2 = Directory.GetFiles("C:\\Windows\\Prefetch\\");
                 string[] Junk3 = Directory.GetFiles("C:\\Windows\\Temp\\");
-                string[] Junk4 = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
                 for (int i = 0; i < Directory.GetFiles(Path.GetTempPath()).Length; i++)
                 {
                     resdet2.Children.Add(new TextBlock { Text = Junk1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
@@ -2764,10 +2765,6 @@ namespace WPFUI
                 for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Temp\\").Length; i++)
                 {
                     resdet2.Children.Add(new TextBlock { Text = Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                }
-                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\").Length; i++)
-                {
-                    resdet2.Children.Add(new TextBlock { Text = Junk4[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
                 }
             }
             catch (Exception)
@@ -2898,22 +2895,7 @@ namespace WPFUI
         {
             try
             {
-                string[] Junk1 = Directory.GetFiles(Path.GetTempPath());
-                string[] Junk2 = Directory.GetFiles("C:\\Windows\\Prefetch\\");
-                string[] Junk3 = Directory.GetFiles("C:\\Windows\\Temp\\");
                 string[] Junk4 = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
-                for (int i = 0; i < Directory.GetFiles(Path.GetTempPath()).Length; i++)
-                {
-                    resdet8.Children.Add(new TextBlock { Text = Junk1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                }
-                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Prefetch\\").Length; i++)
-                {
-                    resdet8.Children.Add(new TextBlock { Text = Junk2[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                }
-                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Temp\\").Length; i++)
-                {
-                    resdet8.Children.Add(new TextBlock { Text = Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                }
                 for (int i = 0; i < Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\").Length; i++)
                 {
                     resdet8.Children.Add(new TextBlock { Text = Junk4[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
@@ -2922,40 +2904,6 @@ namespace WPFUI
             catch (Exception)
             {
                 //System.Windows.MessageBox.Show(e.Message + "\n" + e.Source + "\n" + e.InnerException + "\n" + e.StackTrace);
-            }
-            try
-            {
-                string ICacheFirefoxpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
-                string ICacheChromepath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\";
-                string ICacheChromepath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Application Cache\\Cache\\";
-                if (Directory.Exists(ICacheChromepath))
-                {
-                    string[] chromedetails = Directory.GetFiles(ICacheChromepath);
-                    for (int i = 0; i < 200; i++)
-                    {
-                        resdet8.Children.Add(new TextBlock { Text = chromedetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                    }
-                }
-                if (Directory.Exists(ICacheChromepath1))
-                {
-                    string[] chromedetails1 = Directory.GetFiles(ICacheChromepath1);
-                    for (int i = 0; i < 200; i++)
-                    {
-                        resdet8.Children.Add(new TextBlock { Text = chromedetails1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                    }
-                }
-                if (Directory.Exists(ICacheFirefoxpath))
-                {
-                    string[] firefoxdetails = Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories);
-                    for (int i = 0; i < 200; i++)
-                    {
-                        resdet8.Children.Add(new TextBlock { Text = firefoxdetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 9 });
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                //System.Windows.MessageBox.Show(e.Message);
             }
             resultdetails1.Visibility = Visibility.Visible;
             resdet8.Visibility = Visibility.Visible;
@@ -3076,7 +3024,6 @@ namespace WPFUI
                 string[] Junk1 = Directory.GetFiles(Path.GetTempPath());
                 string[] Junk2 = Directory.GetFiles("C:\\Windows\\Prefetch\\");
                 string[] Junk3 = Directory.GetFiles("C:\\Windows\\Temp\\");
-                string[] Junk4 = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
                 for (int i = 0; i < Directory.GetFiles(Path.GetTempPath()).Length; i++)
                 {
                     resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
@@ -3088,10 +3035,6 @@ namespace WPFUI
                 for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Temp\\").Length; i++)
                 {
                     resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                }
-                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\").Length; i++)
-                {
-                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk4[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
                 }
             }
             catch (Exception)
@@ -3155,27 +3098,6 @@ namespace WPFUI
                     catch { }
                 }
                 foreach (DirectoryInfo dir in di3.GetDirectories())
-                {
-                    try
-                    {
-                        dir.Delete(true);
-                    }
-                    catch { }
-                }
-            }
-            catch { }
-            try
-            {
-                DirectoryInfo di4 = new DirectoryInfo("C:/Windows/SoftwareDistribution/Download");
-                foreach (FileInfo file in di4.GetFiles())
-                {
-                    try
-                    {
-                        file.Delete();
-                    }
-                    catch { }
-                }
-                foreach (DirectoryInfo dir in di4.GetDirectories())
                 {
                     try
                     {
@@ -3419,22 +3341,7 @@ namespace WPFUI
             resultpanel61.Visibility = Visibility.Visible;
             try
             {
-                string[] Junk1 = Directory.GetFiles(Path.GetTempPath());
-                string[] Junk2 = Directory.GetFiles("C:\\Windows\\Prefetch\\");
-                string[] Junk3 = Directory.GetFiles("C:\\Windows\\Temp\\");
                 string[] Junk4 = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
-                for (int i = 0; i < Directory.GetFiles(Path.GetTempPath()).Length; i++)
-                {
-                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                }
-                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Prefetch\\").Length; i++)
-                {
-                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk2[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                }
-                for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Temp\\").Length; i++)
-                {
-                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                }
                 for (int i = 0; i < Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\").Length; i++)
                 {
                     resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk4[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
@@ -3444,106 +3351,7 @@ namespace WPFUI
             {
                 //System.Windows.MessageBox.Show(e.Message + "\n" + e.Source + "\n" + e.InnerException + "\n" + e.StackTrace);
             }
-            try
-            {
-                string ICacheFirefoxpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
-                string ICacheChromepath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\";
-                string ICacheChromepath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Application Cache\\Cache\\";
-                if (Directory.Exists(ICacheChromepath))
-                {
-                    string[] chromedetails = Directory.GetFiles(ICacheChromepath);
-                    for (int i = 0; i < 200; i++)
-                    {
-                        resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + chromedetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                    }
-                }
-                if (Directory.Exists(ICacheChromepath1))
-                {
-                    string[] chromedetails1 = Directory.GetFiles(ICacheChromepath1);
-                    for (int i = 0; i < 200; i++)
-                    {
-                        resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + chromedetails1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                    }
-                }
-                if (Directory.Exists(ICacheFirefoxpath))
-                {
-                    string[] firefoxdetails = Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories);
-                    for (int i = 0; i < 200; i++)
-                    {
-                        resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + firefoxdetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 9 });
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                //System.Windows.MessageBox.Show(e.Message);
-            }
-            Loading08.Visibility = Visibility.Visible;
             await Task.Delay(2000);
-            try
-            {
-                DirectoryInfo di1 = new DirectoryInfo("C:/Windows/Prefetch");
-                foreach (FileInfo file in di1.GetFiles())
-                {
-                    try
-                    {
-                        file.Delete();
-                    }
-                    catch { }
-                }
-                foreach (DirectoryInfo dir in di1.GetDirectories())
-                {
-                    try
-                    {
-                        dir.Delete(true);
-                    }
-                    catch { }
-                }
-            }
-            catch { }
-            try
-            {
-                string Temppath = Path.GetTempPath();
-                DirectoryInfo di2 = new DirectoryInfo(Temppath);
-                foreach (FileInfo file in di2.EnumerateFiles())
-                {
-                    try
-                    {
-                        file.Delete();
-                    }
-                    catch { }
-                }
-                foreach (DirectoryInfo dir in di2.GetDirectories())
-                {
-                    try
-                    {
-                        dir.Delete(true);
-                    }
-                    catch { }
-                }
-            }
-            catch { }
-            try
-            {
-                DirectoryInfo di3 = new DirectoryInfo("C:/Windows/Temp");
-                foreach (FileInfo file in di3.GetFiles())
-                {
-                    try
-                    {
-                        file.Delete();
-                    }
-                    catch { }
-                }
-                foreach (DirectoryInfo dir in di3.GetDirectories())
-                {
-                    try
-                    {
-                        dir.Delete(true);
-                    }
-                    catch { }
-                }
-            }
-            catch { }
             try
             {
                 DirectoryInfo di4 = new DirectoryInfo("C:/Windows/SoftwareDistribution/Download");
@@ -3556,69 +3364,6 @@ namespace WPFUI
                     catch { }
                 }
                 foreach (DirectoryInfo dir in di4.GetDirectories())
-                {
-                    try
-                    {
-                        dir.Delete(true);
-                    }
-                    catch { }
-                }
-            }
-            catch { }
-            try
-            {
-                DirectoryInfo di5 = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\");
-                foreach (FileInfo file in di5.GetFiles())
-                {
-                    try
-                    {
-                        file.Delete();
-                    }
-                    catch { }
-                }
-                foreach (DirectoryInfo dir in di5.GetDirectories())
-                {
-                    try
-                    {
-                        dir.Delete(true);
-                    }
-                    catch { }
-                }
-            }
-            catch { }
-            try
-            {
-                DirectoryInfo di6 = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\");
-                foreach (FileInfo file in di6.GetFiles())
-                {
-                    try
-                    {
-                        file.Delete();
-                    }
-                    catch { }
-                }
-                foreach (DirectoryInfo dir in di6.GetDirectories())
-                {
-                    try
-                    {
-                        dir.Delete(true);
-                    }
-                    catch { }
-                }
-            }
-            catch { }
-            try
-            {
-                DirectoryInfo di6 = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Local\\Microsoft\\Edge\\User Data\\Default\\");
-                foreach (FileInfo file in di6.GetFiles())
-                {
-                    try
-                    {
-                        file.Delete();
-                    }
-                    catch { }
-                }
-                foreach (DirectoryInfo dir in di6.GetDirectories())
                 {
                     try
                     {
