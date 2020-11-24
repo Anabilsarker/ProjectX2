@@ -2783,7 +2783,7 @@ namespace WPFUI
             {
                 for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
                 {
-                    string reg = ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath + ScannerFunctions.arrBadRegistryKeys[i].ValueName;
+                    string reg = "[" + ScannerFunctions.arrBadRegistryKeys[i].Problem + "] " + ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath + ScannerFunctions.arrBadRegistryKeys[i].ValueName;
                     if (reg.Length > 120)
                     {
                         reg = reg.Substring(0, 120) + "...";
@@ -2868,7 +2868,7 @@ namespace WPFUI
             }
             catch (Exception)
             {
-                //System.Windows.MessageBox.Show(e.Message);
+                
             }
             resultdetails1.Visibility = Visibility.Visible;
             resdet4.Visibility = Visibility.Visible;
@@ -2946,7 +2946,6 @@ namespace WPFUI
             resdet7.Children.Clear();
             resdet8.Children.Clear();
             resdet9.Children.Clear();
-            Console.WriteLine("Reset Done!!!");
         }
         private void RegistryCleaner_Click(object sender, RoutedEventArgs e)
         {
@@ -3028,14 +3027,20 @@ namespace WPFUI
                 for (int i = 0; i < Directory.GetFiles(Path.GetTempPath()).Length; i++)
                 {
                     resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk1[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    await Task.Delay(10);
+                    resultpanel61.ScrollToEnd();
                 }
                 for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Prefetch\\").Length; i++)
                 {
                     resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk2[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    await Task.Delay(10);
+                    resultpanel61.ScrollToEnd();
                 }
                 for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Temp\\").Length; i++)
                 {
                     resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    await Task.Delay(10);
+                    resultpanel61.ScrollToEnd();
                 }
             }
             catch (Exception)
@@ -3053,7 +3058,16 @@ namespace WPFUI
                     {
                         file.Delete();
                     }
-                    catch { }
+                    catch 
+                    {
+                        string[] Junk4 = Directory.GetFiles("C:\\Windows\\Prefetch\\");
+                        for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Prefetch\\").Length; i++)
+                        {
+                            resultpanel6.Children.Add(new TextBlock { Text = "[Unable to Delete] " + Junk4[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                            await Task.Delay(10);
+                            resultpanel61.ScrollToEnd();
+                        }
+                    }
                 }
                 foreach (DirectoryInfo dir in di1.GetDirectories())
                 {
@@ -3075,7 +3089,16 @@ namespace WPFUI
                     {
                         file.Delete();
                     }
-                    catch { }
+                    catch 
+                    {
+                        string[] Junk5 = Directory.GetFiles(Path.GetTempPath());
+                        for (int i = 0; i < Directory.GetFiles(Path.GetTempPath()).Length; i++)
+                        {
+                            resultpanel6.Children.Add(new TextBlock { Text = "[Unable to Delete] " + Junk5[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                            await Task.Delay(10);
+                            resultpanel61.ScrollToEnd();
+                        }
+                    }
                 }
                 foreach (DirectoryInfo dir in di2.GetDirectories())
                 {
@@ -3096,7 +3119,16 @@ namespace WPFUI
                     {
                         file.Delete();
                     }
-                    catch { }
+                    catch 
+                    {
+                        string[] Junk6 = Directory.GetFiles("C:\\Windows\\Temp\\");
+                        for (int i = 0; i < Directory.GetFiles("C:\\Windows\\Temp\\").Length; i++)
+                        {
+                            resultpanel6.Children.Add(new TextBlock { Text = "[Unable to Delete] " + Junk6[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                            await Task.Delay(10);
+                            resultpanel61.ScrollToEnd();
+                        }
+                    }
                 }
                 foreach (DirectoryInfo dir in di3.GetDirectories())
                 {
@@ -3165,7 +3197,17 @@ namespace WPFUI
                     {
                         file.Delete();
                     }
-                    catch { }
+                    catch 
+                    {
+                        string ICacheChromepath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Cache\\";
+                        string[] chromedetails = Directory.GetFiles(ICacheChromepath);
+                        for (int i = 0; i < 200; i++)
+                        {
+                            resultpanel6.Children.Add(new TextBlock { Text = "[Unable to Delete] " + chromedetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                            await Task.Delay(10);
+                            resultpanel61.ScrollToEnd();
+                        }
+                    }
                 }
                 foreach (DirectoryInfo dir in di5.GetDirectories())
                 {
@@ -3186,7 +3228,17 @@ namespace WPFUI
                     {
                         file.Delete();
                     }
-                    catch { }
+                    catch 
+                    {
+                        string ICacheFirefoxpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
+                        string[] firefoxdetails = Directory.GetFiles(ICacheFirefoxpath, "*.*", SearchOption.AllDirectories);
+                        for (int i = 0; i < 200; i++)
+                        {
+                            resultpanel6.Children.Add(new TextBlock { Text = "[Unable to Delete] " + firefoxdetails[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 9 });
+                            await Task.Delay(10);
+                            resultpanel61.ScrollToEnd();
+                        }
+                    }
                 }
                 foreach (DirectoryInfo dir in di6.GetDirectories())
                 {
@@ -3265,6 +3317,8 @@ namespace WPFUI
                 for (int i = 0; i < 2; i++)
                 {
                     resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + Junk3[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    await Task.Delay(10);
+                    resultpanel61.ScrollToEnd();
                 }
             }
             catch { }
@@ -3279,7 +3333,16 @@ namespace WPFUI
                     {
                         file.Delete();
                     }
-                    catch { }
+                    catch 
+                    {
+                        string[] Junk7 = Directory.GetFiles("C:\\Windows\\Temp\\", ".", SearchOption.AllDirectories);
+                        for (int i = 0; i < 2; i++)
+                        {
+                            resultpanel6.Children.Add(new TextBlock { Text = "[Unable to Delete] " + Junk7[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                            await Task.Delay(10);
+                            resultpanel61.ScrollToEnd();
+                        }
+                    }
                 }
                 foreach (DirectoryInfo dir in di3.GetDirectories())
                 {
@@ -3310,12 +3373,21 @@ namespace WPFUI
                 for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
                 {
                     resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    await Task.Delay(10);
+                    resultpanel61.ScrollToEnd();
+                }
+                await Task.Run(() => ScannerFunctions.FixProblems());
+            }
+            catch 
+            {
+                for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
+                {
+                    resultpanel6.Children.Add(new TextBlock { Text = "[Unable to Delete] " + ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                    await Task.Delay(10);
+                    resultpanel61.ScrollToEnd();
                 }
             }
-            catch { }
             Loading06.Visibility = Visibility.Visible;
-            await Task.Delay(2000);
-            await Registrycleanfix();
             await Task.Delay(2000);
             resultpanel6.Children.Clear();
             resultpanel61.Visibility = Visibility.Collapsed;
@@ -3362,7 +3434,16 @@ namespace WPFUI
                     {
                         file.Delete();
                     }
-                    catch { }
+                    catch 
+                    {
+                        string[] Junk8 = Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\");
+                        for (int i = 0; i < Directory.GetFiles("C:\\Windows\\SoftwareDistribution\\Download\\").Length; i++)
+                        {
+                            resultpanel6.Children.Add(new TextBlock { Text = "[Unable to Delete] " + Junk8[i], Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                            await Task.Delay(10);
+                            resultpanel61.ScrollToEnd();
+                        }
+                    }
                 }
                 foreach (DirectoryInfo dir in di4.GetDirectories())
                 {
