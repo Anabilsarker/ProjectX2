@@ -2946,6 +2946,7 @@ namespace WPFUI
             resdet7.Children.Clear();
             resdet8.Children.Clear();
             resdet9.Children.Clear();
+            Console.WriteLine("Reset Done!!!");
         }
         private void RegistryCleaner_Click(object sender, RoutedEventArgs e)
         {
