@@ -689,7 +689,6 @@ namespace WPFUI
         public async void Tempdelete()
         {
             {
-                ScannerFunctions.mynum = 0;
                 ScannerFunctions.systemissuever = 0;
                 ScannerFunctions.filever = 0;
                 ScannerFunctions.totalcachenum = 0;
@@ -970,8 +969,7 @@ namespace WPFUI
                 diskclean.Text = sizedir1.ToString();
                 JunkFiles.Text = sizedir.ToString() + "MB";
                 PrivacyFiles.Text = ScannerFunctions.totalcachenum.ToString() + "Items";
-                ScannerFunctions.mynum = ScannerFunctions.arrBadRegistryKeys.Problems;
-                registrydetails.Text = ScannerFunctions.mynum.ToString() + "Items";
+                registrydetails.Text = ScannerFunctions.arrBadRegistryKeys.Problems.ToString() + "Items";
                 scanfix.Visibility = Visibility.Visible;
                 onetimefix.Visibility = Visibility.Visible;
                 resultpanel.Visibility = Visibility.Visible;
@@ -984,7 +982,6 @@ namespace WPFUI
         public async void TempdeleteFull()
         {
             {
-                ScannerFunctions.mynum = 0;
                 ScannerFunctions.systemissuever = 0;
                 ScannerFunctions.filever = 0;
                 ScannerFunctions.totalcachenum = 0;
@@ -1267,8 +1264,7 @@ namespace WPFUI
                 diskclean.Text = sizedir1.ToString();
                 JunkFiles.Text = sizedir.ToString() + "MB";
                 PrivacyFiles.Text = ScannerFunctions.totalcachenum.ToString() + "Items";
-                ScannerFunctions.mynum = ScannerFunctions.arrBadRegistryKeys.Problems;
-                registrydetails.Text = ScannerFunctions.mynum.ToString() + "Items";
+                registrydetails.Text = ScannerFunctions.arrBadRegistryKeys.Problems.ToString() + "Items";
                 scanfix.Visibility = Visibility.Visible;
                 onetimefix.Visibility = Visibility.Visible;
                 resultpanel.Visibility = Visibility.Visible;
@@ -3367,19 +3363,20 @@ namespace WPFUI
         {
             resultpanel5.Visibility = Visibility.Collapsed;
             resultpanel61.Visibility = Visibility.Visible;
+            //Task.Run(() => ScannerFunctions.StartScanning());
+            for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
+            {
+                resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
+                await Task.Delay(10);
+                resultpanel61.ScrollToEnd();
+            }
             try
             {
-                //Task.Run(() => ScannerFunctions.StartScanning());
-                for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
-                {
-                    resultpanel6.Children.Add(new TextBlock { Text = "Deleted " + ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });
-                    await Task.Delay(10);
-                    resultpanel61.ScrollToEnd();
-                }
                 await Task.Run(() => ScannerFunctions.FixProblems());
             }
-            catch 
+            catch (Exception d)
             {
+                System.Windows.MessageBox.Show(d.Message);
                 for (int i = 0; i < ScannerFunctions.arrBadRegistryKeys.Count; i++)
                 {
                     resultpanel6.Children.Add(new TextBlock { Text = "[Unable to Delete] " + ScannerFunctions.arrBadRegistryKeys[i].RegKeyPath, Foreground = System.Windows.Media.Brushes.White, FontSize = 11 });

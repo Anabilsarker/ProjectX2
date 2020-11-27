@@ -19,7 +19,7 @@ namespace Winzard_System_Repair.RegistryScanner
         public static List<string> malwarelist = new List<string>();
         public static string malwarsummary;
         public static string infected;
-        public static int mynum = 0, totalcachenum = 0, filever = 0, systemissuever = 0, notification = 0;
+        public static int totalcachenum = 0, filever = 0, systemissuever = 0, notification = 0;
         private const int ERROR_SUCCESS = 0;
 
         private const string IDS_DEFAULTVALUENAME = "(DEFAULT)";

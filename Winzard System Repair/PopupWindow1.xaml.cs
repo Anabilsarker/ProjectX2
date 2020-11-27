@@ -14,7 +14,6 @@ namespace WPFUI
     /// </summary>
     public partial class PopupWindow1 : Window
     {
-        public static int regissuenum = ScannerFunctions.arrBadRegistryKeys.Problems;
         float sizedir = 0;
         public BrowserWindow bwobj;
         bool result = false;
@@ -76,7 +75,7 @@ namespace WPFUI
             MalwareThreats.Text = ScannerFunctions.infected;
             CorruptedSystemFiles.Text = ScannerFunctions.filever.ToString();
             JunkFiles.Text = sizedir.ToString() + "MB";
-            BrokenRegistryEntries.Text = ScannerFunctions.mynum.ToString() + "Items";
+            BrokenRegistryEntries.Text = ScannerFunctions.arrBadRegistryKeys.Problems.ToString() + "Items";
             PrivacyTraces.Text = ScannerFunctions.totalcachenum.ToString();
             SystemIssue.Text = ScannerFunctions.systemissuever.ToString(); ;
             var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
